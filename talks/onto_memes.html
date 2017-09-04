@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="es">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Hacia la generación automática de leyendas para memes de Internet</title>
+
+    <meta name="description" content="Ponencia para el VIII Coloquio de Lingüística Computacional">
+    <meta name="author" content="AlOrozco53">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/night.css" id="theme">
+    <!-- <link rel="stylesheet" href="../css/theme/sky.css" id="theme"> -->
+
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+		<section>
+		  <section data-menu-title="Hacia la generación automática de leyendas para memes de Internet">
+			<h3>Hacia la generación automática de leyendas para memes de Internet</h3>
+			<p>
+			  <small>
+			    <a href="http://www.github.com/alorozco53" target="_blank">Albert Manuel Orozco Camacho</a>,
+			    <a href="http://turing.iimas.unam.mx/~ivanvladimir/" target="_blank">Ivan Vladimir Meza Ruiz</a>
+			    <br>
+			    <a href="http://twitter.com/alorozco53" target="_blank">@alorozco53</a>,
+			    <a href="http://twitter.com/ivanvladimir" target="_blank">@ivanvladimir</a>
+			    <br>
+			    Facultad de Ciencias - IIMAS, UNAM
+			  </small>
+			  <br>
+			  <img style="border-style: none" width="350" height="350" src="../img/linguist.jpg" alt="VIII CoLiCo">
+			</p>
+		  </section>
+
+		</section>
+		<section>
+		  <section>
+		    <h2>Motivación</h2>
+		  </section>
+		  <section data-background-image="../img/server-farm.jpg">
+		    <p>
+		      <img src="../img/memes-flow.jpg" width="30%" height="30%" style="border:none;" alt="">
+		    </p>
+		  </section>
+		  <section>
+		    <h2>Memética</h2>
+		    <p>
+		      <img src="../img/dawkins.jpg" width="30%" height="30%" style="border:none;" alt="" class="rotate-25">
+		      <span style="display:inline-block; width: 50mm;"></span>
+		      <img src="../img/selfish-gene.png" width="30%" height="30%" style="border:none;" alt="" class="rotate25">
+		    </p>
+		  </section>
+		  <section>
+		    <h2>¿Trabajo previo? &#x1F914;</h2>
+		    <p>
+		      <a href="http://www.aclweb.org/old_anthology/N/N15/N15-1039.pdf" target="_blank">
+			<img src="../img/cheezburger.png" width="45%" height="45%" style="border:none;" alt="">
+		      </a>
+		    </p>
+		  </section>
+		  <section>
+		    <img src="../img/imagenet.jpg" width="35%" height="35%" style="border:none;" alt="">
+		    <img src="../img/show_and_tell_ex.png" width="80%" height="80%" style="border:none;" alt="">
+		    <figcaption>
+		      <small>
+			<a src="https://arxiv.org/pdf/1609.06647.pdf" target="_blank">
+			  [Vinyals, <i>et al</i>. 2016]
+			</a>
+		      </small>
+		    </figcaption>
+		  </section>
+		</section>
+		<section>
+		  <section>
+		    <h2>Tecnología de aprendizaje automático</h2>
+		  </section>
+		  <section>
+			<h2>Objetivo de la mayoría del software:</h2>
+			<p>
+			  <center>
+				ENTRADA: $\vec{x}$<br>
+				$\downarrow$<br>
+				<font color="red">
+				  ALGORITMO: $z = h(\vec{x})$
+				</font><br>
+				$\downarrow$<br>
+				SALIDA: $z$
+			  </center>
+			</p>
+			<small>El programador <i>diseña</i> un programa que calcule $z$ en su mente y <i>prueba</i> casos de uso.</small>
+		  </section>
+		  <section>
+			<h3>Aprendizaje automático</h3>
+			<h4>(Supervisado)</h4>
+			<p>
+			  <!-- <small> -->
+			  ENTRADA: $\vec{x}$<br>
+			  $\downarrow$<br>
+			  <font color="red">
+				ALGORITMO: $z = h(\vec{x}, \vec{\theta})$
+			  </font><br>
+			  $\updownarrow$<br>
+			  <font color="green">
+				Entrenamiento: $J(\vec{\theta}; \vec{x}, \vec{y})$
+			  </font><br>
+			  $\downarrow$<br>
+			  SALIDA: $z$
+			  <!-- </small> -->
+			</p>
+			<small>
+			  Conjunto de datos: $\mathcal{D} = \{(x_1, y_1),\ldots,(x_n, y_n)\}$
+			</small>
+		  </section>
+		  <section>
+			<h2>Redes neuronales</h2>
+			<p>
+			  <figure>
+				<img src="../img/nnzoo.jpg" width="62%" height="62%" style="border:none;" alt="">
+				<figcaption>
+				  <small>
+					Tomado de
+					<a src="http://www.asimovinstitute.org/neural-network-zoo/" target="_blank">
+					  http://www.asimovinstitute.org/neural-network-zoo/
+					</a>
+				  </small>
+				</figcaption>
+			  </figure>
+			</p>
+		  </section>
+		</section>
+		<section>
+		  <section>
+		    <h2>Datos</h2>
+		  </section>
+		  <section data-background-image="../img/memegenerator.png">
+		  </section>
+		  <section data-background-image="../img/memedisplay.gif">
+		  </section>
+		</section>
+		<section>
+		  <section>
+		    <h2>Aprendizaje profundo</h2>
+		    <h3>(Deep Learning)</h3>
+		  </section>
+		  <section>
+		    <img src="../img/deep-learning-book.jpg" width="35%" height="35%" style="border:none;" alt="">
+		    <span style="display:inline-block; width: 50mm;"></span>
+		    <img src="../img/godeeper.jpg" width="40%" height="40%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <h2>Redes neuronales convolucionales</h2>
+		    <h3>(CNN's, ConvNets)</h3>
+		  </section>
+		  <section>
+		    <img src="../img/convnet.jpeg" width="85%" height="85%" style="border:none;" alt="">
+		  </section>
+		  <section data-background-color=rgb(255,255,255)>
+		    <div class="fig figcenter fighighlight">
+		      <iframe src="material/conv-demo.html" width="100%" height="700px" style="border:none;">
+		      </iframe>
+		    </div>
+		  </section>
+		  <section>
+		    <h2>Redes neuronales recurrentes</h2>
+		    <h3>(para el interés del lingüista)</h3>
+		  </section>
+		  <section>
+		    <img src="../img/perceptron.png" width="82%" height="82%" style="border:none;" alt="">
+		  </section>
+		  <section data-background-color=rgb(255,255,0)>
+		    <img src="../img/rnn-unrolled.png" width="82%" height="82%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <h3>Unidad de memoria grande a corto plazo (LSTM)</h3>
+		    <img src="../img/lstm.png" width="42%" height="42%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/tsne.png" width="52%" height="52%" style="border:none;" alt="">
+		    <img src="../img/vec_ar.png" width="52%" height="52%" style="border:none;" alt=""><br>
+		    <center>
+		      $V($queen$)\ -\ V($king$)\ \approx V($woman$)\ -\ V($man$)$
+		    </center>
+		  </section>
+		  <section>
+		    <img src="../img/manifold.png" width="82%" height="82%" style="border:none;" alt="">
+		  </section>
+		</section>
+
+
+		<section>
+		  <section>
+		    <h2>Arquitectura unificada</h2>
+		  </section>
+		  <section>
+		    <img src="../img/show_and_tell.png" width="70%" height="70%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <h2>Entrenamiento e inferencia</h2>
+		  </section>
+		  <section>
+		    <img src="../img/rnn0.png" width="100%" height="100%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/rnn1.png" width="100%" height="100%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/rnn2.png" width="100%" height="100%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/rnn3.png" width="100%" height="100%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/rnn4.png" width="100%" height="100%" style="border:none;" alt="">
+		  </section>
+		</section>
+		<section>
+		  <section>
+		    <h2>La red neuronal en acción (beta)</h2>
+		  </section>
+		  <section>
+		    <img src="../img/ex0.png" width="85%" height="85%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/ex1.png" width="85%" height="85%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <img src="../img/ex2.png" width="65%" height="65%" style="border:none;" alt="">
+		  </section>
+		  <!-- <section> -->
+		  <!--   <img src="../img/ex3.png" width="85%" height="85%" style="border:none;" alt=""> -->
+		  <!-- </section> -->
+		  <section>
+		    <img src="../img/ex4.png" width="85%" height="85%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <h2>Trabajo futuro</h2>
+		    <p>
+		      <ul>
+			<li>Refinamiento del modelo de lenguaje con técnicas de detección y creación de humor/albures.</li>
+			<li>Experimentación con memes de 2017.</li>
+			<li>Agrupamiento semántico de memes (aprendizaje no supervisado).</li>
+		      </ul>
+		    </p>
+		  </section>
+		  <section>
+		    <img src="../img/skinometer.jpg" width="55%" height="55%" style="border:none;" alt="">
+		    <img src="../img/exp-brain.jpg" width="35%" height="35%" style="border:none;" alt="">
+		  </section>
+		  <section>
+		    <h2>Trabajo futuro</h2>
+		    <p>
+		      <ul>
+			<li>Estudio de la <i>"viralidad"</i> que puede alcanzar la información generada automáticamente.</li>
+			<li>Estudio del fenómeno de la <i>evolución</i> en propagación de información.</li>
+		      </ul>
+		    </p>
+		  </section>
+		  <section>
+		    <h2>Trabajo futuro</h2>
+		    <p>
+		      <ul>
+			<li>Generación automática de contenido en redes sociales (por ejemplo, bots en Twitter).</li>
+			<li>Interacción humano-máquina.</li>
+			<li>Agentes conversacionales (chatbots).</li>
+			<center>
+			  <img src="../img/trump-clinton.jpg" width="45%" height="45%" style="border:none;" alt="">
+			</center>
+		      </ul>
+		    </p>
+		  </section>
+		</section>
+		<section>
+		  <section>
+		    <h2>¡Muchas gracias!</h2>
+		    <img src="../img/cookiemonster.png" width="85%" height="85%" style="border:none;" alt="">
+		  </section>
+		</section>
+	  </div>
+
+	</div>
+
+	<script src="../lib/js/head.min.js"></script>
+	<script src="../js/reveal.js"></script>
+
+	<script>
+
+	  // More info https://github.com/hakimel/reveal.js#configuration
+	  Reveal.initialize({
+	  controls: true,
+	  progress: true,
+	  history: true,
+	  center: true,
+
+	  transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+	  math: {
+	  mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+	  config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+	  },
+
+	  // More info https://github.com/hakimel/reveal.js#dependencies
+	  dependencies: [
+	  { src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+	  { src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+	  { src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+	  { src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+	  { src: '../plugin/zoom-js/zoom.js', async: true },
+	  { src: '../plugin/notes/notes.js', async: true },
+	  { src: '../plugin/math/math.js', async: true },
+	  { src: '../plugin/menu/menu.js' },
+	  { src: '../plugin/chalkboard/chalkboard.js' }
+	  ],
+
+	  chalkboard: {
+	  // optionally load pre-recorded chalkboard drawing from file
+	  src: "chalkboard.json",
+	  },
+
+	  keyboard: {
+	  67: function() { RevealChalkboard.toggleNotesCanvas() },	// toggle notes canvas when 'c' is pressed
+	  66: function() { RevealChalkboard.toggleChalkboard() },	// toggle chalkboard when 'b' is pressed
+	  46: function() { RevealChalkboard.clear() },	// clear chalkboard when 'DEL' is pressed
+	  8: function() { RevealChalkboard.reset() },	// reset chalkboard data on current slide when 'BACKSPACE' is pressed
+	  68: function() { RevealChalkboard.download() },	// downlad recorded chalkboard drawing when 'd' is pressed
+	  },
+
+	  //menu
+	  menu: {
+	  // Specifies which side of the presentation the menu will
+	  // be shown. Use 'left' or 'right'.
+	  side: 'left',
+
+	  // Add slide numbers to the titles in the slide list.
+	  // Use 'true' or format string (same as reveal.js slide numbers)
+	  numbers: false,
+
+	  // Specifies which slide elements will be used for generating
+	  // the slide titles in the menu. The default selects the first
+	  // heading element found in the slide, but you can specify any
+	  // valid css selector and the text from the first matching
+	  // element will be used.
+	  // Note: that a section data-menu-title attribute or an element
+	  // with a menu-title class will take precedence over this option
+	  titleSelector: 'h1, h2, h3, h4, h5, h6',
+
+	  // Hide slides from the menu that do not have a title.
+	  // Set to 'true' to only list slides with titles.
+	  hideMissingTitles: false,
+
+	  // Add markers to the slide titles to indicate the
+	  // progress through the presentation
+	  markers: false,
+
+	  // Specify custom panels to be included in the menu, by
+	  // providing an array of objects with 'title', 'icon'
+	  // properties, and either a 'src' or 'content' property.
+	  custom: false,
+
+	  // Specifies the themes that will be available in the themes
+	  // menu panel. Set to 'false' to hide themes panel.
+	  themes: [
+	  { name: 'Black', theme: '../css/theme/black.css' },
+	  { name: 'White', theme: '../css/theme/white.css' },
+	  { name: 'League', theme: '../css/theme/league.css' },
+	  { name: 'Sky', theme: '../css/theme/sky.css' },
+	  { name: 'Beige', theme: '../css/theme/beige.css' },
+	  { name: 'Simple', theme: '../css/theme/simple.css' },
+	  { name: 'Serif', theme: '../css/theme/serif.css' },
+	  { name: 'Blood', theme: '../css/theme/blood.css' },
+	  { name: 'Night', theme: '../css/theme/night.css' },
+	  { name: 'Moon', theme: '../css/theme/moon.css' },
+	  { name: 'Solarized', theme: '../css/theme/solarized.css' }
+	  ],
+
+	  // Specifies if the transitions menu panel will be shown.
+	  transitions: true,
+
+	  // Adds a menu button to the slides to open the menu panel.
+	  // Set to 'false' to hide the button.
+	  openButton: true,
+
+	  // If 'true' allows the slide number in the presentation to
+	  // open the menu panel. The reveal.js slideNumber option must
+	  // be displayed for this to take effect
+	  openSlideNumber: false,
+
+	  // If true allows the user to open and navigate the menu using
+	  // the keyboard. Standard keyboard interaction with reveal
+	  // will be disabled while the menu is open.
+	  keyboard: true
+	  }
+
+	  });
+
+	</script>
+
+  </body>
+</html>
