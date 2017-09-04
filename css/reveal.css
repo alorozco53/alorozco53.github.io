@@ -50,6 +50,14 @@ body {
 /*********************************************
  * VIEW FRAGMENTS
  *********************************************/
+.rotate25 {
+  -webkit-transform: rotate(25deg);
+  transform: rotate(25deg); }
+
+.rotate-25 {
+  -webkit-transform: rotate(-25deg);
+  transform: rotate(-25deg); }
+
 .reveal .slides section .fragment {
   opacity: 0;
   visibility: hidden;
@@ -1166,7 +1174,6 @@ body {
 .reveal .overlay .viewport {
   position: absolute;
   display: -webkit-box;
-  display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
   top: 40px;
