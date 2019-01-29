@@ -1,0 +1,16 @@
+<center>
+  <table class="image">
+	<caption align="bottom">{{ include.description }}</caption>
+	<tr>
+	  <td>
+		{% if include.link %}
+		<a href="{{ include.link }}" target="_blank">
+		  {% endif %}
+		  <img src="{{ include.url }}" alt="{{ include.description }}"/>
+		  {% if include.link %}
+		</a>
+		{% endif %}
+	  </td>
+	</tr>
+  </table>
+</center>

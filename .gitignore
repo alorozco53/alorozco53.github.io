@@ -2,3 +2,4 @@
 node_modules/
 # shitty OS X auto-generated file
 *.DS_Store
+_site/
