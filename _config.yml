@@ -44,6 +44,10 @@ navbar-links:
       - name: "Undergraduate Thesis"
         url: "talks/thesis.html"
         newtab: true
+  - name: "Teaching"
+    children:
+      - name: "ML - Centraal Academy"
+        url: "2018-05-15-ml-centraal-home/"
   - name: "Resume"
     children:
       - name: "CV"

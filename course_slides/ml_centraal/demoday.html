@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="es">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Excavando en las profundidades de la información</title>
+
+    <meta name="description" content="Ponencia para el VIII Coloquio de Lingüística Computacional">
+    <meta name="author" content="AlOrozco53">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../../css/reveal.css">
+    <link rel="stylesheet" href="../../css/theme/simple.css" id="theme">
+
+	<!-- Footer -->
+	<link rel="stylesheet" href="../../plugin/title-footer/title-footer.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../../css/print/pdf.css' : '../../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+		<section>
+		  <section data-menu-title="Portada" data-background-image="../../img/network3.gif">
+		  </section>
+		  <section data-transition="fade">
+			<h1>¡Es la era de la inteligencia artificial!</h1>
+		  </section>
+		  <section data-background-image="../../img/arguments.jpg">
+		  </section>
+		  <section>
+			<img src="../../img/ai-kid-eating.jpeg" width="40%" height="40%" alt="">
+			<img src="../../img/her-film.jpg" width="50%" height="50%"  alt="">
+		  </section>
+		  <section>
+			<img src="../../img/types-of-data.png" width="55%" height="55%" alt="" style="border:none;">
+		  </section>
+		  <section data-background-image="../../img/science.png">
+		  </section>
+		  <section data-background-image="../../img/analytics.png">
+		  </section>
+		  <section data-background-image="../../img/trumppopularity.gif">
+		  </section>
+		  <section>
+			<img src="../../img/twitter.png" width="55%" height="55%" alt="" style="border:none;">
+		  </section>
+		  <section data-background-image="../../img/tweets.jpg">
+		  </section>
+		  <section data-background-image="../../img/twitter-users.jpg">
+		  </section>
+		  <section data-background-image="../../img/twitter-users-mobile.png">
+		  </section>
+		  <section data-background-image="../../img/news.jpg">
+		  </section>
+		  <section>
+			<img src="../../img/trump-truth.png" width="40%" height="40%" alt="">
+			<img src="../../img/dresser-gere.jpg" width="50%" height="50%"  alt="">
+		  </section>
+		  <section data-background-image="../../img/critcal-thinking.jpg">
+		  </section>
+		  <section data-background-image="../../img/flowcharts.jpg">
+		  </section>
+		  <section>
+			<img src="../../img/turing.jpg" width="40%" height="40%" alt="">
+			<img src="../../img/church.jpg" width="40%" height="40%"  alt="">
+		  </section>
+		  <section>
+			<img src="../../img/random-numbers.png" width="33%" height="33%" alt="">
+			<img src="../../img/optimization-stats.png" width="43%" height="43%" alt="">
+			<img src="../../img/gpu.png" width="33%" height="33%" alt="">
+		  </section>
+		  <section data-background-image="../../img/actuarial.jpg">
+		  </section>
+		  <section data-background-image="../../img/physics.jpg">
+		  </section>
+		  <section data-transition="fade">
+			<h1>¿Por qué <b>aprendizaje</b>?</h1>
+		  </section>
+		  <section>
+			<h2>En computación</h2>
+			<p>
+			  <ul>
+				<li>modelamos fenómenos <i>computables,</i></li>
+				<li>abstraemos las características más importantes,</li>
+				<li>diseñamos algoritmos,</li>
+				<li>para el <b>entendimiento desde la máquina</b>.</li>
+			  </ul>
+			</p>
+		  </section>
+		  <section data-background-image="../../img/brain.jpg">
+		  </section>
+		  <section>
+			<img src="../../img/toddlers.jpg" width="53%" height="53%" alt="">
+			<img src="../../img/icub-vs-toddler.jpg" width="43%" height="43%" alt="">
+		  </section>
+		  <section data-background-image="../../img/image-dataset.png">
+		  </section>
+		  <section data-background-image="../../img/clustering.png">
+		  </section>
+		  <section>
+			<img src="../../img/rl.gif" width="53%" height="53%" alt="">
+		  </section>
+		  <section data-background-image="../../img/agent.gif">
+		  </section>
+		  <section data-background-image="../../img/turingtest.jpg">
+		  </section>
+		  <section data-transition="fade">
+			<h2>Ok, la <i>IA</i> necesita de nuestros datos, pero, ¿qué nos da a cambio?</h2>
+		  </section>
+		  <section data-background-image="../../img/privacy.jpeg">
+		  </section>
+		  <section>
+			<img src="../../img/maps-tracking.jpg" width="43%" height="43%" alt="">
+			<img src="../../img/canada-goose.jpg" width="23%" height="23%" alt="">
+			<img src="../../img/facebook-graph.jpg" width="33%" height="33%" alt="">
+		  </section>
+		  <section data-transition="fade">
+			<h2>O, en su defecto...</h2>
+		  </section>
+		  <section>
+			<img src="../../img/pepe-trump.jpg" width="43%" height="43%" alt="">
+			<img src="../../img/cambridge-analytica.jpg" width="43%" height="43%" alt="">
+		  </section>
+		  <section>
+			<a href="https://centraal.academy/programs/machine-learning" target="_blank">
+			  <img src="../../img/curso-ml-centraal.png" width="53%" height="53%" alt="">
+			</a>
+		  </section>
+		  <section data-transition="fade">
+			<h2>¡Muchas gracias!</h2>
+		  </section>
+		</section>
+
+      </div>
+
+    </div>
+
+    <script src="../../lib/js/head.min.js"></script>
+    <script src="../../js/reveal.js"></script>
+
+    <script>
+
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+      math: {
+      mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+      config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+      },
+
+      // More info https://github.com/hakimel/reveal.js#dependencies
+      dependencies: [
+      { src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: '../../plugin/zoom-js/zoom.js', async: true },
+      { src: '../../plugin/notes/notes.js', async: true },
+      { src: '../../plugin/math/math.js', async: true },
+      { src: '../../plugin/menu/menu.js' },
+	  { src: '../../plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize(); } }
+      ],
+
+      keyboard: {
+      67: function() { RevealChalkboard.toggleNotesCanvas() },	// toggle notes canvas when 'c' is pressed
+      66: function() { RevealChalkboard.toggleChalkboard() },	// toggle chalkboard when 'b' is pressed
+      46: function() { RevealChalkboard.clear() },	// clear chalkboard when 'DEL' is pressed
+      8: function() { RevealChalkboard.reset() },	// reset chalkboard data on current slide when 'BACKSPACE' is pressed
+      68: function() { RevealChalkboard.download() },	// downlad recorded chalkboard drawing when 'd' is pressed
+      },
+
+      //menu
+      menu: {
+      // Specifies which side of the presentation the menu will
+      // be shown. Use 'left' or 'right'.
+      side: 'left',
+
+      // Add slide numbers to the titles in the slide list.
+      // Use 'true' or format string (same as reveal.js slide numbers)
+      numbers: false,
+
+      // Specifies which slide elements will be used for generating
+      // the slide titles in the menu. The default selects the first
+      // heading element found in the slide, but you can specify any
+      // valid css selector and the text from the first matching
+      // element will be used.
+      // Note: that a section data-menu-title attribute or an element
+      // with a menu-title class will take precedence over this option
+      titleSelector: 'h1, h2, h3, h4, h5, h6',
+
+      // Hide slides from the menu that do not have a title.
+      // Set to 'true' to only list slides with titles.
+      hideMissingTitles: false,
+
+      // Add markers to the slide titles to indicate the
+      // progress through the presentation
+      markers: false,
+
+      // Specify custom panels to be included in the menu, by
+      // providing an array of objects with 'title', 'icon'
+      // properties, and either a 'src' or 'content' property.
+      custom: false,
+
+      // Specifies the themes that will be available in the themes
+      // menu panel. Set to 'false' to hide themes panel.
+      themes: [
+      { name: 'Black', theme: '../../css/theme/black.css' },
+      { name: 'White', theme: '../../css/theme/white.css' },
+      { name: 'League', theme: '../../css/theme/league.css' },
+      { name: 'Sky', theme: '../../css/theme/sky.css' },
+      { name: 'Beige', theme: '../../css/theme/beige.css' },
+      { name: 'Simple', theme: '../../css/theme/simple.css' },
+      { name: 'Serif', theme: '../../css/theme/serif.css' },
+      { name: 'Blood', theme: '../../css/theme/blood.css' },
+      { name: 'Night', theme: '../../css/theme/night.css' },
+      { name: 'Moon', theme: '../../css/theme/moon.css' },
+      { name: 'Solarized', theme: '../../css/theme/solarized.css' }
+      ],
+
+      // Specifies if the transitions menu panel will be shown.
+      transitions: true,
+
+      // Adds a menu button to the slides to open the menu panel.
+      // Set to 'false' to hide the button.
+      openButton: true,
+
+      // If 'true' allows the slide number in the presentation to
+      // open the menu panel. The reveal.js slideNumber option must
+      // be displayed for this to take effect
+      openSlideNumber: false,
+
+      // If true allows the user to open and navigate the menu using
+      // the keyboard. Standard keyboard interaction with reveal
+      // will be disabled while the menu is open.
+      keyboard: true
+      }
+
+      });
+
+    </script>
+
+	<style type="text/css">
+      /* 1. Style header/footer <div> so they are positioned as desired. */
+		#header-left {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+		}
+		#header-right {
+        position: absolute;
+        top: 0%;
+        right: 0%;
+		}
+		#footer-left {
+        position: absolute;
+        bottom: 5%;
+        left: 43%;
+		}
+	</style>
+
+	<!-- 2. Create hidden header/footer <div> -->
+	<div id="hidden" style="display:none;">
+      <div id="header">
+        <!-- <div id="header-left">HEADER-LEFT</div> -->
+        <!-- <div id="header-right">HEADER-RIGHT</div> -->
+        <div id="footer-left">
+		  <img src="../../img/centraal_logo_blanco.png" width="40%" height="20%" style="border:none;" alt="">
+		</div>
+      </div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript">
+      // 3. On Reveal.js ready event, copy header/footer <div> into each `.slide-background` <div>
+		  var header = $('#header').html();
+		  if ( window.location.search.match( /print-pdf/gi ) ) {
+          Reveal.addEventListener( 'ready', function( event ) {
+          $('.slide-background').append(header);
+          });
+		  }
+		  else {
+          $('div.reveal').append(header);
+		  }
+	</script>
+
+  </body>
+</html>
