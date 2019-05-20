@@ -8,10 +8,17 @@ bigimg: /img/network2.gif
 tags: [cursos, machine learning, deep learning, centraal, academy]
 ---
 
-![centraal-academy-logo](/img/centraal_logo_negro.png)
+<a href="https://centraal.academy" target="_blank">
+	<img src="/img/centraal_logo_negro.png" alt="">
+</a>
+<a href="https://centraal.academy/programs/machine-learning" target="_blank">
+	<img src="/img/centraal-ml-flyer.jpeg" width="30%" height="30%" alt="">
+</a>
+
+INSCRIPCIONES AQUÍ 👆
 
 {: .box-warning}
-**Nota:** El curso empezará el lunes 20 de mayo de 2019.
+**Nota:** El curso empezará el lunes 27 de mayo de 2019.
 
 ## Google Classroom
 
