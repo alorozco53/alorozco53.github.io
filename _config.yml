@@ -47,7 +47,7 @@ navbar-links:
   - name: "Teaching"
     children:
       - name: "ML - Centraal Academy"
-        url: "2018-05-20-ml-centraal-home/"
+        url: "teaching/centraal-ml"
   - name: "Resume"
     children:
       - name: "CV"
