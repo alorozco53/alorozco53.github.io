@@ -70,32 +70,47 @@
 	      <img src="../../img/heterograph.png" width="40%" height="40%" alt="">
 	      <img src="../../img/homomatrix.png" width="40%" height="40%" alt="">
 	      <img src="../../img/heteromatrix.png" width="40%" height="40%" alt="">
+		  <aside class="notes">
+			- Homophily: same political ideologies attract
+			- Heterophily: different roles couple each other
+		  </aside>
 	    </section>
 	    <section>
 	      <h2>Label Propagation with Affinity Matrix</h2>
 	      <img src="../../img/bp-problem.png" width="40%" height="40%" alt="">
 	      <img src="../../img/coupling-matrix.png" width="40%" height="40%" alt="">
+		  <aside class="notes">
+			- In real social media, we've got a mixture, namely, a set of affinity scores according to certain classes.
+			- Our task: label propagation from partial labelling
+		</aside>
 	    </section>
 	  </section>
 	  <section data-menu-title="Setting">
 	    <section data-menu-title="Setting" data-transition="fade">
 	      <h1>Setting</h1>
 	    </section>
-	    <section data-markdown>
+	    <section data-markdown data-separator-notes="^Note:">
 	      <textarea data-template>
 		Given a undirected graph $G$ with $n$ nodes and $k$ possible classes,
 		- for each node $s$, we maintain $k$-dimensional vectors
 		    - $\mathbf{e}_s$ of **explicit** beliefs,
 		    - $\mathbf{b}_s$ of **posterior** beliefs;
 		    - $\sum_i e_s(i) = \sum_i b_s(i) = 1$.
+
+		Note:
+			Vectors e are prior beliefs.
+			Vectors e and b give a likelihood per each class, for each node.
 	      </textarea>
 	    </section>
-	    <section data-markdown>
+	    <section data-markdown data-separator-notes="^Note:">
 	      <textarea data-template>
 		- let $\mathbf{m}_{st}$ represent the $k$ dimensional _message_ that node $s$ sents to node $t$.
-		- let $\mathbf{H}$ be the $k \times k$ coupling _affinity_ matrix which satisfies
+		- let $\mathbf{H}$ be the $k \times k$ _affinity_ matrix which satisfies
 		    - symmetry
 		    - doubly stochastic
+
+		Note:
+		Doubly stochastic: sums of columns and rows equal to one, respectively.
 	      </textarea>
 	    </section>
 	  </section>
@@ -105,25 +120,45 @@
 	    </section>
 	    <section>
 	      <img src="../../img/bp-echocancellation.png" width="80%" height="80%" alt="">
+		  <aside class="notes">
+			Belief Propagation: also known as the message-passing algorithm.
+			Parallel transmission of mesages at each time.
+			Echo cancellation: don't send redundant information from s to t.
+		  </aside>
 	    </section>
-	    <section data-markdown>
+	    <section data-markdown  data-separator-notes="^Note:">
 	      <textarea data-template>
 		## Algorithm Intuition
 		- Iteratively _send messages_ between nodes and their neighbors in parallel
 		- Repeat until "convergence"
 		- At the end we've computed the posterior distribution $\mathbf{b}_{s}$, for arbitrary node $s$.
+
+		Note:
+		Convergence is NOT guaranteed!
 	      </textarea>
 	    </section>
 	    <section>
 	      <img src="../../img/bp-message.png" width="80%" height="80%" alt="">
 	    </section>
-	    <section data-markdown>
+	    <section data-markdown data-separator-notes="^Note:">
 	      <textarea data-template>
 		## Update equations
 
 		![bp-eqs](../../img/bp-equations.png)
+
+		Note:
+		Zs is a normalizing constant proportional to the sum of all prior beliefs.
+		m_st is computed by checking how every class has influence on class i.
+		N(s) \ t means echo cancellation.
 	      </textarea>
 	    </section>
+		<section>
+		  <h2>Bad News 😭</h2>
+		  <ul>
+			<li>CONVERGENCE is not guaranteed: especially with loopy graphs.</li>
+			<li>The original authors don't even assure its <i>correctness</i> as an approximation algorithm.</li>
+		  </ul>
+		</section>
 	  </section>
 	  <section data-menu-title="Linearized BP">
 	    <section data-menu-title="LinBP" data-transition="fade">
@@ -131,20 +166,44 @@
 	    </section>
 	    <section>
 	      <img src="../../img/linbp-centermatrices.png" width="80%" height="80%" alt="">
-	      <img src="../../img/linbp-mclaurin.png" width="40%" height="40%" alt="">
+	      <img src="../../img/linbp-mclaurin.png" width="50%" height="50%" alt="">
+		  <aside class="notes">
+			Key idea: center vectors around a fixed value and work with their residuals.
+			Residuals still capture the same semantics as original vectors.
+			Approximate each vector using the shown McLaurin series (proofs are left to the reader).
+		  </aside>
 	    </section>
 	    <section>
 	      <img src="../../img/linbp-update.png" width="80%" height="80%" alt="">
+		  <aside class="notes">
+			Products have been converted to sums.
+			Update equations are now linear and can be further analyzed in terms of convergence.
+		  </aside>
 	    </section>
 	    <section>
 	      <img src="../../img/linbp-finalbelief.png" width="80%" height="80%" alt="">
-	      <img src="../../img/linbp-closedform.png" width="40%" height="40%" alt="">
+	      <img src="../../img/linbp-closedform.png" width="50%" height="50%" alt="">
+		  <aside class="notes">
+			LinBP final belief equations.
+			Note: They no longer depend on messages!
+			Important: These algorithms can be generalized to weighted graphs, and here we use them.
+			If a graph is unweighted, then W = A.
+			Observe how beliefs are "linearly" weighted by W and by the beliefs scores.
+			Substraction term accounts for echo cancellation.
+			D is the degree matrix for graph G.
+			Vectorized form can be obtained by stacking columns; product is element-wise.
+		  </aside>
 	    </section>
 	    <section>
 	      <h3>LinBP implementation in SQL</h3>
 	      (yes, SQL)
 	      <img src="../../img/linbp-sql.png" width="80%" height="80%" alt="" border="0">
 	    </section>
+		<section>
+		  <h2>Good News 😎: CONVERGENCE!</h2>
+		  <img src="../../img/linbp-econv.png" width="60%" height="60%" alt="" border="0">
+		  <img src="../../img/linbp-sconv.png" width="60%" height="60%" alt="" border="0">
+		</section>
 	  </section>
 	  <section data-menu-title="SPBP">
 	    <section data-menu-title="SPBP" data-transition="fade">
@@ -153,43 +212,56 @@
 	    <section>
 	      <h2>Generalities</h2>
 	      <ul>
-		<li>The authors define a modified BP algorithm that calculates the final beliefs in <i>at most</i> one step.</li>
-		<li>
-		  Consider the residual (from LinBP) coupling matrix. Call it now $\hat{\mathbf{H}}_0$. Now we define a scaled
-		  matrix $\hat{\mathbf{H}} := \epsilon_H \hat{\mathbf{H}}_0$. This scaling factor $\epsilon_H$ helps to justify
-		  the correctness of SBP.
-		</li>
+			<li>The authors define a modified BP algorithm that calculates the final beliefs in <i>at most</i> one step.</li>
+			<li>
+			  Consider the residual (from LinBP) coupling matrix. Call it now $\hat{\mathbf{H}}_0$. Now we define a scaled
+			  matrix $\hat{\mathbf{H}} := \epsilon_H \hat{\mathbf{H}}_0$. This scaling factor $\epsilon_H$ helps to justify
+			  the correctness of SBP.
+			</li>
 	      </ul>
 	    </section>
 	    <section>
 	      <h2>Generalities</h2>
 	      <ul>
-		<li>As $\lim \epsilon_H \to 0$, SBP's predictions converge to those from LinBP.</li>
-		<li>
-		  <i>(Geodesic number g)</i>: given a node $t$, its geodesic number $g_t$ is defined as the length
-		  of the shortest path to any node with <b>explicit beliefs</b>.
-		</li>
-		<li><b>Main idea</b>: the influence a node affects other nodes increases with less distance between.</li>
+			<li>As $\lim_{\epsilon_H \to 0}$, SBP's predictions converge to those from LinBP.</li>
+			<li>
+			  <i>(Geodesic number g)</i>: given a node $t$, its geodesic number $g_t$ is defined as the length
+			  of the shortest path to any node with <b>explicit beliefs</b>.
+			</li>
+			<li><b>Main idea</b>: the influence a node affects other nodes increases with less distance between.</li>
 	      </ul>
+		  <aside class="notes">
+			Instead of iterating, just update all the nodes once, proportional to a node's geodesic number
+			Nodes without explicit beliefs have e = 0.
+		  </aside>
 	    </section>
 	    <section>
 	      <h2>SBP Equation</h2>
 	      <font size="6">
-		Given node $t$ and geodesic number $k$, we define
-		<p>
-		  $$\hat{\mathbf{b}}_t = \hat{\mathbf{H}}^k \sum_{p \in P_t^k} w_p\hat{\mathbf{e}}_p$$
-		<p>
-		  where
-		  <ul>
-		    <li>$p_t^k$ is the set of all paths with length $k$ from a node with explicit beliefs to $t$,</li>
-		    <li>$w_p$ is the weight of any path $p \in p_t^k$,</li>
-		    <li>$\hat{\mathbf{e}}_p$ are the explicit beliefs of the node at the start of path $p$.</li>
-		  </ul>
+			Given node $t$ and geodesic number $k$, we define
+			<p>
+			  $$\hat{\mathbf{b}}_t = \hat{\mathbf{H}}^k \sum_{p \in P_t^k} w_p\hat{\mathbf{e}}_p$$
+			<p>
+			  where
+			  <ul>
+				<li>$p_t^k$ is the set of all paths with length $k$ from a node with explicit beliefs to $t$,</li>
+				<li>$w_p$ is the weight of any path $p \in p_t^k$,</li>
+				<li>$\hat{\mathbf{e}}_p$ are the explicit beliefs of the node at the start of path $p$.</li>
+			  </ul>
 	      </font>
+		  <aside class="notes">
+			Important: after b_hat is computed, the result is "standardized" (subract mean, divide by stand dev).
+			This fact allows epsilons to be cancelled out.
+			Thus, posterior beliefs are independent of scales, which is a free parameter.
+		  </aside>
 	    </section>
 	    <section>
 	      <h2>How geodesic numbers take part of belief propagation</h2>
 	      <img src="../../img/spbp-example.png" width="80%" height="80%" alt="">
+		  <aside class="notes">
+			Geodesic number tells us the extent to which beliefs will be spreading.
+			Neighbors with same geodesic number receive same information from closest node with explicit belief.
+		  </aside>
 	    </section>
 	  </section>
 	  <section data-menu-title="Experiments">
@@ -216,10 +288,34 @@
 	    <section>
 	      <h2>Great Accuracy (LinBP vs BP)</h2>
 	      <img src="../../img/linbp-accuracy.png" width="50%" height="50%" alt="">
+		  <aside class="notes">
+			Synthetic datasets are labeled as mentionned.
+			BP is used as ground truth.
+			Varying values of epsilon are sampled.
+			At some point, LinBP gives the exact same results as BP.
+			rho there is the convergence barrier.
+		  </aside>
 	    </section>
 	    <section>
 	      <h2>Great Scalability (LinBP vs BP)</h2>
 	      <img src="../../img/linbp-fast.png" width="50%" height="50%" alt="">
+		  <aside class="notes">
+			Synthetic datasets are labeled as mentionned.
+			BP is used as ground truth.
+			Experiments performed in Java and SQL.
+		  </aside>
+	    </section>
+		<section>
+	      <h2>LinBP vs LinBP* vs SBP</h2>
+	      <img src="../../img/linbp_vs_sbp.png" width="50%" height="50%" alt="">
+		  <aside class="notes">
+			Precision and recall shown.
+			LinBP* disregards echo cancellation.
+		  </aside>
+	    </section>
+		<section>
+	      <h2>DBPL Results</h2>
+	      <img src="../../img/dbpl-data.png" width="70%" height="70%" alt="">
 	    </section>
 	    <section>
 	      <h3>Summary of Results</h3>
@@ -235,15 +331,40 @@
 		  In the experiments, it was faster to update SBP  when less than $\approx$ 50% of the final explicit beliefs are new.
 		</p>
 		<p class="fragment" data-fragment-index="3">
-		  BP, LinBP, LinBP$^∗$, and SBP give almost identical top belief assignments (for $\epsilon_H$).
+		  BP, LinBP, LinBP$^∗$, and SBP give almost identical top belief assignments (depending on $\epsilon_H$).
 		  However, ties can drop the quality of SBP to $\leq$ 95%.
 		</p>
 	      </font>
 	    </section>
 	  </section>
 	  <section data-menu-title="Conclusions">
-	    <section data-menu-title="Task" data-transition="fade">
-	      <h1>Conclusions</h1>
+		<section>
+		  <h1>Conclusions</h1>
+		</section>
+	    <section data-menu-title="Conclusion" data-transition="fade">
+		  <p class="fragment" data-fragment-index="1">
+			Goal: propagate multi-class heterophily from labels
+		  </p>
+		  <p class="fragment" data-fragment-index="2">
+			Problem: How to solve BP convergence issues ☹
+		  </p>
+		  <p class="fragment" data-fragment-index="3">
+			Solution: Center & linearize BP ⇒ convergence & speed 🙂
+		  </p>
+		</section>
+		<section>
+		  <p class="fragment" data-fragment-index="4">
+			Linearized Belief Propagation (LinBP):
+			Matrix Algebra, convergence, closed-form
+			SQL (w/ recursion) with standard aggregates
+		  </p>
+		  <p class="fragment" data-fragment-index="5">
+			Single-pass Belief Propagation (SBP)
+			Myopic version, incremental updates
+		  </p>
+		  <p class="fragment" data-fragment-index="6">
+			<a href="https://github.com/sslh/linBP/">https://github.com/sslh/linBP/</a>
+		  </p>
 	    </section>
 	  </section>
 	  <section data-transition="fade">
