@@ -69,9 +69,30 @@
 	    </font>
 	  </font>
 	</section>
-	<section>
-	  <section data-menu-title="Task" data-transition="fade">
+	<section data-menu-title="Motivation">
+	  <section data-menu-title="Motivation" data-transition="fade">
 	    <h1>Motivation</h1>
+	  </section>
+	  <section data-menu-title="Introduction" data-transition="fade">
+	    <p class="fragment" data-fragment-index="1">
+	      <b>Neighborhood aggregation</b> turns out to be a crucial part of representation
+	      learning, due to the rise of <i>graph neural networks</i>.
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      Such procedure aims to extract high-level features from nodes via a
+	      <i>message passing</i> scheme.
+	    </p>
+	  </section>
+	  <section data-menu-title="Problems" data-transition="fade">
+	    <h3>Caveats of Traditional Aggregation Schemes</h3>
+	    <p class="fragment" data-fragment-index="1">
+	      Usually, traditional GCNs show state-of-the-art performance only with a 2-layer model,
+	      while deeper models don't take advantage of accessing to more information.
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      Networks that exhibit a <i>power law</i> distribution (and, thus, the
+	      existence of node hubs) yield inconsistent learning of node relations by GCNs.
+	    </p>
 	  </section>
 	  <section data-transition="fade" data-background-image="../../img/twitter-users.jpg">
 	    <h2></h2>
@@ -81,16 +102,18 @@
 	  </section>
 	  <section>
 	    <h2>Neighborhood aggregation in GNNs</h2>
+	    <img src="../../img/jumping-aggregation.png" width="80%" height="80%" alt="">
+	  </section>
+	  <section data-transition="fade" data-background-image="../../img/jumping-sn.png">
+	    <h2>Changing Locality</h2>
 	  </section>
 	  <section>
 	    <h2>Influence distributions vs Random Walks</h2>
+	    <img src="../../img/jumping-rw.png" width="80%" height="80%" alt="">
 	    <aside class="notes">
 	      - In real social media, we've got a mixture, namely, a set of affinity scores according to certain classes.
 	      - Our task: label propagation from partial labelling
 	    </aside>
-	  </section>
-	  <section>
-	    <h2>Changing Locality</h2>
 	  </section>
 	</section>
 	<section data-menu-title="Background">
@@ -110,17 +133,13 @@
 	      TBD
 	    </textarea>
 	  </section>
-	  <!-- <section data-markdown data-separator-notes="Note:"> -->
-	  <!--   <textarea data-template> -->
 	  <section>
+	    <h3>Hidden Layer Update for a GNN</h3>
 	    <font size="6">
 	      $$
 	      h_v^{(l)} = \sigma\left(W_l \cdot \text{AGGREGATE}\left(\{h_u^{(l-1)}, \forall u \in \tilde{N}(v)\}\right)\right)
 	      $$
 	    </font>
-	    <!--   Note: -->
-	    <!--   TBD -->
-	    <!-- </textarea> -->
 	  </section>
 	  <section>
 	    <h3>Graph Convolutional Neural Networks</h3>
@@ -128,7 +147,8 @@
 	      $$
 	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \sum_{u \in \tilde{N}(v)}(\deg(v)\deg(u))^{-\frac{1}{2}} h_u^{(l-1)}\right)
 	      $$
-	      <p>	      
+	      <p>
+	      <p>
 	      $$
 	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \frac{1}{\tilde{\deg}(v)} \sum_{u \in \tilde{N}(v)} h_u^{(l-1)}\right)
 	      $$
@@ -147,12 +167,14 @@
 	    </font>
 	  </section>
 	  <section>
-	    <h3>Influence Distributions</h3>
+	    <h2>Influence Distributions</h2>
 	    <font size="6">
 	      $$
 	      I_x(y) = \frac{e^T \left[\frac{\partial h_x^{(k)}}{\partial h_y^{(0)}} e\right]}{\sum_{z \in V} e^T \frac{\partial h_x^{(k)}}{\partial h_z^{(0)}} e}
 	      $$
 	    </font>
+	    <p>
+	      where $e$ is an all-ones vector
 	  </section>
 	  <section data-markdown data-separator-notes="Note:">
 	    <textarea data-template>
@@ -170,6 +192,17 @@
 	      in expectation, to the $k$-step random walk distribution on $G$ starting at node $x$.
 	    </textarea>
 	  </section>
+	  <section data-markdown data-separator-notes="Note:">
+	    <textarea data-template>
+	      ### A Crucial Implication of Theorem 1
+
+	      Information aggregation rate while updating hidden layers depends on the
+	      local structure radius.
+
+	      - Large radii may lead to too much averaging.
+	      - Small radii may lead to in- stabilities or insufficient information aggregation.
+	    </textarea>
+	  </section>
 	  <section data-transition="fade" data-background-image="../../img/jumping-influence.png">
 	  </section>
 	</section>
@@ -177,13 +210,41 @@
 	  <section data-menu-title="Jumping Networks" data-transition="fade">
 	    <h1>Jumping Knowledge Networks</h1>
 	  </section>
-	  <section data-markdown  data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Architecture
-	      
-	      Note:
-	      Convergence is NOT guaranteed!
-	    </textarea>
+	  <section data-menu-title="Architecture" data-transition="fade">
+	    <h3>The proposed aggregation scheme... </h3>
+	    <p>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		makes each layer increase the size of the influence distribution by aggregating
+		neighborhoods from the previous layer ⬆️;
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		combines, at the last layer, some of the previous layers' representations
+		independently for each node;
+	      </p>
+	      <p class="fragment" data-fragment-index="3">
+		intermediate representations are said to <b><i>jump</i></b> to the last layer.
+	      </p>
+	    </font>
+	  </section>
+	  <section data-menu-title="Aggregation Mechanisms" data-transition="fade">
+	    <h3>Aggregation Mechanisms</h3>
+	    <p>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		<b>CONCATENATION</b>
+		$$[h_v^{(1)},\ldots,h_v^{(k)}]$$
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		<b>MAX-POOLING</b>. Select the most informative layer for each feature coordinate.
+	      </p>
+	      <p class="fragment" data-fragment-index="3">
+		<b>LSTM-ATTENTION</b>. Input $h_v^{(1)},\ldots,h_v^{(k)}$ into a bi-directional
+		LSTM to generate forward and backward features $f_v^{(l)}$ and $b_v^{(l)}$ for each
+		layer $l$; finally compute an attention score per each node by combining those
+		for each layer.
+	      </p>
+	    </font>
 	  </section>
 	  <section data-transition="fade">
 	    <img src="../../img/jumping-architecture.png" width="50%" height="50%" alt="">
@@ -217,17 +278,17 @@
 	  <section data-markdown  data-separator-notes="Note:">
 	    <textarea data-template>
 	      ## Settings
+
+	      ![setup](../../img/jumping-dataset-stats.png)
 	      
 	      Note:
 	      Convergence is NOT guaranteed!
 	    </textarea>
 	  </section>
-	  <section data-markdown  data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Datasets
-	      
-	      Note:
-	      Convergence is NOT guaranteed!
+	  <section>
+	    <h3>Datasets</h3>
+	    <img src="../../img/reddit.png" width="40%" height="40%" alt="">
+	    <img src="../../img/jumping-ppi.png" width="50%" height="50%" alt="">
 	    </textarea>
 	  </section>
 	  <section data-markdown  data-separator-notes="Note:">
@@ -238,110 +299,59 @@
 	      Convergence is NOT guaranteed!
 	    </textarea>
 	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-results-gcn-jk-cc.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-results-graphsage-jk-reddit.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-results-graphsage-jk-ppi.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-microf1-gat-jk.png" width="110%" height="110%" alt="">
+	  </section>
 	</section>
 	<section data-menu-title="Conclusion">
 	  <section data-menu-title="Conclusion" data-transition="fade">
 	    <h1>Conclusion</h1>
 	  </section>
-	  <section>
-	    <h2>Summary</h2>
-	    <ul>
-	      <li>
-		<i>Synthetic</i>: The authors created 9 "Kronecker graphs" of varying sizes ans picked 5% nodes randomly
-		to assignthem two classes ($k=2$) in the range $[-0.1, 0.1]$.
-	      </li>
-	      <li>
-		<i>Real</i>: DBPL data was used, consisting of 36 138 nodes representing papers, authors, converences,
-		and terms ($k=4$).
-	      </li>
-	    </ul>
-	  </section>
-	  <section>
-	    <h2>Conclusions</h2>
-	    <img src="../../img/kronecker-data.png" width="80%" height="80%" alt="">
-	  </section>
-	  <section>
-	    <h2>Great Accuracy (LinBP vs BP)</h2>
-	    <img src="../../img/linbp-accuracy.png" width="50%" height="50%" alt="">
-	    <aside class="notes">
-	      Synthetic datasets are labeled as mentionned.
-	      BP is used as ground truth.
-	      Varying values of epsilon are sampled.
-	      At some point, LinBP gives the exact same results as BP.
-	      rho there is the convergence barrier.
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Great Scalability (LinBP vs BP)</h2>
-	    <img src="../../img/linbp-fast.png" width="50%" height="50%" alt="">
-	    <aside class="notes">
-	      Synthetic datasets are labeled as mentionned.
-	      BP is used as ground truth.
-	      Experiments performed in Java and SQL.
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>LinBP vs LinBP* vs SBP</h2>
-	    <img src="../../img/linbp_vs_sbp.png" width="50%" height="50%" alt="">
-	    <aside class="notes">
-	      Precision and recall shown.
-	      LinBP* disregards echo cancellation.
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>DBPL Results</h2>
-	    <img src="../../img/dbpl-data.png" width="70%" height="70%" alt="">
-	  </section>
-	  <section>
-	    <h3>Summary of Results</h3>
-	    <font size="5">
-	      <p class="fragment" data-fragment-index="1">
-		The main memory implementation of LinBP is up to 600 times faster than BP,
-		and the SQL implementation of SBP is more than 10 times faster than LinBP.
-	      </p>
-	      <p class="fragment" data-fragment-index="2">
-		SBP needs fewer iterations to converge and requires fewer calculations for each iteration, on average.
-	      </p>
-	      <p class="fragment" data-fragment-index="4">
-		In the experiments, it was faster to update SBP  when less than $\approx$ 50% of the final explicit beliefs are new.
-	      </p>
-	      <p class="fragment" data-fragment-index="3">
-		BP, LinBP, LinBP$^∗$, and SBP give almost identical top belief assignments (depending on $\epsilon_H$).
-		However, ties can drop the quality of SBP to $\leq$ 95%.
-	      </p>
-	    </font>
-	  </section>
-	</section>
-	<section data-menu-title="Backup Slides">
-	  <section>
-	    <h1>Sketches of Proofs</h1>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-meme.png" width="50%" height="50%" alt="">
 	  </section>
 	  <section data-menu-title="Conclusion" data-transition="fade">
 	    <p class="fragment" data-fragment-index="1">
-	      Goal: propagate multi-class heterophily from labels
+	      <b>Goal</b>: Provide a representation learning scheme that can generalize
+	      better on diverse variety of network structure, than the one proposed for GCN's
 	    </p>
 	    <p class="fragment" data-fragment-index="2">
-	      Problem: How to solve BP convergence issues ☹
-	    </p>
-	    <p class="fragment" data-fragment-index="3">
-	      Solution: Center & linearize BP ⇒ convergence & speed 🙂
+	      <b>Problem</b>: Denser subgraphs may cause aggregation algorithms to converge
+	      in expectation to biased random walks. ☹
 	    </p>
 	  </section>
 	  <section>
 	    <p class="fragment" data-fragment-index="4">
-	      Linearized Belief Propagation (LinBP):
-	      Matrix Algebra, convergence, closed-form
-	      SQL (w/ recursion) with standard aggregates
+	      <b>Solution</b>: JK-Nets aggregate and leverage information from more than
+	      one hidden layers.😁
 	    </p>
 	    <p class="fragment" data-fragment-index="5">
-	      Single-pass Belief Propagation (SBP)
-	      Myopic version, incremental updates
+	      JK-Nets with the LSTM-attention aggregators outperform the non-adaptive
+	      models GraphSAGE, GAT and JK-Nets with concatenation aggregators.
 	    </p>
-	    <p class="fragment" data-fragment-index="6">
-	      <a href="https://github.com/sslh/linBP/">https://github.com/sslh/linBP/</a>
-	    </p>
+	    <font size="4">
+	      <p class="fragment" data-fragment-index="6">
+		<a href="https://github.com/ShinKyuY/Representation_Learning_on_Graphs_with_Jumping_Knowledge_Networks">
+		  https://github.com/ShinKyuY/Representation_Learning_on_Graphs_with_Jumping_Knowledge_Networks
+		</a>
+	      </p>
+	    </font>
 	  </section>
 	</section>
+	<!-- <section data-menu-title="Backup Slides"> -->
+	<!--   <section> -->
+	<!--     <h1>Sketches of Proofs</h1> -->
+	<!--   </section> -->
+	<!-- </section> -->
 	<section data-transition="fade">
 	  <h2>Thank you!</h2>
 	</section>
