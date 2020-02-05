@@ -117,54 +117,60 @@
 	      $$
 	      h_v^{(l)} = \sigma\left(W_l \cdot \text{AGGREGATE}\left(\{h_u^{(l-1)}, \forall u \in \tilde{N}(v)\}\right)\right)
 	      $$
-	      
-	      $$
-	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \sum_{u \in \tilde{N}(v)}(\deg(v)\deg(u))^{-\frac{1}{2}} h_u^{(l-1)}\right)
-	      $$
-	      
-	      $$
-	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \frac{1}{\tilde{\deg}(v)} \sum_{u \in \tilde{N}(v)} h_u^{(l-1)}\right)
-	      $$
 	    </font>
 	    <!--   Note: -->
 	    <!--   TBD -->
 	    <!-- </textarea> -->
 	  </section>
-	  <section data-markdown data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Graph Convolutional Neural Networks
-	      - let $\mathbf{m}_{st}$ represent the $k$ dimensional _message_ that node $s$ sents to node $t$.
-	      - let $\mathbf{H}$ be the $k \times k$ _affinity_ matrix which satisfies
-	      - symmetry
-	      - doubly stochastic
-
-	      Note:
-	      Doubly stochastic: sums of columns and rows equal to one, respectively.
-	    </textarea>
+	  <section>
+	    <h3>Graph Convolutional Neural Networks</h3>
+	    <font size="6">
+	      $$
+	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \sum_{u \in \tilde{N}(v)}(\deg(v)\deg(u))^{-\frac{1}{2}} h_u^{(l-1)}\right)
+	      $$
+	      <p>	      
+	      $$
+	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \frac{1}{\tilde{\deg}(v)} \sum_{u \in \tilde{N}(v)} h_u^{(l-1)}\right)
+	      $$
+	    </font>
 	  </section>
-	  <section data-markdown data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Neighborhood Aggregation with Skip Connections
-
-	      Note:
-	      Doubly stochastic: sums of columns and rows equal to one, respectively.
-	    </textarea>
+	  <section>
+	    <h3>Neighborhood Aggregation with Skip Connections</h3>
+	    <font size="6">
+	      $$
+	      h_{N(v)}^{(l)} = \sigma\left(W_l \cdot \text{AGGREGATE}_N\left(\{h_u^{(l-1)}, \forall u \in N(v)\}\right)\right)
+	      $$
+	      <p>
+	      $$
+	      h_v^{(l)} = \text{COMBINE}\left(h_v^{(l-1)}, h_{N(v)}^{(l)}\right)
+	      $$
+	    </font>
 	  </section>
-	  <section data-markdown data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Influence Distributions
-
-	      Note:
-	      Doubly stochastic: sums of columns and rows equal to one, respectively.
-	    </textarea>
+	  <section>
+	    <h3>Influence Distributions</h3>
+	    <font size="6">
+	      $$
+	      I_x(y) = \frac{e^T \left[\frac{\partial h_x^{(k)}}{\partial h_y^{(0)}} e\right]}{\sum_{z \in V} e^T \frac{\partial h_x^{(k)}}{\partial h_z^{(0)}} e}
+	      $$
+	    </font>
 	  </section>
 	  <section data-markdown data-separator-notes="Note:">
 	    <textarea data-template>
 	      ## Model Analysis
-
-	      Note:
-	      Doubly stochastic: sums of columns and rows equal to one, respectively.
 	    </textarea>
+	  </section>
+	  <section data-markdown data-separator-notes="Note:">
+	    <textarea data-template>
+	      ### Theorem 1
+
+	      Given a $k$-layer GCN with averaging by each node's degree at each hidden layer update,  assume that all paths in the computation graph of the model are activated with the same probability of
+	      success $\rho$.
+
+	      Then the influence distribution $I_x$ for any node $x \in V$ is equivalent,
+	      in expectation, to the $k$-step random walk distribution on $G$ starting at node $x$.
+	    </textarea>
+	  </section>
+	  <section data-transition="fade" data-background-image="../../img/jumping-influence.png">
 	  </section>
 	</section>
 	<section data-menu-title="Jumping Networks">
@@ -179,6 +185,9 @@
 	      Convergence is NOT guaranteed!
 	    </textarea>
 	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-architecture.png" width="50%" height="50%" alt="">
+	  </section>
 	  <section data-markdown  data-separator-notes="Note:">
 	    <textarea data-template>
 	      ## JK-Net learns to Adapt!
@@ -186,6 +195,19 @@
 	      Note:
 	      Convergence is NOT guaranteed!
 	    </textarea>
+	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/jumping-adapt.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section>
+	      <h3>Proposition 1</h3>
+	      <font size="5">
+		Assume that paths of the same length in the computation graph are activated with the same probability.
+		<p>
+		The influence score $I(x, y)$ for any $x, y \in V$ under a $k$-layer JK-Net with layer-wise max-pooling is equivalent
+		in expectation to a mixture of $0,\ldots,k$-step random walk distributions on $\tilde{G}$ at $y$
+		starting at $x$, the coefficients of which depend on the values of the layer features $h_x^{(l)}$.
+	      </font>
 	  </section>
 	</section>
 	<section data-menu-title="Experiments">
