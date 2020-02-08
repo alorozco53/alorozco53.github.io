@@ -82,6 +82,12 @@
 	      Such procedure aims to extract high-level features from nodes via a
 	      <i>message passing</i> scheme.
 	    </p>
+	    <aside class="notes">
+	      What do aggregation methods bring to the table?
+	      <p>
+	      A generalization of a graph isomorphism test, enabling to learn the topology and
+	      distribution of node features in the neighborhood.
+	    </aside>
 	  </section>
 	  <section data-menu-title="Problems" data-transition="fade">
 	    <h3>Caveats of Traditional Aggregation Schemes</h3>
@@ -93,6 +99,9 @@
 	      Networks that exhibit a diversity in subgraph structures (such as node hubs)
 	      yield inconsistent learning of node relations by GCNs.
 	    </p>
+	    <aside class="notes">
+	      Also, scale-free networks (ones that follow a power law distribution) may fail to be modeled.
+	    </aside>
 	  </section>
 	  <section data-transition="fade" data-background-image="../../img/twitter-users.jpg">
 	    <h2></h2>
@@ -106,13 +115,16 @@
 	  </section>
 	  <section data-transition="fade" data-background-image="../../img/jumping-sn.png">
 	    <h2>Changing Locality</h2>
+	    <aside class="notes">
+	      Of special interest for this paper is to analyze how the spread of influence between nodes
+	      is related to random walk distributions, and hence, what this tells us about GNN learning.
+	    </aside>
 	  </section>
 	  <section>
 	    <h2>Influence distributions vs Random Walks</h2>
 	    <img src="../../img/jumping-rw.png" width="80%" height="80%" alt="">
 	    <aside class="notes">
-	      - In real social media, we've got a mixture, namely, a set of affinity scores according to certain classes.
-	      - Our task: label propagation from partial labelling
+	      Is it possible to adaptively adjust (learn) the influence radii for each node and task?
 	    </aside>
 	  </section>
 	</section>
@@ -130,7 +142,7 @@
 	      by the $l$-th layer of the model.
 
 	      Note:
-	      TBD
+	      The dimension of the hidden layers is assumed to be the same accross layers.
 	    </textarea>
 	  </section>
 	  <section>
@@ -153,6 +165,9 @@
 	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \frac{1}{\tilde{\deg}(v)} \sum_{u \in \tilde{N}(v)} h_u^{(l-1)}\right)
 	      $$
 	    </font>
+	    <aside class="notes">
+	      The role of normalization in both equations determines how to rank nodes of higher degree.
+	    </aside>
 	  </section>
 	  <section>
 	    <h3>Neighborhood Aggregation with Skip Connections</h3>
@@ -165,6 +180,11 @@
 	      h_v^{(l)} = \text{COMBINE}\left(h_v^{(l-1)}, h_{N(v)}^{(l)}\right)
 	      $$
 	    </font>
+	    <aside class="notes">
+	      AGGREGATE and COMBINE are defined by the specific model.
+	      This model can be combined with GAT and GraphSAGE, for instance, to add representational power.
+	      Those approaches are orthogonal to what is presented here.
+	    </aside>
 	  </section>
 	  <section>
 	    <h2>Influence Distributions</h2>
@@ -175,6 +195,9 @@
 	    </font>
 	    <p>
 	      where $e$ is an all-ones vector
+	      <aside class="notes">
+		How does a change in the inpute of node $x$ affects the output of node $y$?
+	      </aside>
 	  </section>
 	  <section data-markdown data-separator-notes="Note:">
 	    <textarea data-template>
@@ -190,6 +213,10 @@
 
 	      Then the influence distribution $I_x$ for any node $x \in V$ is equivalent,
 	      in expectation, to the $k$-step random walk distribution on $G$ starting at node $x$.
+
+	      Note:
+	      Note there is no assumption on the structure of graph $G$, thus guaranteeing
+	      the practical intention of this result for the sake of this paper.
 	    </textarea>
 	  </section>
 	  <section data-markdown data-separator-notes="Note:">
@@ -252,9 +279,6 @@
 	  <section data-markdown  data-separator-notes="Note:">
 	    <textarea data-template>
 	      ## JK-Net learns to Adapt!
-	      
-	      Note:
-	      Convergence is NOT guaranteed!
 	    </textarea>
 	  </section>
 	  <section data-transition="fade">
@@ -269,6 +293,9 @@
 		in expectation to a mixture of $0,\ldots,k$-step random walk distributions on $\tilde{G}$ at $y$
 		starting at $x$, the coefficients of which depend on the values of the layer features $h_x^{(l)}$.
 	      </font>
+	      <aside class="notes">
+		There is no assumption on the structure of graph $G$!
+	      </aside>
 	  </section>
 	</section>
 	<section data-menu-title="Experiments">
