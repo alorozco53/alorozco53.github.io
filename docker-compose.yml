@@ -1,0 +1,32 @@
+# https://davemateer.com/2018/01/25/Jekyll-and-Docker
+# https://michaelsoolee.com/compile-jekyll-site-docker/
+# https://ddewaele.github.io/running-jekyll-in-docker/
+
+version: '3'
+
+services:
+  autogen-profiles:
+    image: python:3.8-slim-buster
+    container_name: autogen-profiles.alorozco53.github.io
+    environment: 
+      - DATA_ROOT=/data
+    volumes:
+      - ./scripts:/run
+      - ./_data:/data/_data
+      - ./_members:/data/_members
+    working_dir: /run
+    command: bash -c "pip install -q pyyaml tqdm && ./autogen_profiles"
+
+  jekyll: 
+    image: jekyll/jekyll:3.8
+    container_name: alorozc53.github.io
+    depends_on: 
+      - "autogen-profiles"
+    environment:
+        - JEKYLL_ENV=docker
+    ports:
+      - 4000:4000
+      - 35729:35729
+    volumes:
+        - ./:/srv/jekyll
+    command: jekyll serve -H 0.0.0.0 -P 4000 --config _config.yml,_config.dev.yml  --incremental
