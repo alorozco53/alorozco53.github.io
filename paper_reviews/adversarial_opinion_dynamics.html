@@ -74,35 +74,45 @@
 	  <section data-menu-title="Motivation" data-transition="fade">
 	    <h1>Motivation</h1>
 	  </section>
-	  <section data-menu-title="Introduction" data-transition="fade">
+	  <section data-menu-title="Research Inquiries" data-transition="fade">
 	    <p class="fragment" data-fragment-index="1">
-	      <b>Neighborhood aggregation</b> turns out to be a crucial part of representation
-	      learning, due to the rise of <i>graph neural networks</i>.
+	      <b>Opinion dynamics</b> has been previously studied within the mathematical social
+	      sciences literature; yet not much attention has been put to current social network studies.
 	    </p>
 	    <p class="fragment" data-fragment-index="2">
-	      Such procedure aims to extract high-level features from nodes via a
-	      <i>message passing</i> scheme.
+	      On the other hand, <i>perturbations that induce discord in social media</i> are of important interest for
+	      current research in politics, sociology, economics, computer science, etc.
 	    </p>
 	    <aside class="notes">
-	      What do aggregation methods bring to the table?
+	      Perturbations as adversarial attacks.
 	      <p>
-	      A generalization of a graph isomorphism test, enabling to learn the topology and
-	      distribution of node features in the neighborhood.
+		The authors investigate the properties of these attacks formally.
 	    </aside>
 	  </section>
-	  <section data-menu-title="Problems" data-transition="fade">
-	    <h3>Caveats of Traditional Aggregation Schemes</h3>
+	  <section data-menu-title="Adversarial Attacks to Induce Discord" data-transition="fade">
+	    <h2>Adversarial Attacks to Induce Discord</h2>
 	    <p class="fragment" data-fragment-index="1">
-	      Usually, traditional GCNs show state-of-the-art performance only with a 2-layer model,
-	      while deeper models don't take advantage of accessing to more information.
+	      The authors present a formal study on the intuition that a (<i>maliscious</i>) actor
+	      attacks the overall opinion consensus of a network.
 	    </p>
 	    <p class="fragment" data-fragment-index="2">
-	      Networks that exhibit a diversity in subgraph structures (such as node hubs)
-	      yield inconsistent learning of node relations by GCNs.
+	      These perturbations will difuse via an opinion dynamics model.
 	    </p>
-	    <aside class="notes">
-	      Also, scale-free networks (ones that follow a power law distribution) may fail to be modeled.
-	    </aside>
+	  </section>
+	  <section data-menu-title="Problem vs Task" data-transition="fade">
+	    <h2>Problem</h2>
+	    <p class="fragment" data-fragment-index="1">
+	      <font color="red">
+		An adversarial agent targets a few individual opinions to difuse a sense of discord.
+	      </font>
+	    </p>
+	    <h2>Task</h2>
+	    <p class="fragment" data-fragment-index="2">
+	      <font color="blue">
+		Identify the most vulverable structures within a network.
+		Mitigate these attacks by insulating nodes.
+	      </font>
+	    </p>
 	  </section>
 	  <section data-transition="fade" data-background-image="../../img/twitter-users.jpg">
 	    <h2></h2>
@@ -110,22 +120,11 @@
 	      - Graphs in Social Media
 	    </aside>
 	  </section>
-	  <section>
-	    <h2>Neighborhood aggregation in GNNs</h2>
-	    <img src="../../img/jumping-aggregation.png" width="80%" height="80%" alt="">
-	  </section>
 	  <section data-transition="fade" data-background-image="../../img/jumping-sn.png">
-	    <h2>Changing Locality</h2>
+	    <h2>Convex Optimization</h2>
 	    <aside class="notes">
 	      Of special interest for this paper is to analyze how the spread of influence between nodes
 	      is related to random walk distributions, and hence, what this tells us about GNN learning.
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Influence distributions vs Random Walks</h2>
-	    <img src="../../img/jumping-rw.png" width="80%" height="80%" alt="">
-	    <aside class="notes">
-	      Is it possible to adaptively adjust (learn) the influence radii for each node and task?
 	    </aside>
 	  </section>
 	</section>
@@ -133,130 +132,117 @@
 	  <section data-menu-title="Definitions" data-transition="fade">
 	    <h1>Definitions</h1>
 	  </section>
-	  <section data-markdown data-separator-notes="Note:">
+	  <section data-markdown data-separator-notes="Note:" data-menu-title="Notation">
 	    <textarea data-template>
-	      ## Graph Neural Networks 
-	      Consider a undirected graph $G = (V, E)$:
-	      - $X_v \in \mathbb{R}^{d_i}$ is a vector of features per each $v \in V$;
-	      - $\tilde{G}$ is the graph obtained by adding self-loops to each vertex;
-	      - let $h_v^{(l)} \in \mathbb{R}^{d_h}$ is the hidden feature of node $v$
-	      by the $l$-th layer of the model.
+	      ## Weighted Graphs
+	      Consider a simple, weighted, undirected graph $G = (V, E, w)$:
+	      
+	      - $|V| = n$ and $w: E \to \mathbb{R}^+$.
+	      - Let $m := \sum_{(i,j) \in E} w(i,j)$, the sum of all the weights of all edges in G.
 
 	      Note:
 	      The dimension of the hidden layers is assumed to be the same accross layers.
 	    </textarea>
 	  </section>
 	  <section>
-	    <h3>Hidden Layer Update for a GNN</h3>
-	    <font size="6">
-	      $$
-	      h_v^{(l)} = \sigma\left(W_l \cdot \text{AGGREGATE}\left(\{h_u^{(l-1)}, \forall u \in \tilde{N}(v)\}\right)\right)
-	      $$
-	    </font>
-	  </section>
-	  <section>
-	    <h3>Graph Convolutional Neural Networks</h3>
-	    <font size="6">
-	      $$
-	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \sum_{u \in \tilde{N}(v)}(\deg(v)\deg(u))^{-\frac{1}{2}} h_u^{(l-1)}\right)
-	      $$
+	    <h2>Matrices</h2>
+	    <font size="7">
+	      <b>Adjacency Matrix</b>
+	      $$A_{i,j} = A_{j,i} := w(i,j)$$
 	      <p>
+	      <b>Diagonal Matrix</b>
+	      $$D_{i,i} = \sum_{j \in V} w(i,j)$$
 	      <p>
-	      $$
-	      h_v^{(l)} = \text{RELU}\left(W_l \cdot \frac{1}{\tilde{\deg}(v)} \sum_{u \in \tilde{N}(v)} h_u^{(l-1)}\right)
-	      $$
+	      <b>Laplacian Matrix</b>
+	      $$L := D - A$$
 	    </font>
 	    <aside class="notes">
-	      The role of normalization in both equations determines how to rank nodes of higher degree.
+	      L is symmetric and positive semidefinite.
 	    </aside>
 	  </section>
 	  <section>
-	    <h3>Neighborhood Aggregation with Skip Connections</h3>
-	    <font size="6">
+	    <h3>Some Spectral Properties</h3>
+	    <font size="8">
 	      $$
-	      h_{N(v)}^{(l)} = \sigma\left(W_l \cdot \text{AGGREGATE}_N\left(\{h_u^{(l-1)}, \forall u \in N(v)\}\right)\right)
+	      \mathbf{x}^T L \mathbf{x} = \sum_{(i,j) \in E} w(i,j)(\mathbf{x}(i)-\mathbf{x}(j))^2
 	      $$
 	      <p>
+	      <p>
 	      $$
-	      h_v^{(l)} = \text{COMBINE}\left(h_v^{(l-1)}, h_{N(v)}^{(l)}\right)
+	      L = \sum_{i=1}^n \lambda_i\mathbf{v}_i\mathbf{v}_i^T
 	      $$
 	    </font>
+	  </section>
+	  <section>
+	    <h3>Friedkin-Johnsen Dynamics</h3>
+	    Given $G = (V, E, w)$ and an initial opinion vector $s \in \mathbb{R}^n$.
+	    <p class="fragment" data-fragment-index="1">
+	      Start with $\mathbf{z}^{(0)} = \mathbf{s}$.
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      For each node $i \in V$, update
+	      $$
+	      \mathbf{z}^{(t+1)}(i) =
+	      \frac{\mathbf{s}(i) + \sum_{j \in V} w(i,j)\mathbf{z}^{(T)}(j)}
+	      {1 + \sum_{j \in V} w(i,j)}
+	      $$
+	    </p>
 	    <aside class="notes">
-	      AGGREGATE and COMBINE are defined by the specific model.
-	      This model can be combined with GAT and GraphSAGE, for instance, to add representational power.
-	      Those approaches are orthogonal to what is presented here.
+	      Normalization is computed implicitly on one's private opinion.
 	    </aside>
 	  </section>
 	  <section>
-	    <h2>Influence Distributions</h2>
-	    <font size="6">
-	      $$
-	      I_x(y) = \frac{e^T \left[\frac{\partial h_x^{(k)}}{\partial h_y^{(0)}} e\right]}{\sum_{z \in V} e^T \frac{\partial h_x^{(k)}}{\partial h_z^{(0)}} e}
-	      $$
-	    </font>
+	    <h3>Friedkin-Johnsen Dynamics</h3>
 	    <p>
-	      where $e$ is an all-ones vector
-	      <aside class="notes">
-		How does a change in the inpute of node $x$ affects the output of node $y$?
-	      </aside>
-	  </section>
-	  <section data-markdown data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Model Analysis
-	    </textarea>
-	  </section>
-	  <section data-markdown data-separator-notes="Note:">
-	    <textarea data-template>
-	      ### Theorem 1
-
-	      Given a $k$-layer GCN with averaging by each node's degree at each hidden layer update,  assume that all paths in the computation graph of the model are activated with the same probability of
-	      success $\rho$.
-
-	      Then the influence distribution $I_x$ for any node $x \in V$ is equivalent,
-	      in expectation, to the $k$-step random walk distribution on $G$ starting at node $x$.
-
-	      Note:
-	      Note there is no assumption on the structure of graph $G$, thus guaranteeing
-	      the practical intention of this result for the sake of this paper.
-	    </textarea>
-	  </section>
-	  <section data-markdown data-separator-notes="Note:">
-	    <textarea data-template>
-	      ### A Crucial Implication of Theorem 1
-
-	      Information aggregation rate while updating hidden layers depends on the
-	      local structure radius.
-
-	      - Large radii may lead to too much averaging.
-	      - Small radii may lead to in- stabilities or insufficient information aggregation.
-	    </textarea>
-	  </section>
-	  <section data-transition="fade" data-background-image="../../img/jumping-influence.png">
+	    Convergence will be reached and the limiting final opinion vector is given by
+	    $$\mathbf{z} = (I + L)^{-1}\mathbf{s}$$
+	    <aside class="notes">
+	      Normalization is computed implicitly on one's private opinion.
+	    </aside>
 	  </section>
 	</section>
 	<section data-menu-title="Adversarial Optimization">
 	  <section data-menu-title="Adversarial Optimization" data-transition="fade">
 	    <h1>Adversarial Optimization</h1>
 	  </section>
-	  <section data-menu-title="Architecture" data-transition="fade">
-	    <h3>The proposed aggregation scheme... </h3>
+	  <section data-menu-title="General Formulation" data-transition="fade">
+	    <h3>General Formulation</h3>
+	    <p>
+	    <p class="fragment" data-fragment-index="1">
+	      $$
+	      \max_{s \in \mathbb{R}^n: ||\mathbf{s}||_2 \leq R}
+	      \mathbf{s}^T (I + L)^{-1}f(L)(I + L)^{-1}\mathbf{s}
+	      $$
+	    </p>
+	  </section>
+	  <section data-menu-title="Disagreement" data-transition="fade">
+	    <h3>Disagreement</h3>
+	    <p>
+	    <p class="fragment" data-fragment-index="1">
+	      <img src="../../img/advop-disagreement.png" width="100%" height="100%" alt="">
+	    </p>
+	  </section>
+	  <section data-menu-title="Optimizing Disagreement" data-transition="fade">
+	    <h3>Optimizing Disagreement</h3>
 	    <p>
 	    <font size="6">
 	      <p class="fragment" data-fragment-index="1">
-		makes each layer increase the size of the influence distribution by aggregating
-		neighborhoods from the previous layer ⬆️;
+		<b>CONCATENATION</b>
+		$$[h_v^{(1)},\ldots,h_v^{(k)}]$$
 	      </p>
 	      <p class="fragment" data-fragment-index="2">
-		combines, at the last layer, some of the previous layers' representations
-		independently for each node;
+		<b>MAX-POOLING</b>. Select the most informative layer for each feature coordinate.
 	      </p>
 	      <p class="fragment" data-fragment-index="3">
-		intermediate representations are said to <b><i>jump</i></b> to the last layer.
+		<b>LSTM-ATTENTION</b>. Input $h_v^{(1)},\ldots,h_v^{(k)}$ into a bi-directional
+		LSTM to generate forward and backward features $f_v^{(l)}$ and $b_v^{(l)}$ for each
+		layer $l$; finally compute an attention score per each node by combining those
+		for each layer.
 	      </p>
 	    </font>
 	  </section>
-	  <section data-menu-title="Aggregation Mechanisms" data-transition="fade">
-	    <h3>Aggregation Mechanisms</h3>
+	  <section data-menu-title="Polarization vs Disagreement" data-transition="fade">
+	    <h3>Polarization vs Disagreement</h3>
 	    <p>
 	    <font size="6">
 	      <p class="fragment" data-fragment-index="1">
@@ -297,6 +283,11 @@
 	      <aside class="notes">
 		There is no assumption on the structure of graph $G$!
 	      </aside>
+	  </section>
+	</section>
+	<section data-menu-title="Defending the Network">
+	  <section data-menu-title="Defending the Network" data-transition="fade">
+	    <h1>Defending the Network</h1>
 	  </section>
 	</section>
 	<section data-menu-title="Mixed Graph Objectives">
