@@ -114,17 +114,17 @@
 	      </font>
 	    </p>
 	  </section>
-	  <section data-transition="fade" data-background-image="../../img/twitter-users.jpg">
+	  <section data-transition="fade" data-background-image="../../img/twitter-users.jpg" data-background-repeat="repeat" data-background-size="100px">
 	    <h2></h2>
 	    <aside class="notes">
-	      - Graphs in Social Media
+	      - Authors are able to qualitatively describe which networks are most vulnerable or resilient
 	    </aside>
 	  </section>
 	  <section data-transition="fade" data-background-image="../../img/jumping-sn.png">
 	    <h2>Convex Optimization</h2>
 	    <aside class="notes">
-	      Of special interest for this paper is to analyze how the spread of influence between nodes
-	      is related to random walk distributions, and hence, what this tells us about GNN learning.
+	      Convex optimization is the general methodology for an entity defending a network,
+	      to minimize risks.
 	    </aside>
 	  </section>
 	</section>
@@ -139,9 +139,6 @@
 	      
 	      - $|V| = n$ and $w: E \to \mathbb{R}^+$.
 	      - Let $m := \sum_{(i,j) \in E} w(i,j)$, the sum of all the weights of all edges in G.
-
-	      Note:
-	      The dimension of the hidden layers is assumed to be the same accross layers.
 	    </textarea>
 	  </section>
 	  <section>
@@ -172,6 +169,11 @@
 	      L = \sum_{i=1}^n \lambda_i\mathbf{v}_i\mathbf{v}_i^T
 	      $$
 	    </font>
+	    <aside class="notes">
+	      The quadratic form induced by L is used throughout the paper to describe the
+	      interaction of a graph with a perturbance vector.
+	      L can be written in terms of its eigenvectors
+	    </aside>
 	  </section>
 	  <section>
 	    <h3>Friedkin-Johnsen Dynamics</h3>
@@ -208,11 +210,26 @@
 	  <section data-menu-title="General Formulation" data-transition="fade">
 	    <h3>General Formulation</h3>
 	    <p>
+	      <font size="6">
+		<p class="fragment">
+		  $$
+		  \max_{s \in \mathbb{R}^n: ||\mathbf{s}||_2 \leq R}
+		  \mathbf{s}^T (I + L)^{-1}f(L)(I + L)^{-1}\mathbf{s}
+		  $$
+		  where $f: \mathbb{R} \to \mathbb{R}$ satisfies $f(y) \geq 0$ for $y \geq 0$
+		</p>
+	      </font>
+	  </section>
+	  <section>
 	    <p class="fragment" data-fragment-index="1">
-	      $$
-	      \max_{s \in \mathbb{R}^n: ||\mathbf{s}||_2 \leq R}
-	      \mathbf{s}^T (I + L)^{-1}f(L)(I + L)^{-1}\mathbf{s}
-	      $$
+	      The adversary will first supply initial opinions $\mathbf{s}$ (e.g. via fake news)
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      The opinions become diffused via the Friedkin-Johnsen dynamics
+	    </p>
+	    <p class="fragment highlight-red">
+	      The goal of the adversary is to choose these initial opinions in order to maximally induce some
+	      desired effect
 	    </p>
 	  </section>
 	  <section data-menu-title="Disagreement" data-transition="fade">
@@ -221,213 +238,194 @@
 	    <p class="fragment" data-fragment-index="1">
 	      <img src="../../img/advop-disagreement.png" width="100%" height="100%" alt="">
 	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      <font size="6">
+		Polarization of $\mathbf{x}$:
+		$$||\bar{\mathbf{x}}||_2^2 = \sum_{i=1}^n \bar{\mathbf{x}}(i)^2$$
+	      </font>
+	      <aside class="notes">
+		Polarization is a measure of variance for x.
+	      </aside>
+	    </p>
 	  </section>
 	  <section data-menu-title="Optimizing Disagreement" data-transition="fade">
 	    <h3>Optimizing Disagreement</h3>
 	    <p>
-	    <font size="6">
+	      <font size="6">
+		<p class="fragment" data-fragment-index="1">
+		  Let $f(y) = y$. <i>Maximizing disagreement</i> yields the objective
+		  $$
+		  \max_{s \in \mathbb{R}^n: ||\mathbf{s}||_2 \leq R}
+		  \mathbf{s}^T (I + L)^{-1}L(I + L)^{-1}\mathbf{s}
+		  $$
+		</p>
+		<p class="fragment" data-fragment-index="2">
+		  $L$ both dictates the measurement of disagreement, and the opinion dynamics themselves
+		</p>
+	      </font>
+	  </section>
+	  <section data-transition="slide">
+	    This leads to two important observations...
+	  </section>
+	  <section data-background-transition="zoom" data-background-color="black" data-background-image="../../img/advop-dots.png">
+	    <font color="white">
 	      <p class="fragment" data-fragment-index="1">
-		<b>CONCATENATION</b>
-		$$[h_v^{(1)},\ldots,h_v^{(k)}]$$
+		When each individual is not listening to their neighbors (very sparse graph)
 	      </p>
 	      <p class="fragment" data-fragment-index="2">
-		<b>MAX-POOLING</b>. Select the most informative layer for each feature coordinate.
+	      	The adversary's strategy is to simply feed in opinions that directly maximize
+	      	disagreement in $G$, <i>as the opinion dynamics are negligible</i>
 	      </p>
-	      <p class="fragment" data-fragment-index="3">
-		<b>LSTM-ATTENTION</b>. Input $h_v^{(1)},\ldots,h_v^{(k)}$ into a bi-directional
-		LSTM to generate forward and backward features $f_v^{(l)}$ and $b_v^{(l)}$ for each
-		layer $l$; finally compute an attention score per each node by combining those
-		for each layer.
-	      </p>
+	      <aside class="notes">
+		This means disregarding the (I + L) terms
+	      </aside>
 	    </font>
 	  </section>
-	  <section data-menu-title="Polarization vs Disagreement" data-transition="fade">
-	    <h3>Polarization vs Disagreement</h3>
+	  <section data-background-transition="zoom" data-background-color="black" data-background-image="../../img/advop-densedots.png">
+	    <font color="white">
+	      <p class="fragment" data-fragment-index="1">
+		As connectivity gets stronger, the optimizer is proportional to the second largest nonzero
+		eigenvalue (namely, $\lambda_2$)
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		In this case, the initial opinion vector inducing maximal disagreement roughly corresponds to a
+		<b>sparse cut</b>
+	      </p>
+	    </font>
+	    <aside class="notes">
+	      Cut sparsity: the total sum of weights of a graph cut (after deleting a set of edges)
+	      Therefore, for a highly connected network, the structural subgraph where the vast majority
+	      of activity inhabits, will be the target for an adversarial agent.
+	    </aside>
+	  </section>
+	  <section data-menu-title="Polarization and Disagreement" data-transition="fade">
+	    <h3>Polarization and Disagreement</h3>
 	    <p>
 	    <font size="6">
 	      <p class="fragment" data-fragment-index="1">
-		<b>CONCATENATION</b>
-		$$[h_v^{(1)},\ldots,h_v^{(k)}]$$
+		Consider optimizing the <i>polarization-disagreement index</i> which simplifies
+		the problem to $\bar{\mathbf{s}}^T(I + L)^{-1}\bar{\mathbf{s}}$
 	      </p>
 	      <p class="fragment" data-fragment-index="2">
-		<b>MAX-POOLING</b>. Select the most informative layer for each feature coordinate.
-	      </p>
-	      <p class="fragment" data-fragment-index="3">
-		<b>LSTM-ATTENTION</b>. Input $h_v^{(1)},\ldots,h_v^{(k)}$ into a bi-directional
-		LSTM to generate forward and backward features $f_v^{(l)}$ and $b_v^{(l)}$ for each
-		layer $l$; finally compute an attention score per each node by combining those
-		for each layer.
+		The only relevant structure of the network that determines its robustness
+		to these adversarial perturbations is precisely determined by the <b>second smallest eigenvalue</b>
 	      </p>
 	    </font>
-	  </section>
-	  <section data-transition="fade">
-	    <img src="../../img/jumping-architecture.png" width="50%" height="50%" alt="">
-	  </section>
-	  <section data-markdown  data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## JK-Net learns to Adapt!
-	    </textarea>
-	  </section>
-	  <section data-transition="fade">
-	    <img src="../../img/jumping-adapt.png" width="110%" height="110%" alt="">
-	  </section>
-	  <section>
-	      <h3>Proposition 1</h3>
-	      <font size="5">
-		Assume that paths of the same length in the computation graph are activated with the same probability.
-		<p>
-		The influence score $I(x, y)$ for any $x, y \in V$ under a $k$-layer JK-Net with layer-wise max-pooling is equivalent
-		in expectation to a mixture of $0,\ldots,k$-step random walk distributions on $\tilde{G}$ at $y$
-		starting at $x$, the coefficients of which depend on the values of the layer features $h_x^{(l)}$.
-	      </font>
-	      <aside class="notes">
-		There is no assumption on the structure of graph $G$!
-	      </aside>
 	  </section>
 	</section>
 	<section data-menu-title="Defending the Network">
 	  <section data-menu-title="Defending the Network" data-transition="fade">
 	    <h1>Defending the Network</h1>
 	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/advop-netminimax.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section>
+	    <h3>Optimization Problem</h3>
+	    <img src="../../img/advop-defendminimax.png" width="110%" height="110%" alt="">
+	  </section>
 	</section>
 	<section data-menu-title="Mixed Graph Objectives">
 	  <section data-menu-title="Mixed Graph Objectives" data-transition="fade">
 	    <h1>Mixed Graph Objectives</h1>
 	  </section>
-	  <section>
-	    <h3>Datasets</h3>
-	    <img src="../../img/reddit.png" width="40%" height="40%" alt="">
-	    <img src="../../img/jumping-ppi.png" width="50%" height="50%" alt="">
-	  </section>
-	  <section data-markdown  data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Settings
-	      
-	      ![setup](../../img/jumping-dataset-stats.png)
-	    </textarea>
-	  </section>
-	  <section data-markdown  data-separator-notes="Note:">
-	    <textarea data-template>
-	      ## Results
-	      
-	      Note:
-	      Convergence is NOT guaranteed!
-	    </textarea>
-	  </section>
 	  <section data-transition="fade">
-	    <img src="../../img/jumping-results-gcn-jk-cc.png" width="110%" height="110%" alt="">
-	  </section>
-	  <section data-transition="fade">
-	    <img src="../../img/jumping-results-graphsage-jk-reddit.png" width="110%" height="110%" alt="">
-	  </section>
-	  <section data-transition="fade">
-	    <img src="../../img/jumping-results-graphsage-jk-ppi.png" width="110%" height="110%" alt="">
-	  </section>
-	  <section data-transition="fade">
-	    <img src="../../img/jumping-microf1-gat-jk.png" width="110%" height="110%" alt="">
-	  </section>
-	</section>
-	<section data-menu-title="Related Work">
-	  <section data-menu-title="Related Work" data-transition="fade">
-	    <h1>Related Work</h1>
-	  </section>
-	  <section data-transition="fade">
-	    <img src="../../img/jumping-meme.png" width="50%" height="50%" alt="">
-	  </section>
-	  <section data-menu-title="Conclusion" data-transition="fade">
-	    <p class="fragment" data-fragment-index="1">
-	      <b>Goal</b>: Provide a representation learning scheme that can generalize
-	      better on diverse variety of network structure, than the one proposed for GCN's
-	    </p>
-	    <p class="fragment" data-fragment-index="2">
-	      <b>Problem</b>: Denser subgraphs may cause aggregation algorithms to converge
-	      in expectation to biased random walks. ☹
-	    </p>
+	    <img src="../../img/advop-mixedgraphobjectives.png" width="110%" height="110%" alt="">
 	  </section>
 	  <section>
-	    <p class="fragment" data-fragment-index="4">
-	      <b>Solution</b>: JK-Nets aggregate and leverage information from more than
-	      one hidden layers.😁
-	    </p>
-	    <p class="fragment" data-fragment-index="5">
-	      JK-Nets with the LSTM-attention aggregators outperform the non-adaptive
-	      models GraphSAGE, GAT and JK-Nets with concatenation aggregators.
-	    </p>
-	    <font size="4">
-	      <p class="fragment" data-fragment-index="6">
-		<a href="https://github.com/ShinKyuY/Representation_Learning_on_Graphs_with_Jumping_Knowledge_Networks">
-		  https://github.com/ShinKyuY/Representation_Learning_on_Graphs_with_Jumping_Knowledge_Networks
-		</a>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		The authors show that having different graphs can actually
+		<i>reduce the adversary's power to induce disagreement</i>
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		The relevant relationship that determines if an adversary gains extra power
+		depends on <i>spectral similarity</i> between the two graphs 
 	      </p>
 	    </font>
 	  </section>
-	  <section data-menu-title="Future Work" data-transition="fade">
-	    <h3>Future Work</h3>
-	    <p class="fragment" data-fragment-index="1">
-	      Exploring other layer aggregators and studying the effect of the combination of various
-	      layer-wise and node-wise aggregators on different types of graph structures.
-	    </p>
-	    <p class="fragment" data-fragment-index="2">
-	      How can sequence modelling by itself impact the task of layer aggregation?
-	    </p>
-	    <p class="fragment" data-fragment-index="3">
-	      Are there <i>smarter</i> ways to keep track of node/community correlations within a network?
-	    </p>
-	  </section>
-	</section>
-	<section data-menu-title="Conclusion">
-	  <section data-menu-title="Conclusion" data-transition="fade">
-	    <h1>Conclusion</h1>
-	  </section>
 	  <section data-transition="fade">
-	    <img src="../../img/jumping-meme.png" width="50%" height="50%" alt="">
+	    <h3>Optimization Problem</h3>
+	    <img src="../../img/advop-mixedgraphproblem.jpg" width="110%" height="110%" alt="">
+	    <aside class="notes">
+	      The defender chooses a weighted-l2 norm under a resource constraint that
+	      specifies consts of influencing each induvidual in the network.
+	      There is a fixed budget R.
+	    </aside>
 	  </section>
-	  <section data-menu-title="Conclusion" data-transition="fade">
-	    <p class="fragment" data-fragment-index="1">
-	      <b>Goal</b>: Provide a representation learning scheme that can generalize
-	      better on diverse variety of network structure, than the one proposed for GCN's
-	    </p>
-	    <p class="fragment" data-fragment-index="2">
-	      <b>Problem</b>: Denser subgraphs may cause aggregation algorithms to converge
-	      in expectation to biased random walks. ☹
-	    </p>
-	  </section>
-	  <section>
-	    <p class="fragment" data-fragment-index="4">
-	      <b>Solution</b>: JK-Nets aggregate and leverage information from more than
-	      one hidden layers.😁
-	    </p>
-	    <p class="fragment" data-fragment-index="5">
-	      JK-Nets with the LSTM-attention aggregators outperform the non-adaptive
-	      models GraphSAGE, GAT and JK-Nets with concatenation aggregators.
-	    </p>
-	    <font size="4">
-	      <p class="fragment" data-fragment-index="6">
-		<a href="https://github.com/ShinKyuY/Representation_Learning_on_Graphs_with_Jumping_Knowledge_Networks">
-		  https://github.com/ShinKyuY/Representation_Learning_on_Graphs_with_Jumping_Knowledge_Networks
-		</a>
+	  <section data-transition="convex">
+	    <h3>Summary of Results</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		The authors derive formal results that depend on $G_2$ being a regular graph
+		or being a cycle (i.e., topology of the "real world" graph).
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		If $L_1 \approx L_2$ component-wise, then the optimization problem
+		can be written in terms on the "real world" graph solely. The
+		converse is not necessarily true, however.
 	      </p>
 	    </font>
 	  </section>
-	  <section data-menu-title="Future Work" data-transition="fade">
-	    <h3>Future Work</h3>
-	    <p class="fragment" data-fragment-index="1">
-	      Exploring other layer aggregators and studying the effect of the combination of various
-	      layer-wise and node-wise aggregators on different types of graph structures.
-	    </p>
-	    <p class="fragment" data-fragment-index="2">
-	      How can sequence modelling by itself impact the task of layer aggregation?
-	    </p>
-	    <p class="fragment" data-fragment-index="3">
-	      Are there <i>smarter</i> ways to keep track of node/community correlations within a network?
-	    </p>
+	  <section data-transition="convex">
+	    <h3>Summary of Results</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		If $L_1$ and $L_2$ are <i>spectrally misaligned</i> then the
+		largest eigenvalue of the mixed-graph objective problem is large.
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		If the opinion and disagreement graphs are misaligned on even one large cut,
+		then the adversary will be able to induce disagreement far beyond what is possible in the
+		single graph objective.
+	      </p>
+	    </font>
 	  </section>
 	</section>
-	<!-- <section data-menu-title="Backup Slides"> -->
-	<!--   <section> -->
-	<!--     <h1>Sketches of Proofs</h1> -->
-	<!--   </section> -->
-	<!-- </section> -->
+	<section data-menu-title="Conclusions">
+	  <section data-menu-title="Conclusions" data-transition="fade">
+	    <h1>Conclusions</h1>
+	  </section>
+	  <section data-menu-title="Achievement" data-transition="fade">
+	    <h2>What's been achieved</h2>
+	    Gain significant insights into the nature of graphs that
+	    are resilient to outside perturbations.
+	  </section>
+	  <section data-menu-title="Future Directions" data-transition="fade">
+	    <h3>Future Directions</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		Is it possible for an opinion dynamics model to fit into the $ENC$-$DEC$
+		setting from graph neural networks? (Many of them, benefit from an iterative
+		algorithm.)
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		With mixed-graph objectives, is it possible to explain how disagreement can arise?
+	      </p>
+	      <p class="fragment" data-fragment-index="3">
+		Consider different structural assumptions, such as, directed graphs, node attributes,
+		dynamic graphs, etc.
+	      </p>
+	    </font>
+	  </section>
+	  <section data-menu-title="Missing">
+	    <h3>What's missing in this paper</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		Experimental results (yet their theoretical arguments are very robust).
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		Contrast the presented conditions that guarantee perturbations with
+		actual evaluation metrics of a supervised learning task (assuming we
+		have a dataset labeled on opinion changes).
+	      </p>
+	      <p class="fragment" data-fragment-index="3">
+		Discussion on <i>cascading phenomena</i>, which is presented on other literature
+		and actually been explored recently as a relevant feature for rumour propagation.
+	      </p>
+	    </font>
+	  </section>
+	</section>
 	<section data-transition="fade">
 	  <h2>Thank you!</h2>
 	</section>
