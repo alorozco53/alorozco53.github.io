@@ -44,6 +44,8 @@ navbar-links:
       - name: "Undergraduate Thesis"
         url: "talks/thesis.html"
         newtab: true
+  - name: "Stack"
+    url: "stack/science"
   - name: "Teaching"
     children:
       - name: "ML - Centraal Academy"

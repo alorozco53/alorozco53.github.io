@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Adversarial Perturbations of Opinion Dynamics in Networks</title>
+
+    <meta name="description" content="Paper review and related literature review">
+    <meta name="author" content="AlOrozco53">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="../../css/reveal.css">
+    <link rel="stylesheet" href="../../css/theme/custom_white.css" id="theme">
+
+    <!-- Footer -->
+    <link rel="stylesheet" href="../../plugin/title-footer/title-footer.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../../css/print/pdf.css' : '../../css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+	<script src="lib/js/html5shiv.js"></script>
+	<![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+	<!-- <section> -->
+	<section data-menu-title="Title" data-background-image="../../img/nets.gif">
+	  <h3>
+	    <font color="white">
+	      Adversarial Perturbations of Opinion Dynamics in Networks
+	    </font>
+	  </h3>
+	  <font color="white">
+	    <font size="4">
+	      <i>
+		Jason Gaitonde,
+		Jon Kleinberg,
+		Éva Tardos
+	      </i>
+	      <p>
+	    </font>
+	    <font size="3">
+	      Cornell University
+	      <p>
+		2020
+	    </font>
+	    <p>
+	    <font size="4">
+	      presented by Albert M Orozco Camacho
+	    </font>
+	  </font>
+	</section>
+	<section data-menu-title="Motivation">
+	  <section data-menu-title="Motivation" data-transition="fade">
+	    <h1>Motivation</h1>
+	  </section>
+	  <section data-menu-title="Research Inquiries" data-transition="fade">
+	    <p class="fragment" data-fragment-index="1">
+	      <b>Opinion dynamics</b> has been previously studied within the mathematical social
+	      sciences literature; yet not much attention has been put to current social network studies.
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      On the other hand, <i>perturbations that induce discord in social media</i> are of important interest for
+	      current research in politics, sociology, economics, computer science, etc.
+	    </p>
+	    <aside class="notes">
+	      Perturbations as adversarial attacks.
+	      <p>
+		The authors investigate the properties of these attacks formally.
+	    </aside>
+	  </section>
+	  <section data-menu-title="Adversarial Attacks to Induce Discord" data-transition="fade">
+	    <h2>Adversarial Attacks to Induce Discord</h2>
+	    <p class="fragment" data-fragment-index="1">
+	      The authors present a formal study on the intuition that a (<i>maliscious</i>) actor
+	      attacks the overall opinion consensus of a network.
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      These perturbations will difuse via an opinion dynamics model.
+	    </p>
+	  </section>
+	  <section data-menu-title="Problem vs Task" data-transition="fade">
+	    <h2>Problem</h2>
+	    <p class="fragment" data-fragment-index="1">
+	      <font color="red">
+		An adversarial agent targets a few individual opinions to difuse a sense of discord.
+	      </font>
+	    </p>
+	    <h2>Task</h2>
+	    <p class="fragment" data-fragment-index="2">
+	      <font color="blue">
+		Identify the most vulverable structures within a network.
+		Mitigate these attacks by insulating nodes.
+	      </font>
+	    </p>
+	  </section>
+	  <section data-transition="fade" data-background-image="../../img/twitter-users.jpg" data-background-repeat="repeat" data-background-size="100px">
+	    <h2></h2>
+	    <aside class="notes">
+	      - Authors are able to qualitatively describe which networks are most vulnerable or resilient
+	    </aside>
+	  </section>
+	  <section data-transition="fade" data-background-image="../../img/jumping-sn.png">
+	    <h2>Convex Optimization</h2>
+	    <aside class="notes">
+	      Convex optimization is the general methodology for an entity defending a network,
+	      to minimize risks.
+	    </aside>
+	  </section>
+	</section>
+	<section data-menu-title="Definitions">
+	  <section data-menu-title="Definitions" data-transition="fade">
+	    <h1>Definitions</h1>
+	  </section>
+	  <section data-markdown data-separator-notes="Note:" data-menu-title="Notation">
+	    <textarea data-template>
+	      ## Weighted Graphs
+	      Consider a simple, weighted, undirected graph $G = (V, E, w)$:
+	      
+	      - $|V| = n$ and $w: E \to \mathbb{R}^+$.
+	      - Let $m := \sum_{(i,j) \in E} w(i,j)$, the sum of all the weights of all edges in G.
+	    </textarea>
+	  </section>
+	  <section>
+	    <h2>Matrices</h2>
+	    <font size="7">
+	      <b>Adjacency Matrix</b>
+	      $$A_{i,j} = A_{j,i} := w(i,j)$$
+	      <p>
+	      <b>Diagonal Matrix</b>
+	      $$D_{i,i} = \sum_{j \in V} w(i,j)$$
+	      <p>
+	      <b>Laplacian Matrix</b>
+	      $$L := D - A$$
+	    </font>
+	    <aside class="notes">
+	      L is symmetric and positive semidefinite.
+	    </aside>
+	  </section>
+	  <section>
+	    <h3>Some Spectral Properties</h3>
+	    <font size="8">
+	      $$
+	      \mathbf{x}^T L \mathbf{x} = \sum_{(i,j) \in E} w(i,j)(\mathbf{x}(i)-\mathbf{x}(j))^2
+	      $$
+	      <p>
+	      <p>
+	      $$
+	      L = \sum_{i=1}^n \lambda_i\mathbf{v}_i\mathbf{v}_i^T
+	      $$
+	    </font>
+	    <aside class="notes">
+	      The quadratic form induced by L is used throughout the paper to describe the
+	      interaction of a graph with a perturbance vector.
+	      L can be written in terms of its eigenvectors
+	    </aside>
+	  </section>
+	  <section>
+	    <h3>Friedkin-Johnsen Dynamics</h3>
+	    Given $G = (V, E, w)$ and an initial opinion vector $s \in \mathbb{R}^n$.
+	    <p class="fragment" data-fragment-index="1">
+	      Start with $\mathbf{z}^{(0)} = \mathbf{s}$.
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      For each node $i \in V$, update
+	      $$
+	      \mathbf{z}^{(t+1)}(i) =
+	      \frac{\mathbf{s}(i) + \sum_{j \in V} w(i,j)\mathbf{z}^{(T)}(j)}
+	      {1 + \sum_{j \in V} w(i,j)}
+	      $$
+	    </p>
+	    <aside class="notes">
+	      Normalization is computed implicitly on one's private opinion.
+	    </aside>
+	  </section>
+	  <section>
+	    <h3>Friedkin-Johnsen Dynamics</h3>
+	    <p>
+	    Convergence will be reached and the limiting final opinion vector is given by
+	    $$\mathbf{z} = (I + L)^{-1}\mathbf{s}$$
+	    <aside class="notes">
+	      Normalization is computed implicitly on one's private opinion.
+	    </aside>
+	  </section>
+	</section>
+	<section data-menu-title="Adversarial Optimization">
+	  <section data-menu-title="Adversarial Optimization" data-transition="fade">
+	    <h1>Adversarial Optimization</h1>
+	  </section>
+	  <section data-menu-title="General Formulation" data-transition="fade">
+	    <h3>General Formulation</h3>
+	    <p>
+	      <font size="6">
+		<p class="fragment">
+		  $$
+		  \max_{s \in \mathbb{R}^n: ||\mathbf{s}||_2 \leq R}
+		  \mathbf{s}^T (I + L)^{-1}f(L)(I + L)^{-1}\mathbf{s}
+		  $$
+		  where $f: \mathbb{R} \to \mathbb{R}$ satisfies $f(y) \geq 0$ for $y \geq 0$
+		</p>
+	      </font>
+	  </section>
+	  <section>
+	    <p class="fragment" data-fragment-index="1">
+	      The adversary will first supply initial opinions $\mathbf{s}$ (e.g. via fake news)
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      The opinions become diffused via the Friedkin-Johnsen dynamics
+	    </p>
+	    <p class="fragment highlight-red">
+	      The goal of the adversary is to choose these initial opinions in order to maximally induce some
+	      desired effect
+	    </p>
+	  </section>
+	  <section data-menu-title="Disagreement" data-transition="fade">
+	    <h3>Disagreement</h3>
+	    <p>
+	    <p class="fragment" data-fragment-index="1">
+	      <img src="../../img/advop-disagreement.png" width="100%" height="100%" alt="">
+	    </p>
+	    <p class="fragment" data-fragment-index="2">
+	      <font size="6">
+		Polarization of $\mathbf{x}$:
+		$$||\bar{\mathbf{x}}||_2^2 = \sum_{i=1}^n \bar{\mathbf{x}}(i)^2$$
+	      </font>
+	      <aside class="notes">
+		Polarization is a measure of variance for x.
+	      </aside>
+	    </p>
+	  </section>
+	  <section data-menu-title="Optimizing Disagreement" data-transition="fade">
+	    <h3>Optimizing Disagreement</h3>
+	    <p>
+	      <font size="6">
+		<p class="fragment" data-fragment-index="1">
+		  Let $f(y) = y$. <i>Maximizing disagreement</i> yields the objective
+		  $$
+		  \max_{s \in \mathbb{R}^n: ||\mathbf{s}||_2 \leq R}
+		  \mathbf{s}^T (I + L)^{-1}L(I + L)^{-1}\mathbf{s}
+		  $$
+		</p>
+		<p class="fragment" data-fragment-index="2">
+		  $L$ both dictates the measurement of disagreement, and the opinion dynamics themselves
+		</p>
+	      </font>
+	  </section>
+	  <section data-transition="slide">
+	    This leads to two important observations...
+	  </section>
+	  <section data-background-transition="zoom" data-background-color="black" data-background-image="../../img/advop-dots.png">
+	    <font color="white">
+	      <p class="fragment" data-fragment-index="1">
+		When each individual is not listening to their neighbors (very sparse graph)
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+	      	The adversary's strategy is to simply feed in opinions that directly maximize
+	      	disagreement in $G$, <i>as the opinion dynamics are negligible</i>
+	      </p>
+	      <aside class="notes">
+		This means disregarding the (I + L) terms
+	      </aside>
+	    </font>
+	  </section>
+	  <section data-background-transition="zoom" data-background-color="black" data-background-image="../../img/advop-densedots.png">
+	    <font color="white">
+	      <p class="fragment" data-fragment-index="1">
+		As connectivity gets stronger, the optimizer is proportional to the second largest nonzero
+		eigenvalue (namely, $\lambda_2$)
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		In this case, the initial opinion vector inducing maximal disagreement roughly corresponds to a
+		<b>sparse cut</b>
+	      </p>
+	    </font>
+	    <aside class="notes">
+	      Cut sparsity: the total sum of weights of a graph cut (after deleting a set of edges)
+	      Therefore, for a highly connected network, the structural subgraph where the vast majority
+	      of activity inhabits, will be the target for an adversarial agent.
+	    </aside>
+	  </section>
+	  <section data-menu-title="Polarization and Disagreement" data-transition="fade">
+	    <h3>Polarization and Disagreement</h3>
+	    <p>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		Consider optimizing the <i>polarization-disagreement index</i> which simplifies
+		the problem to $\bar{\mathbf{s}}^T(I + L)^{-1}\bar{\mathbf{s}}$
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		The only relevant structure of the network that determines its robustness
+		to these adversarial perturbations is precisely determined by the <b>second smallest eigenvalue</b>
+	      </p>
+	    </font>
+	  </section>
+	</section>
+	<section data-menu-title="Defending the Network">
+	  <section data-menu-title="Defending the Network" data-transition="fade">
+	    <h1>Defending the Network</h1>
+	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/advop-netminimax.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section>
+	    <h3>Optimization Problem</h3>
+	    <img src="../../img/advop-defendminimax.png" width="110%" height="110%" alt="">
+	  </section>
+	</section>
+	<section data-menu-title="Mixed Graph Objectives">
+	  <section data-menu-title="Mixed Graph Objectives" data-transition="fade">
+	    <h1>Mixed Graph Objectives</h1>
+	  </section>
+	  <section data-transition="fade">
+	    <img src="../../img/advop-mixedgraphobjectives.png" width="110%" height="110%" alt="">
+	  </section>
+	  <section>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		The authors show that having different graphs can actually
+		<i>reduce the adversary's power to induce disagreement</i>
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		The relevant relationship that determines if an adversary gains extra power
+		depends on <i>spectral similarity</i> between the two graphs 
+	      </p>
+	    </font>
+	  </section>
+	  <section data-transition="fade">
+	    <h3>Optimization Problem</h3>
+	    <img src="../../img/advop-mixedgraphproblem.jpg" width="110%" height="110%" alt="">
+	    <aside class="notes">
+	      The defender chooses a weighted-l2 norm under a resource constraint that
+	      specifies consts of influencing each induvidual in the network.
+	      There is a fixed budget R.
+	    </aside>
+	  </section>
+	  <section data-transition="convex">
+	    <h3>Summary of Results</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		The authors derive formal results that depend on $G_2$ being a regular graph
+		or being a cycle (i.e., topology of the "real world" graph).
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		If $L_1 \approx L_2$ component-wise, then the optimization problem
+		can be written in terms on the "real world" graph solely. The
+		converse is not necessarily true, however.
+	      </p>
+	    </font>
+	  </section>
+	  <section data-transition="convex">
+	    <h3>Summary of Results</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		If $L_1$ and $L_2$ are <i>spectrally misaligned</i> then the
+		largest eigenvalue of the mixed-graph objective problem is large.
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		If the opinion and disagreement graphs are misaligned on even one large cut,
+		then the adversary will be able to induce disagreement far beyond what is possible in the
+		single graph objective.
+	      </p>
+	    </font>
+	  </section>
+	</section>
+	<section data-menu-title="Conclusions">
+	  <section data-menu-title="Conclusions" data-transition="fade">
+	    <h1>Conclusions</h1>
+	  </section>
+	  <section data-menu-title="Achievement" data-transition="fade">
+	    <h2>What's been achieved</h2>
+	    Gain significant insights into the nature of graphs that
+	    are resilient to outside perturbations.
+	  </section>
+	  <section data-menu-title="Future Directions" data-transition="fade">
+	    <h3>Future Directions</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		Is it possible for an opinion dynamics model to fit into the $ENC$-$DEC$
+		setting from graph neural networks? (Many of them, benefit from an iterative
+		algorithm.)
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		With mixed-graph objectives, is it possible to explain how disagreement can arise?
+	      </p>
+	      <p class="fragment" data-fragment-index="3">
+		Consider different structural assumptions, such as, directed graphs, node attributes,
+		dynamic graphs, etc.
+	      </p>
+	    </font>
+	  </section>
+	  <section data-menu-title="Missing">
+	    <h3>What's missing in this paper</h3>
+	    <font size="6">
+	      <p class="fragment" data-fragment-index="1">
+		Experimental results (yet their theoretical arguments are very robust).
+	      </p>
+	      <p class="fragment" data-fragment-index="2">
+		Contrast the presented conditions that guarantee perturbations with
+		actual evaluation metrics of a supervised learning task (assuming we
+		have a dataset labeled on opinion changes).
+	      </p>
+	      <p class="fragment" data-fragment-index="3">
+		Discussion on <i>cascading phenomena</i>, which is presented on other literature
+		and actually been explored recently as a relevant feature for rumour propagation.
+	      </p>
+	    </font>
+	  </section>
+	</section>
+	<section data-transition="fade">
+	  <h2>Thank you!</h2>
+	</section>
+
+      </div>
+
+    </div>
+
+    <script src="../../lib/js/head.min.js"></script>
+    <script src="../../js/reveal.js"></script>
+
+    <script>
+
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+      math: {
+      mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+      config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+      },
+
+      // More info https://github.com/hakimel/reveal.js#dependencies
+      dependencies: [
+      { src: '../../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: '../../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: '../../plugin/zoom-js/zoom.js', async: true },
+      { src: '../../plugin/notes/notes.js', async: true },
+      { src: '../../plugin/math/math.js', async: true },
+      { src: '../../plugin/menu/menu.js' },
+      { src: '../../plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize(); } }
+      ],
+
+      keyboard: {
+      67: function() { RevealChalkboard.toggleNotesCanvas() },	// toggle notes canvas when 'c' is pressed
+      66: function() { RevealChalkboard.toggleChalkboard() },	// toggle chalkboard when 'b' is pressed
+      46: function() { RevealChalkboard.clear() },	// clear chalkboard when 'DEL' is pressed
+      8: function() { RevealChalkboard.reset() },	// reset chalkboard data on current slide when 'BACKSPACE' is pressed
+      68: function() { RevealChalkboard.download() },	// downlad recorded chalkboard drawing when 'd' is pressed
+      },
+
+      //menu
+      menu: {
+      // Specifies which side of the presentation the menu will
+      // be shown. Use 'left' or 'right'.
+      side: 'left',
+
+      // Add slide numbers to the titles in the slide list.
+      // Use 'true' or format string (same as reveal.js slide numbers)
+      numbers: false,
+
+      // Specifies which slide elements will be used for generating
+      // the slide titles in the menu. The default selects the first
+      // heading element found in the slide, but you can specify any
+      // valid css selector and the text from the first matching
+      // element will be used.
+      // Note: that a section data-menu-title attribute or an element
+      // with a menu-title class will take precedence over this option
+      titleSelector: 'h1, h2, h3, h4, h5, h6',
+
+      // Hide slides from the menu that do not have a title.
+      // Set to 'true' to only list slides with titles.
+      hideMissingTitles: false,
+
+      // Add markers to the slide titles to indicate the
+      // progress through the presentation
+      markers: false,
+
+      // Specify custom panels to be included in the menu, by
+      // providing an array of objects with 'title', 'icon'
+      // properties, and either a 'src' or 'content' property.
+      custom: false,
+
+      // Specifies the themes that will be available in the themes
+      // menu panel. Set to 'false' to hide themes panel.
+      themes: [
+      { name: 'Black', theme: '../../css/theme/black.css' },
+      { name: 'White', theme: '../../css/theme/white.css' },
+      { name: 'League', theme: '../../css/theme/league.css' },
+      { name: 'Sky', theme: '../../css/theme/sky.css' },
+      { name: 'Beige', theme: '../../css/theme/beige.css' },
+      { name: 'Simple', theme: '../../css/theme/simple.css' },
+      { name: 'Serif', theme: '../../css/theme/serif.css' },
+      { name: 'Blood', theme: '../../css/theme/blood.css' },
+      { name: 'Night', theme: '../../css/theme/night.css' },
+      { name: 'Moon', theme: '../../css/theme/moon.css' },
+      { name: 'Solarized', theme: '../../css/theme/solarized.css' }
+      ],
+
+      // Specifies if the transitions menu panel will be shown.
+      transitions: true,
+
+      // Adds a menu button to the slides to open the menu panel.
+      // Set to 'false' to hide the button.
+      openButton: true,
+
+      // If 'true' allows the slide number in the presentation to
+      // open the menu panel. The reveal.js slideNumber option must
+      // be displayed for this to take effect
+      openSlideNumber: false,
+
+      // If true allows the user to open and navigate the menu using
+      // the keyboard. Standard keyboard interaction with reveal
+      // will be disabled while the menu is open.
+      keyboard: true
+      }
+
+      });
+
+    </script>
+
+    <style type="text/css">
+      /* 1. Style header/footer <div> so they are positioned as desired. */
+	#header-left {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+	}
+	#header-right {
+        position: absolute;
+        top: 0%;
+        right: 0%;
+	}
+	#footer-left {
+        position: absolute;
+        bottom: 5%;
+        left: 43%;
+	}
+    </style>
+
+    <!-- 2. Create hidden header/footer <div> -->
+    <div id="hidden" style="display:none;">
+      <div id="header">
+        <!-- <div id="header-left">HEADER-LEFT</div> -->
+        <!-- <div id="header-right">HEADER-RIGHT</div> -->
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript">
+      // 3. On Reveal.js ready event, copy header/footer <div> into each `.slide-background` <div>
+	  var header = $('#header').html();
+	  if ( window.location.search.match( /print-pdf/gi ) ) {
+          Reveal.addEventListener( 'ready', function( event ) {
+          $('.slide-background').append(header);
+          });
+	  }
+	  else {
+          $('div.reveal').append(header);
+	  }
+    </script>
+
+  </body>
+</html>
