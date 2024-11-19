@@ -20,7 +20,7 @@ twitter:
   name: "Twitter"
   baseURL: "https://twitter.com/"
   icon: "fa-twitter"
-
+  
 reddit:
   name: "Reddit"
   baseURL: "https://reddit.com/u/"

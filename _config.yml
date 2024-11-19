@@ -83,6 +83,19 @@ footer-col: "#010101" # "#F5F5F5"
 footer-text-col: "#777777"
 footer-link-col: "#404040"
 
+# Light mode
+light-theme:
+  navbar-col: "#FFFFFF"
+  navbar-text-col: "#000000"
+  navbar-children-col: "#C0C0C0"
+  page-col: "#FFFFFF"
+  link-col: "#0066CC"
+  body-text-col: "#000000"
+  hover-col: "#004080"
+  footer-col: "#F5F5F5"
+  footer-text-col: "#404040"
+  footer-link-col: "#000000"
+
 # Alternatively, the navbar, footer, and page background can be set to use background images
 # instead of colour
 
@@ -103,12 +116,10 @@ author:
 # If you want to add a new link that isn't here, you'll need to also edit the file _data/SocialNetworks.yml
 social-network-links:
   rss: true
-  email: "alorozco53@ciencias.unam.mx"
+  email: "alorozco53@mila.quebec"
   github: AlOrozco53
-  twitter: AlOrozco53
+  twitter: tropdeep___
   linkedin: AlOrozco53
-  reddit: AlOrozco53
-  instagram: tropdeep
 #  google-plus: yourname
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
@@ -123,6 +134,7 @@ social-network-links:
 # Select which share links to show in posts
 share-links-active:
   twitter: true
+  reddit: true
   facebook: true
   google: false
   linkedin: true
