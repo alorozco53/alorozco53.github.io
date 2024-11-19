@@ -1,3 +1,8 @@
+update:
+	rm -rf _site/
+	rm -rf Gemfile.lock
+	bundle update
+	bundle install
 install:
 	bundle install
 
