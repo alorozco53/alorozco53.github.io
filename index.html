@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Albert
-subtitle: Network Science, NLP, Social Media, DL, the secrets of humanity
+subtitle: <b>Model Merging!</b> <p>Previously, <i> network science & GNNs applied on social networks </i> </p>
 use-site-title: true
 bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 ---
@@ -16,3 +16,38 @@ bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 	  -- Louis Pasteur
 	</i>
 </center>
+
+<!-- make columns, embed news.md on left, right for tweets -->
+
+<!-- <div class="row"> -->
+<!--   <div class="column"> -->
+<!--     <div> -->
+<!--       {% capture news_content %} -->
+<!--       {% include news.md %} -->
+<!--       {% endcapture %} -->
+<!--       {{ news_content | markdownify }} -->
+<!--     </div> -->
+<!--   </div> -->
+<!--   <div class="column"> -->
+<!--     <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/tropdeep___" target="_blank"> -->
+<!--       Tweets by tropdeep___ -->
+<!--     </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>  -->
+<!--   </div> -->
+<!-- </div> -->
+
+{% capture news_content %}
+{% include news.md %}
+{% endcapture %}
+{% assign news_html = news_content | markdownify | safe %}
+
+{% capture social_content %}
+<a class="twitter-timeline" data-theme="dark" href="https://twitter.com/tropdeep___">
+  Tweets by tropdeep___</a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endcapture %}
+{% assign social_html = social_content | markdownify | safe %}
+
+{% include index_columns.html %}
+
+<!-- render news_html -->
+
