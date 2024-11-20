@@ -1,11 +1,12 @@
 ---
 layout: page
 title: Albert
-subtitle: <b>Model Merging!</b> <p>Previously, <i> network science & GNNs applied on social networks </i> </p>
+subtitle: <b>Model Merging!</b> <p>Previously, <i> network science; GNNs; social networks </i> </p>
 use-site-title: true
 bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 ---
 
+<!-- a mamador quote -->
 <center>
   <h3>
 	La science n'a pas de patrie
@@ -17,24 +18,18 @@ bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 	</i>
 </center>
 
-<!-- make columns, embed news.md on left, right for tweets -->
+<!-- brief self-introduction: -->
+<br>
+<b>Albert</b> is a PhD student-researcher,
+in Computer Science,
+<i>à l'institut <a href="https://mila.quebec/en/" target="_blank">Mila</a></i>
+and at <i><a href="https://www.concordia.ca/" target="_blank">Concordia University</a></i>,
+in Montréal, Canada.
+<br>
+His current research interests surround <i>model merging</i>, i.e., the integration of multiple models into a single, coherent model... [Continue reading 👉 <a href="/aboutme">here</a>]
+<br>
 
-<!-- <div class="row"> -->
-<!--   <div class="column"> -->
-<!--     <div> -->
-<!--       {% capture news_content %} -->
-<!--       {% include news.md %} -->
-<!--       {% endcapture %} -->
-<!--       {{ news_content | markdownify }} -->
-<!--     </div> -->
-<!--   </div> -->
-<!--   <div class="column"> -->
-<!--     <a class="twitter-timeline" data-theme="dark" href="https://twitter.com/tropdeep___" target="_blank"> -->
-<!--       Tweets by tropdeep___ -->
-<!--     </a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>  -->
-<!--   </div> -->
-<!-- </div> -->
-
+<!-- some news and some social media stuff -->
 {% capture news_content %}
 {% include news.md %}
 {% endcapture %}
@@ -48,6 +43,3 @@ bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 {% assign social_html = social_content | markdownify | safe %}
 
 {% include index_columns.html %}
-
-<!-- render news_html -->
-
