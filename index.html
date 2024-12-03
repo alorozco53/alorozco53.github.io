@@ -18,24 +18,28 @@ bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 	</i>
 </center>
 
-<!-- brief self-introduction: -->
-<br>
-<b>Albert</b> is a PhD <a href="https://chatgpt.com/share/674e27aa-fe88-8001-bd06-18d33529a7b2" target="_blank">Candidate</a>
-in Computer Science <i>à l'institut <a href="https://mila.quebec/en/" target="_blank">Mila</a></i>
-and at <i><a href="https://www.concordia.ca/" target="_blank">Concordia University</a></i>,
-in Montréal, QC, Canada.
-<p>
-  Albert is happily co-supervised by
-  Dr <a href="http://eugenium.github.io/" target="_blank">Eugene Belilovsky</a>
-  and Dr <a href="http://guywolf.org/" target="_blank">Guy Wolf</a>;
-  hence, he is part of the <a href="http://diffusion.space/" target="_blank">
-    Recherche et Analyse Fondamentales d'Apprentissage,
-    Linéarisation et Exploration en Science-des-données (RAFALES)
-  </a> group.
-<p>
-  His current research interests surround <i>model merging</i>, i.e.,
-  the integration of multiple models into a single, coherent model... [Continue reading 👉 <a href="/aboutme">here</a>]
-  <br>
+<!-- introduction -->
+{% capture introduction %}
+{% include intro.html %}
+{% endcapture %}
+{% assign left_col = introduction %}
+
+
+<!-- contact info -->
+{% capture contact_content %}
+{% include contact_info.md %}
+{% endcapture %}
+{% assign right_col = contact_content | markdownify | safe %}
+<!-- {{ contact_html }} -->
+
+{% include index_columns.html %}
+
+<!-- statement -->
+{% capture statement %}
+{% include statement.md %}
+{% endcapture %}
+{% assign statement_html = statement | markdownify | safe %}
+{{ statement_html }}
 
 <!-- news-->
 {% capture news_content %}
@@ -43,7 +47,6 @@ in Montréal, QC, Canada.
 {% endcapture %}
 {% assign news_html = news_content | markdownify | safe %}
 {{ news_html }}
-
 
 
 <!-- in the future, I will add some social media stuff here... -->

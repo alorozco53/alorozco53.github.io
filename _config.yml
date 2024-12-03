@@ -25,37 +25,19 @@ description: My personal website, by AlOrozco53.
 navbar-links:
   - name: "About Me"
     url: "aboutme"
+  - name: "avatar"
   - name: "Publications"
     url: "publications"
-  - name: "Blog"
-    url: "https://medium.com/@AlOrozco53"
-  - name: "avatar"
-  - name: "Talks"
-    children:
-      - name: "Eyes on Bots"
-        url: "talks/eyes_on_bot.html"
-        newtab: true
-      - name: "Deep Learning Lessons"
-        url: "talks/lessons.html"
-        newtab: true
-      - name: "Hands On for Deep Meme Captioning"
-        url: "talks/onto_memes.html"
-        newtab: true
-      - name: "Undergraduate Thesis"
-        url: "talks/thesis.html"
-        newtab: true
-  - name: "Stack"
-    url: "stack/science"
-  - name: "Teaching"
-    children:
-      - name: "ML - Centraal Academy"
-        url: "teaching/centraal-ml"
   - name: "Resume"
     children:
       - name: "CV"
         url: "https://drive.google.com/open?id=1s5aMS8hCJnz3GxFSRvEuX6p6N2rYblP0"
+        newtab: true
       - name: "Academic CV"
         url: "https://drive.google.com/open?id=1C9rLy7kI6_K0YRRxmxtsFAw6G8c5AO8K"
+        newtab: true
+  - name: "Stack"
+    url: "stack/science"
   - name: "Extras"
     url: "extras"
 
