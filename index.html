@@ -18,25 +18,45 @@ bigimg: [/img/futuristic-cityscape-at-night_800.jpg, /img/ai-cover.jpg]
 	</i>
 </center>
 
-<!-- brief self-introduction: -->
-<br>
-<b>Albert</b> is a PhD <a href="https://chatgpt.com/share/674e27aa-fe88-8001-bd06-18d33529a7b2" target="_blank">Candidate</a>
-in Computer Science <i>à l'institut <a href="https://mila.quebec/en/" target="_blank">Mila</a></i>
-and at <i><a href="https://www.concordia.ca/" target="_blank">Concordia University</a></i>,
-in Montréal, QC, Canada.
-<p>
-  His current research interests surround <i>model merging</i>, i.e.,
-  the integration of multiple models into a single, coherent model... [Continue reading 👉 <a href="/aboutme">here</a>]
-  <br>
+<!-- introduction -->
+{% capture introduction %}
+{% include intro.html %}
+{% endcapture %}
+{% assign left_col = introduction %}
 
-<!-- some news and some social media stuff -->
+
+<!-- contact info -->
+{% capture contact_content %}
+{% include contact_info.md %}
+{% endcapture %}
+{% assign right_col = contact_content | markdownify | safe %}
+<!-- {{ contact_html }} -->
+
+{% include index_columns.html %}
+
+<!-- statement -->
+{% capture statement %}
+{% include statement.md %}
+{% endcapture %}
+{% assign statement_html = statement | markdownify | safe %}
+{{ statement_html }}
+
+<!-- news-->
 {% capture news_content %}
 {% include news.md %}
 {% endcapture %}
 {% assign news_html = news_content | markdownify | safe %}
+{{ news_html }}
 
-{% capture social_content %}
-{% endcapture %}
-{% assign social_html = social_content | markdownify | safe %}
+
+<!-- in the future, I will add some social media stuff here... -->
+<!-- {% capture news_content %} -->
+
+<!-- {% endcapture %} -->
+<!-- {% assign news_html = news_content | markdownify | safe %} -->
+
+<!-- {% capture social_content %} -->
+<!-- {% endcapture %} -->
+<!-- {% assign social_html = social_content | markdownify | safe %} -->
   
-{% include index_columns.html %}
+<!-- {% include index_columns.html %} -->
