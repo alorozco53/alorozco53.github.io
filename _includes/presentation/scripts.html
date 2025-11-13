@@ -27,7 +27,12 @@
       transitions: {{ page.reveal.menu_config.transitions | default: true | jsonify }},
       openButton: {{ page.reveal.menu_config.openButton | default: true | jsonify }},
       openSlideNumber: {{ page.reveal.menu_config.openSlideNumber | default: false | jsonify }},
-      keyboard: {{ page.reveal.menu_config.keyboard | default: true | jsonify }}
+      keyboard: {{ page.reveal.menu_config.keyboard | default: true | jsonify }},
+      {% if page.reveal.chalkboard != false %}
+      custom: [
+        { title: 'Drawing Tools', icon: '<i class="fa fa-pencil"></i>', content: '<ul class="slide-menu-items"><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.toggleNotesCanvas(); return false;"><i class="fa fa-pencil" style="width:1em;margin-right:0.5em;"></i>Toggle drawing on slides</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.toggleChalkboard(); return false;"><i class="fa fa-pencil-square-o" style="width:1em;margin-right:0.5em;"></i>Toggle whiteboard</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.clear(); return false;"><i class="fa fa-trash" style="width:1em;margin-right:0.5em;"></i>Clear drawings</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.reset(); return false;"><i class="fa fa-refresh" style="width:1em;margin-right:0.5em;"></i>Reset slide drawings</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.download(); return false;"><i class="fa fa-download" style="width:1em;margin-right:0.5em;"></i>Download drawings</a></li></ul>' }
+      ]
+      {% endif %}
     };
     {% endif %}
 
@@ -62,6 +67,35 @@
 
     {% if page.reveal.menu != false %}
     dependencies.push({ src: '{{ "/plugin/menu/menu.js" | relative_url }}' });
+    {% endif %}
+
+    {% if page.reveal.chalkboard != false %}
+    revealConfig.chalkboard = {
+      {% if page.reveal.chalkboard_config.src %}
+      src: '{{ page.reveal.chalkboard_config.src }}',
+      {% endif %}
+      {% if page.reveal.chalkboard_config.readOnly %}
+      readOnly: {{ page.reveal.chalkboard_config.readOnly | jsonify }},
+      {% endif %}
+      {% if page.reveal.chalkboard_config.theme %}
+      theme: '{{ page.reveal.chalkboard_config.theme }}',
+      {% endif %}
+      {% if page.reveal.chalkboard_config.transition %}
+      transition: {{ page.reveal.chalkboard_config.transition | jsonify }},
+      {% endif %}
+      toggleChalkboardButton: {{ page.reveal.chalkboard_config.toggleChalkboardButton | default: true | jsonify }},
+      toggleNotesButton: {{ page.reveal.chalkboard_config.toggleNotesButton | default: true | jsonify }}
+    };
+    dependencies.push({ src: '{{ "/plugin/chalkboard/chalkboard.js" | relative_url }}' });
+
+    if (!revealConfig.keyboard) {
+      revealConfig.keyboard = {};
+    }
+    revealConfig.keyboard[67] = function() { RevealChalkboard.toggleNotesCanvas() };  // toggle notes canvas when 'c' is pressed
+    revealConfig.keyboard[66] = function() { RevealChalkboard.toggleChalkboard() };   // toggle chalkboard when 'b' is pressed
+    revealConfig.keyboard[46] = function() { RevealChalkboard.clear() };              // clear chalkboard when 'DEL' is pressed
+    revealConfig.keyboard[8] = function() { RevealChalkboard.reset() };               // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+    revealConfig.keyboard[68] = function() { RevealChalkboard.download() };           // download recorded chalkboard drawing when 'd' is pressed
     {% endif %}
 
     {% if page.reveal.title_footer %}

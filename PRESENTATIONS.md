@@ -10,10 +10,11 @@ This repository hosts multiple presentations built with **reveal.js**, a powerfu
 2. [Presentation Locations](#presentation-locations)
 3. [Architecture & Structure](#architecture--structure)
 4. [Creating a New Presentation](#creating-a-new-presentation)
-5. [Features & Plugins](#features--plugins)
-6. [Customization](#customization)
-7. [Best Practices](#best-practices)
-8. [Troubleshooting](#troubleshooting)
+5. [Jekyll-Based Presentations (NEW)](#jekyll-based-presentations-new)
+6. [Features & Plugins](#features--plugins)
+7. [Customization](#customization)
+8. [Best Practices](#best-practices)
+9. [Troubleshooting](#troubleshooting)
 
 ## What is Reveal.js
 
@@ -30,28 +31,32 @@ This repository hosts multiple presentations built with **reveal.js**, a powerfu
 
 ## Presentation Locations
 
-Presentations are organized in three main directories:
+Presentations are organized in four main directories:
 
 ```
 /workspace/
-├── talks/                      # Main presentations/talks
+├── _presentations/             # NEW: Jekyll-based standardized presentations
+│   └── standardization-prototype.html  # Template for new presentations
+├── talks/                      # Main presentations/talks (legacy HTML)
 │   ├── lessons.html           # Meme generation lessons (Spanish)
 │   ├── thesis.html            # Thesis presentation (Spanish)
 │   ├── eyes_on_bot.html       # Eyes on bot presentation
 │   ├── onto_memes.html        # Onto memes presentation
 │   └── material/
 │       └── conv-demo.html     # Interactive convolution demo
-├── stack/                      # Research project presentations
+├── stack/                      # Research project presentations (legacy HTML)
 │   ├── hanabi/
 │   │   └── hanabichallenge.html
 │   ├── jumping_networks.html
 │   ├── lin-sp-bp.html
 │   ├── adversarial_opinion_dynamics.html
 │   └── ...
-└── course_slides/              # Course-related slides
+└── course_slides/              # Course-related slides (legacy HTML)
     └── ml_centraal/
         └── demoday.html
 ```
+
+**Note:** New presentations should use the Jekyll-based approach in `_presentations/`. Legacy presentations in `talks/`, `stack/`, and `course_slides/` remain as standalone HTML files.
 
 ## Architecture & Structure
 
@@ -300,6 +305,356 @@ def hello_world():
    ```
 
 3. Test navigation, features, and responsiveness
+
+## Jekyll-Based Presentations (NEW)
+
+### Overview
+
+The new standardized approach uses Jekyll's layout system to create presentations. This method provides:
+
+- **YAML-driven configuration** - Control all features from front matter
+- **Consistent structure** - Reusable `reveal` layout with includes
+- **Automatic plugin management** - Plugins loaded based on YAML settings
+- **Menu integration** - Drawing tools, themes, and transitions in one place
+- **Easier maintenance** - Update all presentations by changing layout files
+
+### Creating a Jekyll Presentation
+
+#### Step 1: Create Presentation File
+
+Create a new file in `_presentations/` directory:
+
+```bash
+touch _presentations/my-presentation.html
+```
+
+#### Step 2: Add Front Matter and Content
+
+Use this template:
+
+```yaml
+---
+title: My Presentation Title
+subtitle: Optional subtitle
+reveal:
+  # Core settings
+  theme: night                    # Available: black, white, league, night, etc.
+  transition: slide               # none, fade, slide, convex, concave, zoom
+  backgroundTransition: fade
+  controls: true
+  progress: true
+  history: true
+  center: true
+  
+  # Menu plugin (provides navigation panel)
+  menu: true
+  menu_config:
+    side: left                    # Menu position: left or right
+    transitions: true             # Show transitions in menu
+    openButton: true              # Show menu button
+    
+  # Drawing and whiteboard tools (chalkboard plugin)
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard             # chalkboard or whiteboard
+    toggleChalkboardButton: true  # Show whiteboard toggle button
+    toggleNotesButton: true       # Show drawing toggle button
+  
+  # Navigation bar
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  links:
+    - label: 'Project Page'
+      url: '/projects/my-project/'
+  logo: '/img/logo.png'           # Optional logo in navbar
+  logo_alt: 'Logo'
+  
+  # Other plugins (all true by default)
+  markdown: true                  # Markdown support
+  highlight: true                 # Code syntax highlighting
+  zoom: true                      # Alt+click to zoom
+  notes: true                     # Speaker notes (press 'S')
+  math: false                     # MathJax for equations (optional)
+  
+  # Math configuration (if math: true)
+  math_config:
+    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+    config: 'TeX-AMS_HTML-full'
+---
+
+<section data-background="#03040f">
+  <h1>{{ page.title }}</h1>
+  <p>{{ page.subtitle }}</p>
+</section>
+
+<section>
+  <h2>Content Slide</h2>
+  <ul>
+    <li class="fragment">Point 1</li>
+    <li class="fragment">Point 2</li>
+  </ul>
+</section>
+
+<!-- Add more slides -->
+```
+
+### Drawing and Whiteboard Features
+
+The chalkboard plugin provides two powerful annotation tools that can be configured via YAML:
+
+#### Configuration Options
+
+```yaml
+reveal:
+  chalkboard: true              # Enable/disable chalkboard features
+  chalkboard_config:
+    theme: chalkboard           # 'chalkboard' (chalk on black) or 'whiteboard' (marker on white)
+    toggleChalkboardButton: true # Show whiteboard button (pencil-square icon)
+    toggleNotesButton: true     # Show drawing button (pencil icon)
+    src: "drawings.json"        # Optional: Load pre-recorded drawings
+    readOnly: false             # Set to true to prevent changes to drawings
+    transition: 800             # Transition duration in milliseconds
+```
+
+#### Using Drawing Tools
+
+When `chalkboard: true`, you get two annotation modes:
+
+**1. Drawing on Slides (Notes Canvas)**
+- Click the pencil icon (<i class="fa fa-pencil"></i>) in the bottom-left corner
+- Or press the **`c`** key
+- Draw directly on the current slide to annotate content
+- Drawings are slide-specific and persist when navigating back
+
+**2. Full Whiteboard Mode (Chalkboard)**
+- Click the pencil-square icon (<i class="fa fa-pencil-square-o"></i>) in the bottom-left corner
+- Or press the **`b`** key
+- Opens a blank canvas over your slides
+- Perfect for working through problems or brainstorming
+
+#### Keyboard Shortcuts
+
+When chalkboard is enabled, these keyboard shortcuts are automatically configured:
+
+| Key | Action |
+|-----|--------|
+| **`c`** | Toggle drawing on slides (notes canvas) |
+| **`b`** | Toggle full whiteboard |
+| **`DEL`** | Clear all drawings on current canvas |
+| **`BACKSPACE`** | Reset drawings on current slide |
+| **`d`** | Download drawings as JSON |
+
+#### Menu Integration
+
+With both `menu: true` and `chalkboard: true`, the drawing tools appear in the reveal menu under "Drawing Tools":
+
+- Toggle drawing on slides
+- Toggle whiteboard
+- Clear drawings
+- Reset slide drawings
+- Download drawings
+
+This provides an alternative to keyboard shortcuts and buttons.
+
+#### Example: Presentation with Drawing Tools
+
+```yaml
+---
+title: Interactive Lecture
+reveal:
+  theme: night
+  menu: true
+  menu_config:
+    side: left
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+---
+
+<section>
+  <h2>Work Through Example</h2>
+  <p>Press <strong>b</strong> to open whiteboard and solve together</p>
+</section>
+
+<section>
+  <h2>Diagram Explanation</h2>
+  <img src="/img/diagram.png" alt="Diagram">
+  <p><small>Press <strong>c</strong> to annotate this diagram</small></p>
+</section>
+```
+
+### Available YAML Options Reference
+
+#### Core Reveal.js Settings
+
+```yaml
+reveal:
+  # Display
+  theme: night                   # Theme name (see Customization section)
+  transition: slide              # Transition style between slides
+  backgroundTransition: fade     # Background transition style
+  controls: true                 # Show navigation controls
+  progress: true                 # Show progress bar
+  history: true                  # Push to browser history
+  center: true                   # Vertical centering
+```
+
+#### Plugin Settings
+
+```yaml
+  # Menu plugin
+  menu: true                     # Enable menu (default: true)
+  menu_config:
+    side: left
+    titleSelector: 'h1, h2, h3, h4, h5, h6'
+    hideMissingTitles: false
+    markers: false
+    transitions: true
+    openButton: true
+    openSlideNumber: false
+    keyboard: true
+  
+  # Chalkboard plugin (drawing tools)
+  chalkboard: true               # Enable chalkboard (default: false)
+  chalkboard_config:
+    theme: chalkboard            # chalkboard or whiteboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+    src: null                    # Path to pre-recorded drawings
+    readOnly: false
+    transition: 800
+  
+  # Markdown support
+  markdown: true                 # Enable markdown (default: true)
+  
+  # Code highlighting
+  highlight: true                # Enable syntax highlighting (default: true)
+  
+  # Zoom plugin
+  zoom: true                     # Alt+click to zoom (default: true)
+  
+  # Speaker notes
+  notes: true                    # Enable notes (default: true)
+  
+  # Math equations
+  math: false                    # Enable MathJax (default: false)
+  math_config:
+    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+    config: 'TeX-AMS_HTML-full'
+```
+
+#### Navigation Bar Settings
+
+```yaml
+  # Home link
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  
+  # Additional links
+  links:
+    - label: 'Link 1'
+      url: '/path/to/page/'
+    - label: 'Link 2'
+      url: 'https://external-site.com'
+  
+  # Logo
+  logo: '/img/logo.png'
+  logo_alt: 'Logo text'
+```
+
+#### Advanced Settings
+
+```yaml
+  # Custom CSS files
+  additional_css:
+    - '/css/custom-presentation.css'
+  
+  # Custom JavaScript files
+  additional_js:
+    - '/js/custom-animations.js'
+  
+  # Custom plugin dependencies
+  additional_dependencies:
+    - "{ src: '/plugin/custom/plugin.js', async: true }"
+  
+  # Title footer
+  title_footer: false
+  
+  # Extend reveal config with custom options
+  extend:
+    slideNumber: true
+    showSlideNumber: 'all'
+    autoSlide: 5000
+```
+
+### Jekyll vs. Legacy HTML Comparison
+
+| Feature | Jekyll Approach | Legacy HTML |
+|---------|----------------|-------------|
+| Configuration | YAML front matter | JavaScript object |
+| Plugin loading | Automatic based on YAML | Manual dependency array |
+| Navigation | Standardized navbar include | Custom per-file |
+| Menu integration | Auto-integrated drawing tools | Manual configuration |
+| Maintenance | Update layout affects all | Update each file |
+| Reusability | High (shared layout) | Low (copy-paste) |
+| Learning curve | YAML + minimal HTML | Full reveal.js config |
+
+### Migrating Legacy Presentations
+
+To migrate a presentation from legacy HTML to Jekyll:
+
+1. **Extract content slides**
+   - Copy everything inside `<div class="slides">...</div>`
+
+2. **Convert configuration to YAML**
+   - Map JavaScript config to YAML front matter
+   - Use available options reference above
+
+3. **Update paths**
+   - Images: Keep absolute paths from site root (`/img/...`)
+   - No need to update CSS/JS plugin paths (handled by layout)
+
+4. **Test locally**
+   - Save as `_presentations/my-presentation.html`
+   - Visit `http://localhost:4000/presentations/my-presentation.html`
+
+**Example migration:**
+
+**Before (legacy HTML):**
+```html
+<script>
+Reveal.initialize({
+  theme: 'night',
+  transition: 'slide',
+  menu: {
+    side: 'left',
+    transitions: true
+  },
+  dependencies: [
+    { src: '../plugin/menu/menu.js' },
+    { src: '../plugin/chalkboard/chalkboard.js' }
+  ]
+});
+</script>
+```
+
+**After (Jekyll YAML):**
+```yaml
+---
+reveal:
+  theme: night
+  transition: slide
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+  chalkboard: true
+---
+```
 
 ## Features & Plugins
 
