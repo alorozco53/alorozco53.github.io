@@ -1,0 +1,89 @@
+---
+title: Presentation Template Prototype
+subtitle: Prototype deck for the standardized Reveal.js layout
+purpose: Demo deck used during development to validate the reusable presentation framework.
+reveal:
+  theme: night
+  transition: slide
+  backgroundTransition: fade
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+    openButton: true
+  title_footer: false
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  links:
+    - label: 'Debug Notes'
+      url: '/debug/2025-11-13T054059Z-standardizing-presentation-prototype/'
+  logo: '/img/centraal_logo_blanco.png'
+  logo_alt: 'Centraal'
+---
+
+<section data-background="#03040f" data-transition="fade">
+  <h1>Presentation Template Prototype</h1>
+  <p class="fragment">A working sandbox for the new Reveal.js layout standard.</p>
+  <p class="fragment">Purpose: {{ page.purpose }}</p>
+</section>
+
+<section data-background="#040a1b">
+  <h2>What&rsquo;s under test?</h2>
+  <ul>
+    <li class="fragment">Reusable Jekyll layout with front matter driven configuration.</li>
+    <li class="fragment">Consistent navigation chrome: home link, quick links, optional logo.</li>
+    <li class="fragment">Default plugin stack (menu, notes, markdown, highlight, zoom).</li>
+  </ul>
+</section>
+
+<section>
+  <section data-background="#050d22">
+    <h2>Slide Structure</h2>
+    <p>Nested sections still work as expected.</p>
+  </section>
+  <section data-markdown data-separator="^\n---\n$" data-background="#071735">
+    <textarea data-template>
+## Markdown Support
+The markdown plugin remains optional but is enabled by default.
+---
+## Quick Checklist
+- Define your deck in `_presentations/`
+- Configure behavior in front matter
+- Write slides as HTML or markdown
+---
+## Reveal.js Plugins Enabled
+- Menu
+- Notes
+- Highlight
+- Zoom
+    </textarea>
+  </section>
+</section>
+
+<section data-background="#040816">
+  <h2>Code Highlighting</h2>
+  <pre><code class="language-yaml">reveal:
+  theme: night
+  menu: true
+  home_url: '/'
+  links:
+    - label: 'Dashboard'
+      url: '/presentations/'
+</code></pre>
+</section>
+
+<section data-background="#081229">
+  <h2>Next Steps</h2>
+  <ol>
+    <li class="fragment">Backfill existing decks onto this layout.</li>
+    <li class="fragment">Introduce a branded home button and shared menu structure.</li>
+    <li class="fragment">Document authoring workflow in <code>PRESENTATIONS.md</code>.</li>
+  </ol>
+</section>
+
+<section data-background="#00040d" data-transition="fade">
+  <h2>Feedback Welcome</h2>
+  <p class="fragment">Use this prototype to validate styling, plugins, and navigation.</p>
+  <p class="fragment">Report notes in the debug log referenced from the homepage.</p>
+</section>

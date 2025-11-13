@@ -1,0 +1,23 @@
+{% include head.html %}
+
+{% assign reveal_theme = page.reveal.theme | default: 'night' %}
+<link rel="stylesheet" href="{{ '/css/theme/' | append: reveal_theme | append: '.css' | relative_url }}" id="reveal-theme">
+
+{% if page.reveal.highlight != false %}
+<link rel="stylesheet" href="{{ '/lib/css/zenburn.css' | relative_url }}">
+{% endif %}
+
+{% if page.reveal.menu != false %}
+<link rel="stylesheet" href="{{ '/plugin/menu/menu.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/plugin/menu/font-awesome-4.3.0/css/font-awesome.min.css' | relative_url }}">
+{% endif %}
+
+{% if page.reveal.title_footer %}
+<link rel="stylesheet" href="{{ '/plugin/title-footer/title-footer.css' | relative_url }}">
+{% endif %}
+
+{% if page.reveal.additional_css %}
+  {% for css_path in page.reveal.additional_css %}
+<link rel="stylesheet" href="{{ css_path | relative_url }}">
+  {% endfor %}
+{% endif %}
