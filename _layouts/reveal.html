@@ -1,0 +1,28 @@
+---
+layout: null
+common-css:
+  - "/css/reveal.css"
+  - "/css/presentations.css"
+common-googlefonts:
+  - "Source+Sans+Pro:400,600"
+  - "Open+Sans:400,600"
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  {% include presentation/head.html %}
+  <body class="reveal-body">
+    {% include gtm_body.html %}
+
+    {% include presentation/navbar.html %}
+
+    <div class="reveal" data-testid="presentation-root">
+      <div class="slides">
+        {{ content }}
+      </div>
+    </div>
+
+    {% include presentation/scripts.html %}
+    {% include footer-scripts.html %}
+  </body>
+</html>

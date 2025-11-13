@@ -1,0 +1,92 @@
+<script src="{{ '/lib/js/head.min.js' | relative_url }}"></script>
+<script src="{{ '/js/reveal.js' | relative_url }}"></script>
+
+{% if page.reveal.additional_js %}
+  {% for script_path in page.reveal.additional_js %}
+<script src="{{ script_path | relative_url }}"></script>
+  {% endfor %}
+{% endif %}
+
+<script>
+  (function() {
+    var revealConfig = {
+      controls: {{ page.reveal.controls | default: true | jsonify }},
+      progress: {{ page.reveal.progress | default: true | jsonify }},
+      history: {{ page.reveal.history | default: true | jsonify }},
+      center: {{ page.reveal.center | default: true | jsonify }},
+      transition: '{{ page.reveal.transition | default: "slide" }}',
+      backgroundTransition: '{{ page.reveal.backgroundTransition | default: "fade" }}'
+    };
+
+    {% if page.reveal.menu != false %}
+    revealConfig.menu = {
+      side: '{{ page.reveal.menu_config.side | default: "left" }}',
+      titleSelector: '{{ page.reveal.menu_config.titleSelector | default: "h1, h2, h3, h4, h5, h6" }}',
+      hideMissingTitles: {{ page.reveal.menu_config.hideMissingTitles | default: false | jsonify }},
+      markers: {{ page.reveal.menu_config.markers | default: false | jsonify }},
+      transitions: {{ page.reveal.menu_config.transitions | default: true | jsonify }},
+      openButton: {{ page.reveal.menu_config.openButton | default: true | jsonify }},
+      openSlideNumber: {{ page.reveal.menu_config.openSlideNumber | default: false | jsonify }},
+      keyboard: {{ page.reveal.menu_config.keyboard | default: true | jsonify }}
+    };
+    {% endif %}
+
+    var dependencies = [
+      { src: '{{ "/lib/js/classList.js" | relative_url }}', condition: function() { return !document.body.classList; } }
+    ];
+
+    {% if page.reveal.markdown != false %}
+    dependencies.push({ src: '{{ "/plugin/markdown/marked.js" | relative_url }}', condition: function() { return !!document.querySelector("[data-markdown]"); } });
+    dependencies.push({ src: '{{ "/plugin/markdown/markdown.js" | relative_url }}', condition: function() { return !!document.querySelector("[data-markdown]"); } });
+    {% endif %}
+
+    {% if page.reveal.highlight != false %}
+    dependencies.push({ src: '{{ "/plugin/highlight/highlight.js" | relative_url }}', async: true, callback: function() { if (window.hljs && window.hljs.initHighlightingOnLoad) { hljs.initHighlightingOnLoad(); } } });
+    {% endif %}
+
+    {% if page.reveal.zoom != false %}
+    dependencies.push({ src: '{{ "/plugin/zoom-js/zoom.js" | relative_url }}', async: true });
+    {% endif %}
+
+    {% if page.reveal.notes != false %}
+    dependencies.push({ src: '{{ "/plugin/notes/notes.js" | relative_url }}', async: true });
+    {% endif %}
+
+    {% if page.reveal.math %}
+    revealConfig.math = {
+      mathjax: '{{ page.reveal.math_config.mathjax | default: "https://cdn.mathjax.org/mathjax/latest/MathJax.js" }}',
+      config: '{{ page.reveal.math_config.config | default: "TeX-AMS_HTML-full" }}'
+    };
+    dependencies.push({ src: '{{ "/plugin/math/math.js" | relative_url }}', async: true });
+    {% endif %}
+
+    {% if page.reveal.menu != false %}
+    dependencies.push({ src: '{{ "/plugin/menu/menu.js" | relative_url }}' });
+    {% endif %}
+
+    {% if page.reveal.title_footer %}
+    dependencies.push({ src: '{{ "/plugin/title-footer/title-footer.js" | relative_url }}', async: true, callback: function() { if (window.title_footer && window.title_footer.initialize) { title_footer.initialize(); } } });
+    {% endif %}
+
+    {% if page.reveal.additional_dependencies %}
+      {% for item in page.reveal.additional_dependencies %}
+    dependencies.push({{ item }});
+      {% endfor %}
+    {% endif %}
+
+    revealConfig.dependencies = dependencies;
+
+    {% if page.reveal.extend %}
+    var extraConfig = {{ page.reveal.extend | jsonify }};
+    if (extraConfig && typeof extraConfig === 'object') {
+      for (var key in extraConfig) {
+        if (Object.prototype.hasOwnProperty.call(extraConfig, key)) {
+          revealConfig[key] = extraConfig[key];
+        }
+      }
+    }
+    {% endif %}
+
+    Reveal.initialize(revealConfig);
+  })();
+</script>

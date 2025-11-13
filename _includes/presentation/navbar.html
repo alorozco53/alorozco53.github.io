@@ -1,0 +1,27 @@
+<div class="reveal-chrome" data-component="presentation-chrome">
+  {% assign home_enabled = page.reveal.home_link %}
+  {% if home_enabled != false %}
+    {% assign home_url = page.reveal.home_url | default: '/' %}
+    <a class="reveal-nav-link reveal-nav-home" href="{{ home_url | relative_url }}" aria-label="{{ page.reveal.home_label | default: 'Back to home' }}">
+      <span class="reveal-nav-icon">←</span>
+      <span class="reveal-nav-label">{{ page.reveal.home_label | default: 'Back to home' }}</span>
+    </a>
+  {% endif %}
+
+  {% if page.reveal.links %}
+    <nav class="reveal-nav-links" aria-label="Presentation quick links">
+      {% for item in page.reveal.links %}
+        <a class="reveal-nav-link" href="{{ item.url | relative_url }}"
+           {% if item.newtab %}target="_blank" rel="noopener"{% endif %}>
+          {{ item.label }}
+        </a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  {% if page.reveal.logo %}
+    <div class="reveal-nav-logo">
+      <img src="{{ page.reveal.logo | relative_url }}" alt="{{ page.reveal.logo_alt | default: site.title }}">
+    </div>
+  {% endif %}
+</div>

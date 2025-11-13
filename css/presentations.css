@@ -1,0 +1,109 @@
+.reveal-body {
+  background-color: #03040f;
+  color: #f5f7ff;
+  font-family: "Source Sans Pro", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.reveal-chrome {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.reveal-nav-home {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  border: none;
+  background: rgba(10, 18, 42, 0.75);
+  color: #e6f1ff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  transition: background 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(6px);
+}
+
+.reveal-nav-home:hover,
+.reveal-nav-home:focus {
+  background: rgba(31, 66, 143, 0.85);
+  transform: translateY(-1px);
+  color: #ffffff;
+}
+
+.reveal-nav-icon {
+  font-size: 1em;
+  margin-right: 0.4rem;
+}
+
+.reveal-nav-links {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.reveal-nav-link {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.75rem;
+  background: rgba(9, 15, 32, 0.65);
+  color: #d8e4ff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.reveal-nav-link:hover,
+.reveal-nav-link:focus {
+  background: rgba(63, 114, 255, 0.8);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.reveal-nav-logo {
+  pointer-events: auto;
+  margin-left: auto;
+}
+
+.reveal-nav-logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.25rem 0.4rem;
+}
+
+@media (max-width: 768px) {
+  .reveal-chrome {
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .reveal-nav-links {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .reveal-nav-logo {
+    order: -1;
+  }
+}

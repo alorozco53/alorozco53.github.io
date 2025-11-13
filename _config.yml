@@ -19,6 +19,11 @@ title: AlOrozco53
 # Short description of your site
 description: My personal website, by AlOrozco53.
 
+collections:
+  presentations:
+    output: true
+    permalink: /presentations/:path/
+
 # --- Navigation bar options --- #
 
 # List of links in the navigation bar
@@ -205,6 +210,28 @@ defaults:
     values:
       layout: "page"
       show-avatar: true
+    -
+      scope:
+        path: ""
+        type: "presentations"
+      values:
+        layout: "reveal"
+        reveal:
+          theme: night
+          controls: true
+          progress: true
+          history: true
+          center: true
+          transition: slide
+          backgroundTransition: fade
+          menu: true
+          notes: true
+          markdown: true
+          highlight: true
+          zoom: true
+          math: false
+          title_footer: false
+          home_link: true
 
 # Use tags index page and make tags on each post clickable
 link-tags: true
