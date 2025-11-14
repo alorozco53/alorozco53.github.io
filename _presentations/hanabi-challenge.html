@@ -1,0 +1,774 @@
+---
+title: "The Hanabi Challenge: A New Frontier for AI Research"
+subtitle: "Bard, Foerster, Chandar, et al."
+presenter: "Albert Orozco Camacho"
+reveal:
+  # Core settings
+  theme: simple
+  transition: slide
+  backgroundTransition: fade
+  controls: true
+  progress: true
+  history: true
+  center: true
+  
+  # Menu plugin
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+    openButton: true
+    
+  # Drawing tools (chalkboard plugin)
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+  
+  # Math support (for LaTeX equations)
+  math: true
+  math_config:
+    mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_HTML'
+    config: 'TeX-AMS_HTML-full'
+  
+  # Navigation
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  links:
+    - label: 'ArXiv Paper'
+      url: 'https://arxiv.org/abs/1902.00506'
+  
+  # Custom JavaScript for background helpers
+  additional_js:
+    - '/js/hanabi-presentation.js'
+  
+  # Other plugins
+  markdown: true
+  highlight: true
+  zoom: true
+  notes: true
+---
+
+<section>
+<section>
+<h1>
+The Hanabi Challenge: A New Frontier for AI Research
+</h1>
+<p>
+<em>
+Bard, Foerster, Chandar, et al.
+</em>
+</p>
+<p>
+presented by
+<a href="https://twitter.com/alorozco53">
+Albert Orozco Camacho
+</a>
+</p>
+<script>setBackgroundColor("blue", "");</script>
+</section>
+<section>
+<script>setBackgroundImage("/stack/hanabi/paper.gif", "");</script>
+<h2>
+Click
+<a href="https://arxiv.org/abs/1902.00506" target="blank_">
+me
+</a>
+to go to the article!
+</h2>
+</section>
+</section>
+<section>
+<section>
+<h2>
+Motivation
+</h2>
+<script>setBackgroundColor("cyan", "");</script>
+</section>
+<section>
+<blockquote>
+<p>
+In the context of
+<em>
+reinforcement learning
+</em>
+(RL)...
+</p>
+</blockquote>
+<ul>
+<li>
+the research community is constantly looking to better ways of assessing performance;
+</li>
+<li>
+typically, games like
+<em>
+chess
+</em>
+,
+<em>
+go
+</em>
+, or
+<em>
+StarCraft
+</em>
+serve for this means
+</li>
+</ul>
+<div class="fragment">
+<p>
+<em>
+Nevertheless
+</em>
+, such games just offer testing:
+</p>
+<ul>
+<li>
+competitive settings
+</li>
+<li>
+zero-sum evaluation schemes
+</li>
+<li>
+individualistic policies that follow an equilibrium
+</li>
+</ul>
+<p>
+<strong>
+Yet, games, in general, need many more abilities
+</strong>
+</p>
+</div>
+</section>
+<section>
+<h3>
+What are we missing?
+</h3>
+<div class="fragment">
+<ul>
+<li>
+A
+<em>
+cooperative
+</em>
+setting
+</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>
+<em>
+Imperfect
+</em>
+information
+</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>
+Assess
+<em>
+restricted communication
+</em>
+settings
+</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>
+Communicating extra information
+<em>
+implicitly
+</em>
+(a form of reasoning)
+</li>
+</ul>
+</div>
+</section>
+<section>
+<h2>
+The Hanabi Card Game
+</h2>
+<script>setBackgroundColor("purple", "");</script>
+</section>
+<section>
+<script>setBackgroundImage("https://boardgaming.com/wp-content/uploads/2012/11/hanabi-components.jpg", "");</script>
+</section>
+<section>
+<ul>
+<li>
+Two to Five player game, similar to a
+<em>
+cooperative solitarie
+</em>
+</li>
+<li>
+Each card depicts a rank $\in \{1,2,3,4,5\}$ and colour (red,
+green, blue, yellow, white).
+</li>
+<li>
+Deck has a total of
+<strong>
+50 cards
+</strong>
+, 10 of each color:
+<ul>
+<li>
+three $1$s
+</li>
+<li>
+two $2$s
+</li>
+<li>
+two $3$s
+</li>
+<li>
+two $4$s
+</li>
+<li>
+one $5$s
+</li>
+</ul>
+</li>
+<li>
+<strong>
+Players can only see their partners' hands
+</strong>
+</li>
+</ul>
+<blockquote>
+<p>
+<strong>
+GOAL
+</strong>
+: Play cards to form five consecutively ordered stacks
+</p>
+</blockquote>
+</section>
+<section>
+<p>
+<img src="/stack/hanabi/hanabi-scheme.png" alt="">
+</p>
+</section>
+<section>
+<p>
+Players take turns doing one of
+<em>
+three
+</em>
+actions:
+</p>
+<blockquote>
+<p>
+Giving a
+<strong>
+hint
+</strong>
+</p>
+</blockquote>
+<p>
+The
+<em>
+active player
+</em>
+tells any other player a clue about the content of their hand.
+Hints are limited by
+<em>
+information tokens
+</em>
+(8 total)
+</p>
+<div class="fragment">
+<blockquote>
+<p>
+The active player can
+<strong>
+discard
+</strong>
+a card from their hand, whenever there are < 8 information tokens
+</p>
+</blockquote>
+<p>
+Such player then, has to draw a new card from the deck and an
+<em>
+information token is recovered
+</em>
+</p>
+</div>
+</section>
+<section>
+<blockquote>
+<p>
+Pick a card and
+<strong>
+play
+</strong>
+it
+</p>
+</blockquote>
+<ul>
+<li>
+<em>
+Successful play
+</em>
+: if the played card is the next in the sequence of its color
+</li>
+<li>
+<em>
+Unsucessful play
+</em>
+the played card is discarded and the group loses one life
+</li>
+<li>
+Players receive an extra information token if a stack is completed
+</li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p>
+<strong>
+Game Over
+</strong>
+</p>
+</blockquote>
+<ul>
+<li>
+Players complete all five stacks (perfect game with score = 25)
+</li>
+<li>
+Players consume all their lives or after drawing last card of deck
+(score equals to the sum of all the card numbers in the stacks)
+</li>
+</ul>
+</div>
+</section>
+<section>
+<p>
+<a href="https://youtu.be/d_js_3S_7K8">
+https://youtu.be/d_js_3S_7K8
+</a>
+</p>
+<script>setBackgroundColor("black", "");</script>
+</section>
+<section>
+<h3>
+Paper Contributions
+</h3>
+<ul>
+<li>
+Motivate the ML (RL) research community to address a problem that requires
+<ul>
+<li>
+learning implicit incentives
+</li>
+<li>
+<em>
+theory of mind
+</em>
+</li>
+<li>
+imperfect information
+</li>
+</ul>
+</li>
+<li>
+Present an Open Source Environment, inspired on the
+<em>
+OpenAI Gym
+</em>
+</li>
+<li>
+Benchmark current RL SOTA with these new challenges
+<ul>
+<li>
+Compare SOTA performance with human-like strategies
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section>
+<section>
+<h2>
+Experimental Details
+</h2>
+<script>setBackgroundColor("green", "");</script>
+</section>
+<section>
+<p>
+<em>
+Two Learning Challenges
+</em>
+:
+</p>
+<ul>
+<li>
+Self-play Learning
+</li>
+<li>
+Ad-hoc Learning
+</li>
+</ul>
+<p>
+Both with limited and unlimited sampling regimes
+</p>
+</section>
+<section>
+<blockquote>
+<p>
+<strong>
+Self-Play Learning
+</strong>
+:
+<em>
+Find a joint policy that maximizes a score through repeatedly playing the game.
+</em>
+</p>
+</blockquote>
+<div class="fragment">
+<ul>
+<li>
+<strong>
+Sample limited regime
+</strong>
+(SL): limit the number of environment steps (turns) to at most 100 million
+</li>
+<li>
+<strong>
+Unlimited regime
+</strong>
+(UL): no restrictions on time nor computing; hence, we focus on
+<em>
+asymptotic pefromance
+</em>
+of scores
+</li>
+</ul>
+</div>
+<div class="fragment">
+<blockquote>
+<p>
+<strong>
+Ad-hoc Teams
+</strong>
+</p>
+<ul>
+<li>
+<em>
+Mixture of agents trained each one with a particular algorithm and/or human-like
+</em>
+</li>
+<li>
+Focus is on measuring an agent's ability to play with a wide range of teammates
+</li>
+</ul>
+</blockquote>
+</div>
+</section>
+<section>
+<h3>
+Learning Agents
+</h3>
+<div class="fragment">
+<blockquote>
+<p>
+<strong>
+Actor-Critic-Hanabi-Agent
+</strong>
+(ACHA)
+</p>
+<ul>
+<li>
+Asynchronous implementation of an actor-critic algorithm
+</li>
+<li>
+Policy is represented by a DNN
+</li>
+<li>
+Learns a
+<em>
+value function
+</em>
+as a baseline for variance reduction
+</li>
+<li>
+Learned gradients are controlled by a
+<em>
+centralized server
+</em>
+, which holds
+the DNN parameters
+</li>
+<li>
+Has shown good performance on tasks such as
+<em>
+Arcade Learning Environment
+</em>
+,
+<em>
+TORCS driving simulator
+</em>
+, and
+<em>
+3D first-person environments
+</em>
+.
+</li>
+</ul>
+</blockquote>
+</div>
+</section>
+<section>
+<blockquote>
+<p>
+<strong>
+Rainbow-Agent
+</strong>
+</p>
+<ul>
+<li>
+SOTA agent architecture for deep RL
+</li>
+<li>
+Combines innovations made to Deep-Q Networks into a sample eficient and high-rewarded algorithm
+</li>
+</ul>
+</blockquote>
+<div class="fragment">
+<blockquote>
+<p>
+<strong>
+BAD Agent
+</strong>
+</p>
+<ul>
+<li>
+<em>
+Bayesian Action Decoder
+</em>
+</li>
+<li>
+SOTA for the two-player unlimited regime
+</li>
+<li>
+Bayesian belief update conditioned on current policy of the acting agent
+</li>
+</ul>
+</blockquote>
+</div>
+</section>
+<section>
+<h3>
+Benchmarks
+</h3>
+<p>
+(that attempt to immitate human reasoning)
+</p>
+</section>
+<section>
+<blockquote>
+<p>
+<strong>
+SmartBot
+</strong>
+</p>
+<ul>
+<li>
+Tracks the publicly known information about each player's cards
+</li>
+<li>
+Prevents other players to play/discard cards that they don't know are safe or not.
+</li>
+</ul>
+</blockquote>
+<div class="fragment">
+<blockquote>
+<p>
+<strong>
+HatBot and WTFWThat
+</strong>
+</p>
+<ul>
+<li>
+HatBot uses a predefined protocol to determine a recommended action forall other players
+</li>
+<li>
+Every agent can infer other player's recommended actions according to HatBot's convention
+</li>
+<li>
+WTFWThat is a variant of the HatBot strategy that can play with 2 through 5 players
+</li>
+</ul>
+</blockquote>
+</div>
+</section>
+<section>
+<blockquote>
+<p>
+<strong>
+FireFlower
+</strong>
+</p>
+<ul>
+<li>
+Implements a set of human-style conventions
+</li>
+<li>
+Searches over all possible actions and choses the one that maximizes the expected
+value of an evaluation function
+</li>
+</ul>
+</blockquote>
+</section>
+<section>
+<p>
+<img src="/stack/hanabi/fireflower.png" alt="">
+</p>
+</section>
+</section>
+<section>
+<section>
+<h2>
+<em>
+State-of-the-Art
+</em>
+Results (as of 2020)
+</h2>
+<script>setBackgroundColor("yellow", "");</script>
+</section>
+<section>
+<h4>
+ACHA
+</h4>
+<p>
+<img src="/stack/hanabi/acha-evol.png" alt="">
+</p>
+</section>
+<section>
+<h4>
+Rainbow
+</h4>
+<p>
+<img src="/stack/hanabi/rainbow.png" alt="">
+</p>
+</section>
+<section>
+<h4>
+ACHA
+</h4>
+<p>
+<img src="/stack/hanabi/acha-evol2.png" alt="">
+</p>
+</section>
+<section>
+<h4>
+Rainbow
+</h4>
+<p>
+<img src="/stack/hanabi/rainbow2.png" alt="">
+</p>
+</section>
+<section>
+<h4>
+ACHA (No evolution of parameters)
+</h4>
+<p>
+<img src="/stack/hanabi/acha-noevol.png" alt="">
+</p>
+</section>
+<section>
+<h4>
+Ad-hoc team play
+</h4>
+<p>
+<img src="/stack/hanabi/adhoc.png" alt="">
+</p>
+</section>
+</section>
+<section>
+<section>
+<h2>
+Conclusions and Future Directions
+</h2>
+<script>setBackgroundColor("red", "black");</script>
+</section>
+<section>
+<blockquote>
+<p>
+<em>
+The cooperative gameplay and imperfect infomation
+</em>
+of Hanabi makes it a complling research challenge for
+</p>
+<ul>
+<li>
+Multiagent RL
+</li>
+<li>
+Game Theory
+</li>
+</ul>
+</blockquote>
+<div class="fragment">
+<blockquote>
+<p>
+The authors evaluate SOTA deep RL algorithms showing that
+</p>
+<ul>
+<li>
+they are largely insufficient to surpass hand-coded bots;
+</li>
+<li>
+in ad-hoc settings, agents fail to collaborate at all
+</li>
+</ul>
+</blockquote>
+</div>
+</section>
+<section>
+<blockquote>
+<p>
+The authors believe that
+<strong>
+theory of mind
+</strong>
+plays an important role
+</p>
+<ul>
+<li>
+to learn what humans are really thinking
+</li>
+<li>
+to adapt to unknown teammates
+</li>
+<li>
+to recognize the
+<em>
+intention
+</em>
+of other players
+</li>
+</ul>
+</blockquote>
+</section>
+<section>
+<h2>
+Questions?
+</h2>
+<script>setBackgroundColor("black", "");</script>
+</section>
+<section>
+<script>setBackgroundColor("black", "");</script>
+<p>
+<img src="/stack/hanabi/questions.png" alt="">
+</p>
+</section>
+</section>
+</div>
+</div>
