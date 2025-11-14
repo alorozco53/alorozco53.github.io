@@ -28,6 +28,19 @@
       openButton: {{ page.reveal.menu_config.openButton | default: true | jsonify }},
       openSlideNumber: {{ page.reveal.menu_config.openSlideNumber | default: false | jsonify }},
       keyboard: {{ page.reveal.menu_config.keyboard | default: true | jsonify }},
+      themes: [
+        { name: 'Black', theme: '{{ "/css/theme/black.css" | relative_url }}' },
+        { name: 'White', theme: '{{ "/css/theme/white.css" | relative_url }}' },
+        { name: 'League', theme: '{{ "/css/theme/league.css" | relative_url }}' },
+        { name: 'Sky', theme: '{{ "/css/theme/sky.css" | relative_url }}' },
+        { name: 'Beige', theme: '{{ "/css/theme/beige.css" | relative_url }}' },
+        { name: 'Simple', theme: '{{ "/css/theme/simple.css" | relative_url }}' },
+        { name: 'Serif', theme: '{{ "/css/theme/serif.css" | relative_url }}' },
+        { name: 'Blood', theme: '{{ "/css/theme/blood.css" | relative_url }}' },
+        { name: 'Night', theme: '{{ "/css/theme/night.css" | relative_url }}' },
+        { name: 'Moon', theme: '{{ "/css/theme/moon.css" | relative_url }}' },
+        { name: 'Solarized', theme: '{{ "/css/theme/solarized.css" | relative_url }}' }
+      ],
       {% if page.reveal.chalkboard != false %}
       custom: [
         { title: 'Drawing Tools', icon: '<i class="fa fa-pencil"></i>', content: '<ul class="slide-menu-items"><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.toggleNotesCanvas(); return false;"><i class="fa fa-pencil" style="width:1em;margin-right:0.5em;"></i>Toggle drawing on slides</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.toggleChalkboard(); return false;"><i class="fa fa-pencil-square-o" style="width:1em;margin-right:0.5em;"></i>Toggle whiteboard</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.clear(); return false;"><i class="fa fa-trash" style="width:1em;margin-right:0.5em;"></i>Clear drawings</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.reset(); return false;"><i class="fa fa-refresh" style="width:1em;margin-right:0.5em;"></i>Reset slide drawings</a></li><li class="slide-menu-item"><a href="#" onclick="RevealChalkboard.download(); return false;"><i class="fa fa-download" style="width:1em;margin-right:0.5em;"></i>Download drawings</a></li></ul>' }

@@ -107,3 +107,62 @@
     order: -1;
   }
 }
+
+/* Ensure data-background-color attributes work correctly across all themes */
+.reveal .slides section[data-background-color] {
+  background-color: var(--r-background-color) !important;
+}
+
+/* Ensure text is readable on custom colored backgrounds */
+.reveal .slides section[data-background-color="blue"],
+.reveal .slides section[data-background-color="cyan"],
+.reveal .slides section[data-background-color="purple"],
+.reveal .slides section[data-background-color="green"],
+.reveal .slides section[data-background-color="black"] {
+  color: white !important;
+}
+
+.reveal .slides section[data-background-color="blue"] h1,
+.reveal .slides section[data-background-color="blue"] h2,
+.reveal .slides section[data-background-color="blue"] h3,
+.reveal .slides section[data-background-color="blue"] p,
+.reveal .slides section[data-background-color="blue"] a,
+.reveal .slides section[data-background-color="cyan"] h1,
+.reveal .slides section[data-background-color="cyan"] h2,
+.reveal .slides section[data-background-color="cyan"] h3,
+.reveal .slides section[data-background-color="cyan"] p,
+.reveal .slides section[data-background-color="cyan"] li,
+.reveal .slides section[data-background-color="purple"] h1,
+.reveal .slides section[data-background-color="purple"] h2,
+.reveal .slides section[data-background-color="purple"] h3,
+.reveal .slides section[data-background-color="purple"] p,
+.reveal .slides section[data-background-color="green"] h1,
+.reveal .slides section[data-background-color="green"] h2,
+.reveal .slides section[data-background-color="green"] h3,
+.reveal .slides section[data-background-color="green"] p,
+.reveal .slides section[data-background-color="green"] li,
+.reveal .slides section[data-background-color="black"] h1,
+.reveal .slides section[data-background-color="black"] h2,
+.reveal .slides section[data-background-color="black"] h3,
+.reveal .slides section[data-background-color="black"] p,
+.reveal .slides section[data-background-color="black"] a {
+  color: white !important;
+}
+
+.reveal .slides section[data-background-color="yellow"],
+.reveal .slides section[data-background-color="red"] {
+  color: black !important;
+}
+
+.reveal .slides section[data-background-color="yellow"] h1,
+.reveal .slides section[data-background-color="yellow"] h2,
+.reveal .slides section[data-background-color="yellow"] h3,
+.reveal .slides section[data-background-color="yellow"] h4,
+.reveal .slides section[data-background-color="yellow"] p,
+.reveal .slides section[data-background-color="red"] h1,
+.reveal .slides section[data-background-color="red"] h2,
+.reveal .slides section[data-background-color="red"] h3,
+.reveal .slides section[data-background-color="red"] p,
+.reveal .slides section[data-background-color="red"] li {
+  color: black !important;
+}
