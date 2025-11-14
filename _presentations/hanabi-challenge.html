@@ -41,10 +41,6 @@ reveal:
     - label: 'ArXiv Paper'
       url: 'https://arxiv.org/abs/1902.00506'
   
-  # Custom JavaScript for background helpers
-  additional_js:
-    - '/js/hanabi-presentation.js'
-  
   # Other plugins
   markdown: true
   highlight: true
@@ -52,8 +48,70 @@ reveal:
   notes: true
 ---
 
+<style>
+/* Custom color overrides for Hanabi presentation */
+.reveal section[data-background-color="blue"],
+.reveal section[data-background-color="cyan"],
+.reveal section[data-background-color="purple"],
+.reveal section[data-background-color="green"],
+.reveal section[data-background-color="black"] {
+  color: white !important;
+}
+
+.reveal section[data-background-color="blue"] h1,
+.reveal section[data-background-color="blue"] h2,
+.reveal section[data-background-color="blue"] h3,
+.reveal section[data-background-color="blue"] p,
+.reveal section[data-background-color="blue"] a,
+.reveal section[data-background-color="cyan"] h1,
+.reveal section[data-background-color="cyan"] h2,
+.reveal section[data-background-color="cyan"] h3,
+.reveal section[data-background-color="cyan"] p,
+.reveal section[data-background-color="cyan"] li,
+.reveal section[data-background-color="purple"] h1,
+.reveal section[data-background-color="purple"] h2,
+.reveal section[data-background-color="purple"] h3,
+.reveal section[data-background-color="purple"] p,
+.reveal section[data-background-color="green"] h1,
+.reveal section[data-background-color="green"] h2,
+.reveal section[data-background-color="green"] h3,
+.reveal section[data-background-color="green"] p,
+.reveal section[data-background-color="green"] li,
+.reveal section[data-background-color="black"] h1,
+.reveal section[data-background-color="black"] h2,
+.reveal section[data-background-color="black"] h3,
+.reveal section[data-background-color="black"] p,
+.reveal section[data-background-color="black"] a {
+  color: white !important;
+}
+
+.reveal section[data-background-color="yellow"] {
+  color: black !important;
+}
+
+.reveal section[data-background-color="yellow"] h1,
+.reveal section[data-background-color="yellow"] h2,
+.reveal section[data-background-color="yellow"] h3,
+.reveal section[data-background-color="yellow"] h4,
+.reveal section[data-background-color="yellow"] p {
+  color: black !important;
+}
+
+.reveal section[data-background-color="red"] {
+  color: black !important;
+}
+
+.reveal section[data-background-color="red"] h1,
+.reveal section[data-background-color="red"] h2,
+.reveal section[data-background-color="red"] h3,
+.reveal section[data-background-color="red"] p,
+.reveal section[data-background-color="red"] li {
+  color: black !important;
+}
+</style>
+
 <section>
-<section>
+<section data-background-color="blue">
 <h1>
 The Hanabi Challenge: A New Frontier for AI Research
 </h1>
@@ -68,10 +126,8 @@ presented by
 Albert Orozco Camacho
 </a>
 </p>
-<script>setBackgroundColor("blue", "");</script>
 </section>
-<section>
-<script>setBackgroundImage("/stack/hanabi/paper.gif", "");</script>
+<section data-background-image="/stack/hanabi/paper.gif">
 <h2>
 Click
 <a href="https://arxiv.org/abs/1902.00506" target="blank_">
@@ -82,11 +138,10 @@ to go to the article!
 </section>
 </section>
 <section>
-<section>
+<section data-background-color="cyan">
 <h2>
 Motivation
 </h2>
-<script>setBackgroundColor("cyan", "");</script>
 </section>
 <section>
 <blockquote>
@@ -191,14 +246,12 @@ implicitly
 </ul>
 </div>
 </section>
-<section>
+<section data-background-color="purple">
 <h2>
 The Hanabi Card Game
 </h2>
-<script>setBackgroundColor("purple", "");</script>
 </section>
-<section>
-<script>setBackgroundImage("https://boardgaming.com/wp-content/uploads/2012/11/hanabi-components.jpg", "");</script>
+<section data-background-image="https://boardgaming.com/wp-content/uploads/2012/11/hanabi-components.jpg">
 </section>
 <section>
 <ul>
@@ -348,13 +401,12 @@ Players consume all their lives or after drawing last card of deck
 </ul>
 </div>
 </section>
-<section>
+<section data-background-color="black">
 <p>
 <a href="https://youtu.be/d_js_3S_7K8">
 https://youtu.be/d_js_3S_7K8
 </a>
 </p>
-<script>setBackgroundColor("black", "");</script>
 </section>
 <section>
 <h3>
@@ -395,11 +447,10 @@ Compare SOTA performance with human-like strategies
 </section>
 </section>
 <section>
-<section>
+<section data-background-color="green">
 <h2>
 Experimental Details
 </h2>
-<script>setBackgroundColor("green", "");</script>
 </section>
 <section>
 <p>
@@ -634,14 +685,13 @@ value of an evaluation function
 </section>
 </section>
 <section>
-<section>
+<section data-background-color="yellow">
 <h2>
 <em>
 State-of-the-Art
 </em>
 Results (as of 2020)
 </h2>
-<script>setBackgroundColor("yellow", "");</script>
 </section>
 <section>
 <h4>
@@ -693,11 +743,10 @@ Ad-hoc team play
 </section>
 </section>
 <section>
-<section>
+<section data-background-color="red">
 <h2>
 Conclusions and Future Directions
 </h2>
-<script>setBackgroundColor("red", "black");</script>
 </section>
 <section>
 <blockquote>
@@ -758,14 +807,12 @@ of other players
 </ul>
 </blockquote>
 </section>
-<section>
+<section data-background-color="black">
 <h2>
 Questions?
 </h2>
-<script>setBackgroundColor("black", "");</script>
 </section>
-<section>
-<script>setBackgroundColor("black", "");</script>
+<section data-background-color="black">
 <p>
 <img src="/stack/hanabi/questions.png" alt="">
 </p>
