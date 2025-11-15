@@ -1,7 +1,7 @@
 {% include head.html %}
 
 {% assign reveal_theme = page.reveal.theme | default: 'night' %}
-<link rel="stylesheet" href="{{ '/css/theme/' | append: reveal_theme | append: '.css' | relative_url }}" id="reveal-theme">
+<link rel="stylesheet" href="{{ '/css/theme/' | append: reveal_theme | append: '.css' | relative_url }}" id="theme">
 
 {% if page.reveal.highlight != false %}
 <link rel="stylesheet" href="{{ '/lib/css/zenburn.css' | relative_url }}">
