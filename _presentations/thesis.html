@@ -1,0 +1,387 @@
+---
+layout: reveal
+title: "Generación automática de memes de Internet a través de una red neuronal profunda"
+subtitle: "T E S I S - Licenciado en Ciencias de la Computación"
+presenter: "Albert Manuel Orozco Camacho"
+reveal:
+  # Core settings
+  theme: league
+  transition: slide
+  backgroundTransition: fade
+  controls: true
+  progress: true
+  history: true
+  center: true
+  
+  # Menu plugin
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+    openButton: true
+    
+  # Chalkboard plugin
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+  
+  # Math support
+  math: true
+  math_config:
+    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+    config: 'TeX-AMS_HTML-full'
+  
+  # Navigation
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  
+  # Other plugins
+  markdown: true
+  highlight: true
+  zoom: true
+  notes: true
+---
+
+<section>
+  <section data-menu-title="Portada">
+    <h3>Generación automática de memes de Internet a través de una red neuronal profunda</h3>
+    <h4>T      E      S      I      S</h4>
+    <h5>Que para obtener el grado de</h5>
+    <h4>Licenciado en en Ciencias de la Computación</h4>
+    <h5>presenta</h5>
+      <small>
+        <a href="http://www.github.com/alorozco53" target="_blank">Albert Manuel Orozco Camacho</a>,
+        <a href="http://twitter.com/alorozco53" target="_blank">@AlOrozco53</a>,
+        <br>
+        <img src="/img/ciencias.png" width="150" height="150" style="border:none;" alt="">
+        <span style="display:inline-block; width: 50;"></span>
+        <img src="/img/iimas.jpeg" width="150" height="150" style="border:none;" alt="">
+      </small>
+      <br>
+  </section>
+
+</section>
+<section>
+  <section>
+    <h2>Tarea</h2>
+  </section>
+  <section>
+    <img src="/img/one-does-not-simply.png" width="50%" height="50%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/computer_thinking.jpg" width="50%" height="50%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/one-does-not-simply-find-nemo.jpg" width="50%" height="50%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Motivación</h2>
+  </section>
+  <section data-background-image="/img/server-farm.jpg">
+    <p>
+      <img src="/img/memes-flow.jpg" width="30%" height="30%" style="border:none;" alt="">
+    </p>
+  </section>
+  <section>
+    <h2>Memética</h2>
+    <p>
+      <img src="/img/dawkins.jpg" width="30%" height="30%" style="border:none;" alt="" class="rotate-25">
+      <span style="display:inline-block; width: 50mm;"></span>
+      <img src="/img/selfish-gene.png" width="30%" height="30%" style="border:none;" alt="" class="rotate25">
+    </p>
+  </section>
+  <section>
+    <h2>¿Trabajo previo? &#x1F914;</h2>
+    <!-- <p> -->
+    <!--   <a href="http://www.aclweb.org/old_anthology/N/N15/N15-1039.pdf" target="_blank"> -->
+    <!-- <img src="/img/cheezburger.png" width="45%" height="45%" style="border:none;" alt=""> -->
+    <!--   </a> -->
+    <!-- </p> -->
+  </section>
+  <section>
+    <img src="/img/imagenet.jpg" width="35%" height="35%" style="border:none;" alt="">
+    <img src="/img/show_and_tell_ex.png" width="80%" height="80%" style="border:none;" alt="">
+    <figcaption>
+      <small>
+        <a src="https://arxiv.org/pdf/1609.06647.pdf" target="_blank">
+          [Vinyals, <i>et al</i>. 2016]
+        </a>
+      </small>
+    </figcaption>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Aprendizaje Automático</h2>
+  </section>
+  <section>
+    <h2>Objetivo de la mayoría del software:</h2>
+    <p>
+      <center>
+        ENTRADA: $\vec{x}$<br>
+        $\downarrow$<br>
+        <font color="red">
+          ALGORITMO: $z = h(\vec{x})$
+        </font><br>
+        $\downarrow$<br>
+        SALIDA: $z$
+      </center>
+    </p>
+    <small>El programador <i>diseña</i> un programa que calcule $z$ en su mente y <i>prueba</i> casos de uso.</small>
+  </section>
+  <section>
+    <h3>Aprendizaje automático</h3>
+    <h4>(Supervisado)</h4>
+    <p>
+      <!-- <small> -->
+      ENTRADA: $\vec{x}$<br>
+      $\downarrow$<br>
+      <font color="red">
+        ALGORITMO: $z = h(\vec{x}, \vec{\theta})$
+      </font><br>
+      $\updownarrow$<br>
+      <font color="green">
+        Entrenamiento: $J(\vec{\theta}; \vec{x}, \vec{y})$
+      </font><br>
+      $\downarrow$<br>
+      SALIDA: $z$
+      <!-- </small> -->
+    </p>
+    <small>
+      Conjunto de ejemplos: $\mathcal{D} = \{(x_1, y_1),\ldots,(x_n, y_n)\}$
+    </small>
+  </section>
+  <section>
+    <h2>Redes neuronales</h2>
+    <img src="/img/redneuronalartificial.png" width="70%" height="70%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Aprendizaje profundo</h2>
+    <h3>(Deep Learning)</h3>
+  </section>
+  <section>
+    <img src="/img/godeeper.jpg" width="60%" height="60%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Redes neuronales convolucionales</h2>
+    <h3>(CNN's, ConvNets)</h3>
+  </section>
+  <section>
+    <img src="/img/conv.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/first-layer.jpeg" width="70%" height="70%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Redes neuronales recurrentes</h2>
+  </section>
+  <section>
+    <img src="/img/perceptron.png" width="82%" height="82%" style="border:none;" alt="">
+  </section>
+  <section data-background-color=rgb(255,255,0)>
+    <img src="/img/rnn-unrolled.png" width="82%" height="82%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h3>Unidad de memoria grande a corto plazo (LSTM)</h3>
+    <img src="/img/lstm.png" width="42%" height="42%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Arquitectura unificada</h2>
+  </section>
+  <section>
+    <!-- <img src="/img/show_and_tell.png" width="70%" height="70%" style="border:none;" alt=""> -->
+    <img src="/img/conv.png" width="60%" height="60%" style="border:none;" alt="">
+    $$+$$
+    <img src="/img/unrolled-lstm.png" width="60%" height="60%" style="border:none;" alt="">
+  </section>
+  <!-- <section> -->
+  <!--   <img src="/img/shallow-model.png" width="40%" height="40%" style="border:none;" alt=""> -->
+  <!-- </section> -->
+</section>
+<section>
+  <section>
+    <h2>Datos</h2>
+  </section>
+  <section data-background-image="/img/memegenerator.png">
+  </section>
+  <section>
+    <img src="/img/sep.png" width="50%" height="50%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Entrenamiento e inferencia</h2>
+  </section>
+  <section>
+    <img src="/img/rnn0.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn1.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn2.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn3.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn4.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Experimentos</h2>
+  </section>
+  <section>
+    <img src="/img/res-experimentos.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h3>Dos modelos resultantes de los experimentos...</h3>
+    <p>
+      <ul>
+        <li><b>Modelo A</b>:</li>
+        <ul>
+          <li>Arquitectura convolucional superficial</li>
+        </ul>
+        <li><b>Modelo B</b>:</li>
+        <ul>
+          <li>Arquitectura convolucional <i>Inception V3</i></li>
+          <li>Modelo afinado con las imágenes de memes</li>
+        </ul>
+      </ul>
+  </section>
+  <section>
+    <h2>Evaluación</h2>
+  </section>
+  <section>
+    <h3>¿Qué tanto se parece el texto generado a un modelo de lenguaje natural?</h3>
+    <h4>Perplejidad</h4>
+    $$PP(S) = p(s_1 s_2 \ldots s_n)^{-\frac{1}{n}}$$
+  </section>
+  <section>
+    <h3>"Nuevos" memes</h3>
+    <img src="/img/new1.jpg" width="40%" height="40%" style="border:none;" alt="">
+    <img src="/img/new2.gif" width="40%" height="40%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h3>Memes del conjunto de evaluación</h3>
+    <img src="/img/old1.png" width="40%" height="40%" style="border:none;" alt="">
+    <img src="/img/old2.png" width="40%" height="40%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h3>"No" memes</h3>
+    <img src="/img/no1.jpg" width="40%" height="40%" style="border:none;" alt="">
+    <img src="/img/no2.jpg" width="40%" height="40%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/avgperplexities.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>La red neuronal en acción</h2>
+  </section>
+  <section>
+    <img src="/img/ex0.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex1.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex2.png" width="65%" height="65%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex4.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex5.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex8.jpg" width="75%" height="75%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Conclusiones</h2>
+  </section>
+  <section>
+    <ul>
+      <li>Se reunió una gran cantidad de memes separados por imagen y leyenda.</li>
+      <li>Se siguió una metodología de <i>aprendizaje profundo</i> para extracción de características en imágenes.</li>
+      <li>Con lo anterior, se entrenó un modelo neuronal capaz de aprender a generar texto a partir de una imagen</li>
+      <li>
+        El éxito de arquitecturas de gran profundidad (para la presente tarea) es <b>proporcional</b> al número
+        de datos que se puedan añadir al entrenamiento.
+      </li>
+    </ul>
+  </section>
+  <section>
+    <h2>Trabajo futuro</h2>
+    <p>
+      <ul>
+        <li>Refinamiento del modelo de lenguaje con técnicas de detección y creación de humor/albures.</li>
+        <li>Experimentación con memes de 2017.</li>
+        <li>Agrupamiento semántico de memes (aprendizaje no supervisado).</li>
+      </ul>
+    </p>
+  </section>
+  <section>
+    <img src="/img/skinometer.jpg" width="55%" height="55%" style="border:none;" alt="">
+    <img src="/img/exp-brain.jpg" width="35%" height="35%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Trabajo futuro</h2>
+    <p>
+      <ul>
+        <li>Estudio de la <i>"viralidad"</i> que puede alcanzar la información generada automáticamente.</li>
+        <li>Estudio del fenómeno de la <i>evolución</i> en propagación de información.</li>
+      </ul>
+    </p>
+  </section>
+  <section>
+    <h2>Trabajo futuro</h2>
+    <p>
+      <ul>
+        <li>Generación automática de contenido en redes sociales (por ejemplo, bots en Twitter).</li>
+        <li>Interacción humano-máquina.</li>
+        <li>Agentes conversacionales (chatbots).</li>
+        <center>
+          <img src="/img/trump-clinton.jpg" width="45%" height="45%" style="border:none;" alt="">
+        </center>
+      </ul>
+    </p>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>¡Muchas gracias!</h2>
+    <img src="/img/cookiemonster.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Anexos</h2>
+  </section>
+  <section data-background-color=rgb(255,255,255)>
+    <div class="fig figcenter fighighlight">
+      <iframe src="/talks/material/conv-demo.html" width="100%" height="700px" style="border:none;">
+      </iframe>
+    </div>
+  </section>
+  <section>
+    <h2>Afinación de una CNN</h2>
+  </section>
+  <section>
+    <img src="/img/transfer.png" width="80%" height="80%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/show_and_tell.png" width="70%" height="70%" style="border:none;" alt="">
+  </section>
+</section>
