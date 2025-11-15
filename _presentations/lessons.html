@@ -1,0 +1,305 @@
+---
+layout: reveal
+title: "Lecciones aprendidas a partir de la generación automática de leyendas para memes de Internet"
+subtitle: "Ponencia para el Meetup 'Platiquemos sobre Inteligencia Artificial'"
+presenter: "Albert Manuel Orozco Camacho"
+reveal:
+  # Core settings
+  theme: white
+  transition: slide
+  backgroundTransition: fade
+  controls: true
+  progress: true
+  history: true
+  center: true
+  
+  # Menu plugin
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+    openButton: true
+    
+  # Chalkboard plugin
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+  
+  # Math support
+  math: true
+  math_config:
+    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+    config: 'TeX-AMS_HTML-full'
+  
+  # Navigation
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  
+  # Other plugins
+  markdown: true
+  highlight: true
+  zoom: true
+  notes: true
+---
+
+<section>
+  <section data-menu-title="Hacia la generación automática de leyendas para memes de Internet">
+    <h3>Hacia la generación automática de leyendas para memes de Internet</h3>
+    <p>
+      <small>
+        <a href="http://www.github.com/alorozco53" target="_blank">Albert Manuel Orozco Camacho</a>
+        <br>
+        <a href="http://twitter.com/alorozco53" target="_blank"><i class="fa fa-twitter"></i>@alorozco53</a>
+      </small>
+      <br>
+      <a href="http://www.fciencias.unam.mx" target="_blank">
+        <img width="20%" height="20%" src="/img/ciencias.png" alt="Facultad de Ciencias, UNAM" style="border:none;">
+      </a>
+      <span style="display:inline-block; width: 30mm;"></span>
+      <a href="http://www.mariachi.io" target="_blank">
+        <img width="20%" height="20%" src="/img/logo.jpeg" alt="Mariachi IO" style="border:none;">
+      </a>
+      <span style="display:inline-block; width: 30mm;"></span>
+      <a href="http://www.fractalabogados.com" target="_blank">
+        <img width="30%" height="30%" src="/img/fractal.png" alt="Fractal Abogados" style="border:none;">
+      </a>
+      <br>
+      <img width="25%" height="25%" src="/img/gdgunam.jpeg" alt="GDG UNAM" style="border:none;">
+    </p>
+  </section>
+  <section>
+    <h2>
+      <font face="serif" color="red">LECCIONES APRENDIDAS A PARTIR DE LA</font>
+      generación automática de leyendas para memes de Internet
+    </h2>
+  </section>
+  <section>
+    <img width="80%" height="80%" src="/img/deep_learning_meme_keras.png" alt="DL" style="border:none;">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Motivación</h2>
+  </section>
+  <section data-background-image="/img/server-farm.jpg">
+    <p>
+      <img src="/img/memes-flow.jpg" width="30%" height="30%" style="border:none;" alt="">
+    </p>
+  </section>
+  <section>
+    <h2>Memética</h2>
+    <p>
+      <img src="/img/dawkins.jpg" width="30%" height="30%" style="border:none;" alt="" class="rotate-25">
+      <span style="display:inline-block; width: 50mm;"></span>
+      <img src="/img/selfish-gene.png" width="30%" height="30%" style="border:none;" alt="" class="rotate25">
+    </p>
+  </section>
+  <section>
+    <h2>¿Trabajo previo? &#x1F914;</h2>
+    <p>
+      <a href="http://www.aclweb.org/old_anthology/N/N15/N15-1039.pdf" target="_blank">
+        <img src="/img/cheezburger.png" width="45%" height="45%" style="border:none;" alt="">
+      </a>
+    </p>
+  </section>
+  <section>
+    <img src="/img/imagenet.jpg" width="35%" height="35%" style="border:none;" alt="">
+    <img src="/img/show_and_tell_ex.png" width="80%" height="80%" style="border:none;" alt="">
+    <figcaption>
+      <small>
+        <a src="https://arxiv.org/pdf/1609.06647.pdf" target="_blank">
+          [Vinyals, <i>et al</i>. 2016]
+        </a>
+      </small>
+    </figcaption>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Datos</h2>
+  </section>
+  <section data-background-image="/img/memegenerator.png">
+  </section>
+  <section>
+    <img src="/img/sep.png" width="50%" height="50%" style="border:none;" alt="">
+  </section>
+  <section data-background-image="/img/memedisplay.gif">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>Aprendizaje profundo</h2>
+    <h3>(Deep Learning)</h3>
+  </section>
+  <section>
+    <img src="/img/deep-learning-book.jpg" width="35%" height="35%" style="border:none;" alt="">
+    <span style="display:inline-block; width: 50mm;"></span>
+    <img src="/img/godeeper.jpg" width="40%" height="40%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Redes neuronales convolucionales</h2>
+    <h3>(CNN's, ConvNets)</h3>
+  </section>
+  <section>
+    <img src="/img/convnet.jpeg" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section data-background-color=rgb(255,255,255)>
+    <div class="fig figcenter fighighlight">
+      <iframe src="/talks/material/conv-demo.html" width="100%" height="700px" style="border:none;">
+      </iframe>
+    </div>
+  </section>
+  <section>
+    <h2>Redes neuronales recurrentes</h2>
+  </section>
+  <section>
+    <img src="/img/perceptron.png" width="82%" height="82%" style="border:none;" alt="">
+  </section>
+  <section data-background-color=rgb(255,255,0)>
+    <img src="/img/rnn-unrolled.png" width="82%" height="82%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h3>Unidad de memoria grande a corto plazo (LSTM)</h3>
+    <img src="/img/lstm.png" width="42%" height="42%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/tsne.png" width="52%" height="52%" style="border:none;" alt="">
+    <img src="/img/vec_ar.png" width="52%" height="52%" style="border:none;" alt=""><br>
+    <center>
+      $V($queen$)\ -\ V($king$)\ \approx V($woman$)\ -\ V($man$)$
+    </center>
+  </section>
+  <section>
+    <img src="/img/manifold.png" width="82%" height="82%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Arquitectura unificada</h2>
+  </section>
+  <section>
+    <img src="/img/show_and_tell.png" width="70%" height="70%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Entrenamiento e inferencia</h2>
+  </section>
+  <section>
+    <img src="/img/rnn0.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn1.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn2.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn3.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/rnn4.png" width="100%" height="100%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>¿Para qué le sirve una red neuronal a un programador (curioso)?</h2>
+  </section>
+  <section>
+    <h3>Una red convolucional profunda...</h3>
+    <p>
+      <ul>
+        <li>normalmente <b>NO</b> se entrena desde cero;</li>
+        <li>
+          especializa sus primeras capas en tareas <i>genéricas</i>, mientras que su última capa es un <b>POTENTE</b> clasificador lineal;
+        </li>
+        <li>puede <i>reciclar</i> sus pesos para adaptarse a otras tareas.</li>
+      </ul>
+    </p>
+  </section>
+  <section>
+    <img src="/img/first-layer.jpeg" width="70%" height="70%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Afinando una CNN</h2>
+  </section>
+  <section>
+    <img src="/img/transfer.png" width="80%" height="80%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Visualización de <i>datasets</i></h2>
+  </section>
+  <section data-background-image="/img/tsne.jpeg">
+  </section>
+  <section>
+    <img src="/img/cnn_embed_full_1k.jpg" width="70%" height="70%" style="border:none;" alt="">
+  </section>
+</section>
+<section>
+  <section>
+    <h2>La red neuronal en acción (beta)</h2>
+  </section>
+  <section>
+    <img src="/img/ex0.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex1.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex2.png" width="65%" height="65%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex4.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex5.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex6.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+  <section>
+    <img src="/img/ex7.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+
+  <section>
+    <h2>Trabajo futuro</h2>
+    <p>
+      <ul>
+        <li>Refinamiento del modelo de lenguaje con técnicas de detección y creación de humor/albures.</li>
+        <li>Experimentación con memes de 2017.</li>
+        <li>Agrupamiento semántico de memes (aprendizaje no supervisado).</li>
+      </ul>
+    </p>
+  </section>
+  <section>
+    <img src="/img/skinometer.jpg" width="55%" height="55%" style="border:none;" alt="">
+    <img src="/img/exp-brain.jpg" width="35%" height="35%" style="border:none;" alt="">
+  </section>
+  <section>
+    <h2>Trabajo futuro</h2>
+    <p>
+      <ul>
+        <li>Estudio de la <i>"viralidad"</i> que puede alcanzar la información generada automáticamente.</li>
+        <li>Estudio del fenómeno de la <i>evolución</i> en propagación de información.</li>
+      </ul>
+    </p>
+  </section>
+  <section>
+    <h2>Trabajo futuro</h2>
+    <p>
+      <ul>
+        <li>Generación automática de contenido en redes sociales (por ejemplo, bots en Twitter).</li>
+        <li>Interacción humano-máquina.</li>
+        <li>Agentes conversacionales (chatbots).</li>
+        <center>
+          <img src="/img/trump-clinton.jpg" width="45%" height="45%" style="border:none;" alt="">
+        </center>
+      </ul>
+    </p>
+  </section>
+</section>
+<section>
+  <section>
+    <h2>¡Muchas gracias!</h2>
+    <img src="/img/cookiemonster.png" width="85%" height="85%" style="border:none;" alt="">
+  </section>
+</section>

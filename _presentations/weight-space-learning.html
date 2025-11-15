@@ -1,0 +1,362 @@
+---
+layout: reveal
+title: "Weight Space Learning — Navigating the Geometry of Models"
+subtitle: "Seeing Models as Geometry"
+presenter: "GPT-5 Codex"
+reveal:
+  # Core settings
+  theme: night
+  transition: slide
+  backgroundTransition: fade
+  controls: true
+  progress: true
+  history: true
+  center: true
+  
+  # Menu plugin
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+    openButton: true
+    
+  # Chalkboard plugin
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+  
+  # Math support
+  math: true
+  math_config:
+    mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js'
+    config: 'TeX-AMS_HTML-full'
+  
+  # Navigation
+  home_link: true
+  home_url: '/'
+  home_label: 'Back to Home'
+  links:
+    - label: 'Visualizing Loss Landscapes'
+      url: 'https://arxiv.org/abs/1712.09913'
+    - label: 'Mode Connectivity'
+      url: 'https://arxiv.org/abs/1906.06762'
+    - label: 'Sharpness-Aware Minimization'
+      url: 'https://arxiv.org/abs/2205.03201'
+  
+  # Centraal logo
+  logo: '/img/centraal_logo_blanco.png'
+  logo_alt: 'Centraal'
+  
+  # Other plugins
+  markdown: true
+  highlight: true
+  zoom: true
+  notes: true
+---
+
+<section>
+  <section data-transition="fade" data-background-color="#03040f" data-background-image="/img/network3.gif" data-background-size="cover" data-background-opacity="0.2">
+    <div class="title-card">
+      <h1 data-auto-animate>Weight Space Learning</h1>
+      <h3 data-auto-animate>Seeing Models as Geometry</h3>
+      <p class="attribution">crafted by <strong>GPT-5 Codex</strong>, 2025</p>
+    </div>
+  </section>
+
+  <section data-background-color="#050816">
+    <h2>Why weight space?</h2>
+    <ul>
+      <li class="fragment">Every model parameter vector <em>w</em> is a point in a high-dimensional space.</li>
+      <li class="fragment">Learning traces a path through that space via optimization.</li>
+      <li class="fragment">Geometry reveals <strong>expressivity, robustness,</strong> and <strong>generalization</strong>.</li>
+    </ul>
+    <aside class="notes">
+      Frame the intuition: models are trajectories through weight space informed by data and inductive bias.
+    </aside>
+  </section>
+
+  <section data-background-color="#070b20" data-auto-animate>
+    <h2>Visualizing a slice</h2>
+    <svg viewBox="0 0 600 360" width="70%" data-auto-animate>
+      <defs>
+        <linearGradient id="planeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1b6ca8" stop-opacity="0.8"></stop>
+          <stop offset="100%" stop-color="#102542" stop-opacity="0.9"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="600" height="360" fill="#050816"></rect>
+      <g transform="translate(60,40)">
+        <polygon points="0,240 260,210 520,260 260,300" fill="url(#planeGradient)" opacity="0.85"></polygon>
+        <line x1="260" y1="210" x2="260" y2="300" stroke="#5adedc" stroke-width="2" stroke-dasharray="4 6"></line>
+        <circle cx="260" cy="255" r="12" fill="#ffd166"></circle>
+        <text x="270" y="245" fill="#ffd166" font-size="20">w*</text>
+        <line x1="120" y1="235" x2="380" y2="275" stroke="#f25f5c" stroke-width="4" marker-end="url(#arrowHead)"></line>
+        <text x="100" y="225" fill="#f25f5c" font-size="18">loss gradient</text>
+        <text x="0" y="20" fill="#9fb8d1" font-size="22">2D projection of a high-D weight space</text>
+      </g>
+      <defs>
+        <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <polygon points="0,0 8,4 0,8" fill="#f25f5c"></polygon>
+        </marker>
+      </defs>
+    </svg>
+  </section>
+
+  <section data-background-color="#050816" data-auto-animate>
+    <h2>Weight space inhabitants</h2>
+    <div class="grid">
+      <div class="fragment">
+        <h3>Manifold of solutions</h3>
+        <p>Over-parameterized networks admit entire <strong>flat valleys</strong> of low loss.</p>
+      </div>
+      <div class="fragment">
+        <h3>Basins &amp; barriers</h3>
+        <p>Saddle points surround minima; wide basins usually generalize better.</p>
+      </div>
+      <div class="fragment">
+        <h3>Null directions</h3>
+        <p>Symmetries (e.g., neuron permutations) produce equivalent points.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-background-color="#071323">
+    <h2>Loss landscapes as terrain</h2>
+    <canvas id="loss-landscape" width="760" height="420"></canvas>
+    <p class="fragment fade-in">Gradient descent is a hiker with noisy senses, momentum is a compass.</p>
+  </section>
+
+  <section data-background-color="#030818">
+    <h2>Optimization loop</h2>
+    <svg class="loop-diagram" viewBox="0 0 760 320">
+      <defs>
+        <linearGradient id="loopGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#54c5f8"></stop>
+          <stop offset="100%" stop-color="#8a5cff"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="760" height="320" rx="28" fill="rgba(10, 18, 42, 0.65)"></rect>
+      <g fill="#e6f1ff" font-size="26" font-weight="500">
+        <text x="90" y="140">data batch</text>
+        <text x="320" y="60">forward pass</text>
+        <text x="545" y="140">loss &amp; gradients</text>
+        <text x="305" y="260">parameter update</text>
+      </g>
+      <g stroke="url(#loopGradient)" stroke-width="8" fill="none" stroke-linecap="round">
+        <path d="M140 180 C 220 280, 320 280, 380 240" marker-end="url(#arrowHeadLg)"></path>
+        <path d="M380 240 C 460 200, 480 140, 520 120" marker-end="url(#arrowHeadLg)"></path>
+        <path d="M520 120 C 590 90, 640 70, 640 130" marker-end="url(#arrowHeadLg)"></path>
+        <path d="M640 130 C 640 200, 480 280, 280 120" marker-end="url(#arrowHeadLg)"></path>
+      </g>
+      <defs>
+        <marker id="arrowHeadLg" markerWidth="14" markerHeight="14" refX="7" refY="7" orient="auto">
+          <polygon points="0,0 14,7 0,14" fill="url(#loopGradient)"></polygon>
+        </marker>
+      </defs>
+    </svg>
+    <p class="fragment">Data &rarr; gradient &rarr; update &rarr; new point in weight space</p>
+  </section>
+
+  <section data-background-color="#050816" data-auto-animate>
+    <h2>Regularization reshapes the landscape</h2>
+    <ul>
+      <li class="fragment"><strong>L2</strong> adds spherical walls pulling weights toward the origin.</li>
+      <li class="fragment"><strong>Dropout</strong> forces exploration of wider valleys.</li>
+      <li class="fragment"><strong>Sharpness-aware minimization</strong> explicitly penalizes curvature.</li>
+    </ul>
+  </section>
+
+  <section data-background-color="#071a30" data-auto-animate>
+    <h2>Dimensionality tricks</h2>
+    <div class="columns">
+      <div class="fragment">
+        <h3>Linear mode connectivity</h3>
+        <p>Interpolate between checkpoints to reveal connected minima.</p>
+      </div>
+      <div class="fragment">
+        <h3>Filter outliers</h3>
+        <p>Project onto dominant Hessian eigenvectors to study sharpness.</p>
+      </div>
+      <div class="fragment">
+        <h3>Low-rank adapters</h3>
+        <p>Fine-tune in subspaces without leaving pre-trained basins.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-background-color="#050816">
+    <h2>Algorithms as trajectories</h2>
+    <pre><code class="language-python">
+def step(params, grad, state):
+    direction = momentum(state, grad)
+    scaled = adapt(direction, state)
+    return project(params - scaled)
+    </code></pre>
+    <p class="fragment">Optimizers differ by how they shape <code>direction</code>, <code>scaled</code>, and <code>project</code>.</p>
+  </section>
+
+  <section data-background-color="#03040f" data-transition="convex">
+    <h2>Designing with weight space intuition</h2>
+    <ul>
+      <li class="fragment">Visual diagnostics (PCA, CCA) expose training dynamics.</li>
+      <li class="fragment">Curriculum learning chooses <em>paths</em>, not just endpoints.</li>
+      <li class="fragment">Hyperparameter sweeps sample the landscape statistically.</li>
+      <li class="fragment">Ensembles average across neighboring minima.</li>
+    </ul>
+  </section>
+
+  <section data-background-color="#050816" data-transition="fade">
+    <h2>Key takeaways</h2>
+    <ol>
+      <li class="fragment">Treat parameters as geometry to build intuition.</li>
+      <li class="fragment">Structure creates friendly landscapes; noise explores them.</li>
+      <li class="fragment">Generalization lives in wide, connected valleys.</li>
+    </ol>
+  </section>
+
+  <section data-background-color="#03040f" data-transition="fade">
+    <h2>Further reading</h2>
+    <p class="fragment"><a href="https://arxiv.org/abs/1712.09913" target="_blank" rel="noopener">Visualizing the Loss Landscape of Neural Nets</a></p>
+    <p class="fragment"><a href="https://arxiv.org/abs/1906.06762" target="_blank" rel="noopener">Mode Connectivity and the Landscape of Neural Computation</a></p>
+    <p class="fragment"><a href="https://arxiv.org/abs/2205.03201" target="_blank" rel="noopener">Sharpness-Aware Minimization</a></p>
+  </section>
+
+  <section data-background-color="#00040d" data-transition="fade">
+    <h1>Thank you!</h1>
+    <p>Slides written by <strong>GPT-5 Codex</strong>.</p>
+    <p class="fragment">Ping me if you remix these decks or explore new basins.</p>
+  </section>
+</section>
+
+<style>
+  .title-card {
+    background: rgba(3, 8, 30, 0.7);
+    padding: 2rem 3rem;
+    border-radius: 1.5rem;
+    backdrop-filter: blur(6px);
+  }
+  .title-card h1 {
+    margin-bottom: 0.4em;
+  }
+  .title-card h3 {
+    color: #aadaff;
+    font-weight: 400;
+  }
+  .attribution {
+    margin-top: 1.5rem;
+    font-size: 0.9em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7ec8ff;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  .loop-diagram {
+    width: 80%;
+    max-width: 760px;
+    margin: 1.5rem auto 0 auto;
+    display: block;
+  }
+  .overlay {
+    background: rgba(0, 4, 13, 0.75);
+    padding: 1.5rem 2rem;
+    border-radius: 1rem;
+  }
+  #loss-landscape {
+    background: radial-gradient(circle at center, rgba(20, 80, 180, 0.2), rgba(3, 8, 23, 0.9));
+    border-radius: 1.5rem;
+    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.35);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('loss-landscape');
+    if (!canvas || !canvas.getContext) return;
+
+    var ctx = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    var t = 0;
+
+    function loss(x, y) {
+      return Math.sin(x * 0.8) * Math.cos(y * 0.6) * 0.5 + Math.pow(x * 0.05, 2) + Math.pow(y * 0.05, 2);
+    }
+
+    function drawSurface() {
+      var imgData = ctx.createImageData(width, height);
+      for (var px = 0; px < width; px++) {
+        for (var py = 0; py < height; py++) {
+          var x = (px - width / 2) / 15;
+          var y = (py - height / 2) / 15;
+          var l = loss(x, y);
+          var shade = Math.max(0, Math.min(255, 160 + l * 80));
+          var idx = (py * width + px) * 4;
+          imgData.data[idx] = 40 + l * 60;
+          imgData.data[idx + 1] = shade;
+          imgData.data[idx + 2] = 220 - l * 40;
+          imgData.data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+
+    function drawPath() {
+      var pathLength = 240;
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = 'rgba(255, 214, 102, 0.9)';
+      ctx.beginPath();
+      for (var i = 0; i <= pathLength; i++) {
+        var progress = i / pathLength;
+        var x = Math.cos(progress * Math.PI * 1.5) * 25;
+        var y = Math.sin(progress * Math.PI) * 35;
+        var px = width / 2 + x * 4;
+        var py = height / 2 + y * 4 + Math.sin(progress * Math.PI * 2) * 6;
+        if (i === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.stroke();
+    }
+
+    function drawMarker(time) {
+      var progress = (Math.sin(time / 1300) + 1) / 2;
+      var x = Math.cos(progress * Math.PI * 1.5) * 25;
+      var y = Math.sin(progress * Math.PI) * 35;
+      var px = width / 2 + x * 4;
+      var py = height / 2 + y * 4 + Math.sin(progress * Math.PI * 2) * 6;
+
+      ctx.fillStyle = '#f25f5c';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.arc(px, py, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function frame(time) {
+      drawSurface();
+      drawPath();
+      drawMarker(time || 0);
+      t += 1;
+      requestAnimationFrame(frame);
+    }
+
+    drawSurface();
+    drawPath();
+    requestAnimationFrame(frame);
+  });
+</script>
