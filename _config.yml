@@ -246,6 +246,8 @@ exclude:
   - LICENSE
   - README.md
   - Vagrantfile
+  - vendor
+  - .bundle
 
 # prose.io config
 prose:
