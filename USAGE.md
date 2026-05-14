@@ -10,10 +10,11 @@ This repository contains the source code for a personal academic website hosted 
 2. [Repository Structure](#repository-structure)
 3. [Getting Started](#getting-started)
 4. [Development Workflows](#development-workflows)
-5. [Configuration](#configuration)
-6. [Content Management](#content-management)
-7. [Deployment](#deployment)
-8. [Troubleshooting](#troubleshooting)
+5. [Branching Strategy](#branching-strategy)
+6. [Configuration](#configuration)
+7. [Content Management](#content-management)
+8. [Deployment](#deployment)
+9. [Troubleshooting](#troubleshooting)
 
 ## Technology Stack
 
@@ -187,6 +188,46 @@ docker rm beautiful-jekyll
 docker build -t beautiful-jekyll .
 docker run -d -p 4000:4000 --name beautiful-jekyll -v "$PWD":/srv/jekyll beautiful-jekyll
 ```
+
+## Branching Strategy
+
+This repo uses a **dash-depth convention** to encode a hierarchy of branches.
+The number of consecutive dashes immediately after the `dev` prefix indicates
+the level of separation from `master` — more dashes = further from production,
+broader scope for in-flight change.
+
+| Level | Branch          | Scope                                                                 |
+|-------|-----------------|-----------------------------------------------------------------------|
+| 0     | `master`        | Production. What GitHub Pages serves at https://alorozco53.github.io. |
+| 1     | `dev-config`    | Config-level knobs: `_config.yml`, layouts, includes, theming, build plumbing. Structural changes that affect *how* the site is built or styled, independent of content. |
+| 2     | `dev--substance`| Actual content: posts, presentations, pages, publications, images, copy edits. Where the site's substance is authored before promotion. |
+| 3     | `dev---tmp`     | In-flight WIP: experimental commits, drafts, and stashed-but-versioned work that isn't ready to land in `dev--substance` yet. |
+
+### Flow
+
+Work flows **upward** (from longer-dash branches toward `master`) as it
+matures:
+
+```
+dev---tmp  ──merge──▶  dev--substance  ──merge──▶  dev-config  ──merge──▶  master
+   (drafts)              (content)                  (scaffolding)          (deploy)
+```
+
+In practice, a level may be a no-op for any given change — e.g. a pure
+content tweak goes `dev--substance` → `master` directly, skipping
+`dev-config`. The dash-depth signals the *kind* of change, not a mandatory
+promotion path.
+
+### Conventions
+
+- Keep the four named branches (`master`, `dev-config`, `dev--substance`,
+  `dev---tmp`) long-lived. Don't delete them after a merge — they get reused.
+- After a successful promotion, fast-forward the lower-level branch(es) to
+  the new tip so the hierarchy stays consistent rather than diverging.
+- One-off short-lived branches for a specific PR or experiment can still be
+  cut from any of the above; they don't follow the dash-depth rule.
+- All four branches pointing at the same commit is the **healthy idle
+  state** — it means everything is promoted and nothing is in flight.
 
 ## Configuration
 

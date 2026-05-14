@@ -25,6 +25,19 @@ Welcome, fellow agent! This repository powers a Jekyll-based personal website. U
 
 The `Makefile` wraps common commands (`make install`, `make run`, `make clean`, `make update`).
 
+## Branching
+
+Branches follow a **dash-depth hierarchy** (more dashes = further from production):
+
+- `master` — production / GitHub Pages.
+- `dev-config` — Jekyll/HTML/theme scaffolding.
+- `dev--substance` — content (posts, presentations, pages, images).
+- `dev---tmp` — in-flight WIP, drafts.
+
+Work flows upward: `dev---tmp` → `dev--substance` → `dev-config` → `master`. A
+level may be skipped when not relevant. See `USAGE.md#branching-strategy` for
+the full convention.
+
 ## Working Effectively
 
 - Keep HTML tidy and prefer includes when you add reusable page fragments.
