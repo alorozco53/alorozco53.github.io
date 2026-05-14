@@ -16,8 +16,8 @@ tags: [literature, reading, talks, datasets]
   <li><a href="{{ site.baseurl }}/stack/adversarial_opinion_dynamics.html" target="_blank">Adversarial Opinion Dynamics</a></li>
   <li><a href="{{ site.baseurl }}/stack/hanabi/hanabichallenge.html" target="_blank">The Hanabi Challenge</a></li>
   <li><a href="{{ site.baseurl }}/stack/jumping_networks.html" target="_blank">Jumping Networks</a></li>
-  <li><a href="{{ site.baseurl }}/stack/lin-sp-bp.html" target="_blank">Linearized and Single-Pass Belief Propagation</a></li>
-  <li><a href="{{ site.baseurl }}/stack/micro-dynamics/microdynamics.html" target="_blank">On the challenges of predicting microscopic dynamics of online conversations</a></li>
+  <li><a href="{{ site.baseurl }}/archive/2019/research/lin-sp-bp.html" target="_blank">Linearized and Single-Pass Belief Propagation</a></li>
+  <li><a href="{{ site.baseurl }}/archive/2021/research/micro-dynamics/microdynamics.html" target="_blank">On the challenges of predicting microscopic dynamics of online conversations</a></li>
 </ul>
 
 
@@ -38,7 +38,7 @@ tags: [literature, reading, talks, datasets]
 
 ## Talks for Events around Mexico City
 <ul>
-<li><a href="{{ site.baseurl }}/talks/eyes_on_bot.html" target="_blank">Eyes on Bots</a></li>
+<li><a href="{{ site.baseurl }}/archive/2017/meetup/eyes_on_bot.html" target="_blank">Eyes on Bots</a></li>
 <li><a href="{{ site.baseurl }}/talks/lessons.html" target="_blank">Deep Learning Lessons</a></li>
 <li><a href="{{ site.baseurl }}/talks/onto_memes.html" target="_blank">Hands On for Deep Meme Captioning</a></li>
 </ul>
