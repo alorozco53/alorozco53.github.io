@@ -27,7 +27,7 @@ tags: [literature, reading, talks, datasets]
 `[ - 2019]`
 
 {: .box-info}
-> <a href="{{ site.baseurl }}/talks/thesis.html" target="_blank">Undergraduate Thesis Presentation 🐸</a>
+> <a href="{{ site.baseurl }}/talks/thesis.html" target="_blank">UNAM Undergraduate Thesis Presentation 🐸</a>
 
 ## Talks for Events around Mexico City
 <ul>
