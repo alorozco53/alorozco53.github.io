@@ -11,14 +11,16 @@ tags: [literature, reading, talks, datasets]
 # MSc Years Archive
 `[2019 - 2022]`
 
-## Literature Presenations
-<ul>
-  <li><a href="{{ site.baseurl }}/stack/adversarial_opinion_dynamics.html" target="_blank">Adversarial Opinion Dynamics</a></li>
-  <li><a href="{{ site.baseurl }}/presentations/hanabi-challenge/" target="_blank">The Hanabi Challenge</a></li>
-  <li><a href="{{ site.baseurl }}/stack/jumping_networks.html" target="_blank">Jumping Networks</a></li>
-  <li><a href="{{ site.baseurl }}/archive/2019/research/lin-sp-bp.html" target="_blank">Linearized and Single-Pass Belief Propagation</a></li>
-  <li><a href="{{ site.baseurl }}/archive/2021/research/micro-dynamics/microdynamics.html" target="_blank">On the challenges of predicting microscopic dynamics of online conversations</a></li>
-</ul>
+## Literature Presentations
+
+<!-- The literature presentations (Adversarial Opinion Dynamics, The Hanabi
+     Challenge, Jumping Networks, Linearized and Single-Pass Belief
+     Propagation, Microscopic Dynamics of Online Conversations) have moved
+     to a dedicated public slides repo. The canonical URL will be wired in
+     here once the deployment is live. -->
+
+These have moved to a public slides repository. The full catalog is
+linked below — see the deployment URL Albert will paste in.
 
 
 ----------------
@@ -30,6 +32,9 @@ tags: [literature, reading, talks, datasets]
 > <a href="{{ site.baseurl }}/talks/thesis.html" target="_blank">UNAM Undergraduate Thesis Presentation 🐸</a>
 
 ## Talks for Events around Mexico City
-<ul>
-<li><a href="{{ site.baseurl }}/archive/2017/meetup/eyes_on_bot.html" target="_blank">Eyes on Bots</a></li>
-</ul>
+
+<!-- "Eyes on Bots" and other earlier event talks have also moved to the
+     public slides repo; the cross-link will be added with the URL Albert
+     provides. -->
+
+Earlier event talks have also moved to the public slides repository.
