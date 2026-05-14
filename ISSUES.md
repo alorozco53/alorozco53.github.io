@@ -27,11 +27,9 @@ This document provides a comprehensive analysis of potential bugs, issues, depre
 Multiple presentations use the deprecated MathJax CDN endpoint `https://cdn.mathjax.org/mathjax/latest/MathJax.js`, which has been shut down since April 2017.
 
 **Affected Files:**
-- `talks/lessons.html`
 - `talks/thesis.html`
-- `talks/eyes_on_bot.html`
-- `talks/onto_memes.html`
-- `stack/lin-sp-bp.html`
+- `archive/2017/meetup/eyes_on_bot.html`
+- `archive/2019/research/lin-sp-bp.html`
 - `stack/jumping_networks.html`
 - `stack/adversarial_opinion_dynamics.html`
 
@@ -122,11 +120,10 @@ Multiple files contain `http://` links instead of `https://`, which can cause:
 - Broken functionality on HTTPS sites
 
 **Affected Files:**
-- `talks/lessons.html`
-- `talks/eyes_on_bot.html`
-- `talks/onto_memes.html`
 - `talks/thesis.html`
+- `archive/2017/meetup/eyes_on_bot.html`
 - `stack/` directory files
+- `archive/` directory files
 - And more...
 
 **Common Patterns:**
@@ -288,7 +285,7 @@ Personal information (email, Twitter handle, etc.) is hardcoded in multiple plac
 
 **Examples:**
 ```html
-<!-- In talks/lessons.html -->
+<!-- In talks/thesis.html -->
 <a href="http://twitter.com/alorozco53" target="_blank">
   <i class="fa fa-twitter"></i>@alorozco53
 </a>

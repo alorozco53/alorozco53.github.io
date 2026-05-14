@@ -122,12 +122,12 @@ All reveal.js presentations follow a similar structure:
 
 **CRITICAL:** Paths are relative to the HTML file's location. For example:
 
-**File:** `/talks/lessons.html`
+**File:** `/talks/thesis.html`
 - CSS: `../css/reveal.css` (goes up one level to `/css/`)
 - JS: `../js/reveal.js`
 - Plugins: `../plugin/markdown/markdown.js`
 
-**File:** `/stack/hanabi/hanabichallenge.html`
+**File:** `/archive/2017/meetup/eyes_on_bot.html`
 - CSS: `../../../css/reveal.css` (goes up three levels)
 - JS: `../../../js/reveal.js`
 - Plugins: `../../../plugin/markdown/markdown.js`
@@ -1088,23 +1088,23 @@ Reveal.navigateDown();     // Down (vertical)
 
 Study these presentations as references:
 
-1. **`talks/lessons.html`**
-   - Full-featured presentation
+1. **`_presentations/standardization-prototype.html`**
+   - Canonical example of the unified Jekyll-based layout
    - Chalkboard and menu plugins
-   - Embedded iframe demo
-   - Custom themes configuration
+   - Theme switching
+   - Reusable navigation chrome
 
 2. **`talks/thesis.html`**
+   - Legacy raw reveal.js example
    - Academic presentation structure
    - Mathematical equations (MathJax)
    - Vertical slide navigation
    - Image-heavy content
 
-3. **`stack/hanabi/hanabichallenge.html`**
-   - Notebook-style presentation
-   - Bootstrap integration
+3. **`archive/2021/research/micro-dynamics/microdynamics.html`**
+   - Deep-nested archive example
    - Custom styling
-   - Deep nested paths
+   - Demonstrates archive/YEAR/track path layout
 
 ---
 
