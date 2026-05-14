@@ -34,7 +34,6 @@ Multiple presentations use the deprecated MathJax CDN endpoint `https://cdn.math
 - `stack/lin-sp-bp.html`
 - `stack/jumping_networks.html`
 - `stack/adversarial_opinion_dynamics.html`
-- `course_slides/ml_centraal/demoday.html`
 
 **Current Code:**
 ```javascript
@@ -128,7 +127,6 @@ Multiple files contain `http://` links instead of `https://`, which can cause:
 - `talks/onto_memes.html`
 - `talks/thesis.html`
 - `stack/` directory files
-- `course_slides/ml_centraal/demoday.html`
 - And more...
 
 **Common Patterns:**

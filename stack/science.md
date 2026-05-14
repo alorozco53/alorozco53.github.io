@@ -41,8 +41,4 @@ tags: [literature, reading, talks, datasets]
 <li><a href="{{ site.baseurl }}/talks/eyes_on_bot.html" target="_blank">Eyes on Bots</a></li>
 <li><a href="{{ site.baseurl }}/talks/lessons.html" target="_blank">Deep Learning Lessons</a></li>
 <li><a href="{{ site.baseurl }}/talks/onto_memes.html" target="_blank">Hands On for Deep Meme Captioning</a></li>
-<li>Centraal Academy ML Course (<a href="{{ site.baseurl }}/teaching/centraal-ml" target="_blank">Syllabus</a>)</li>
-<ul>
-<li><a href="{{ site.baseurl }}/course_slides/ml_centraal/demoday.html" target="_blank">Demo Day</a></li>
-</ul>
 </ul>

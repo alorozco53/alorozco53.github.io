@@ -34,7 +34,6 @@ All required files are present and properly configured:
 ### Content ✅
 - `_presentations/standardization-prototype.html` - Prototype presentation deck
 - `index.html` - Homepage with blue alert button (lines 41-50)
-- `img/centraal_logo_blanco.png` - Logo for presentations
 
 ### Reveal.js Assets ✅
 - `js/reveal.js` - Core Reveal.js library
@@ -56,7 +55,6 @@ When Jekyll rebuilds the site (automatically on GitHub Pages or manually with `b
    - Navigation chrome at top-left:
      - "← Back to Home" button
      - "Debug Notes" quick link
-     - Centraal logo (top-right)
    - Six slides demonstrating the system
    - Menu plugin (press 'm' or click menu icon)
    - Speaker notes (press 's')

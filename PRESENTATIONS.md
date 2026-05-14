@@ -51,9 +51,6 @@ Presentations are organized in four main directories:
 │   ├── lin-sp-bp.html
 │   ├── adversarial_opinion_dynamics.html
 │   └── ...
-└── course_slides/              # Course-related slides (legacy HTML)
-    └── ml_centraal/
-        └── demoday.html
 ```
 
 **Note:** New presentations should use the Jekyll-based approach in `_presentations/`. Legacy presentations in `talks/`, `stack/`, and `course_slides/` remain as standalone HTML files.
