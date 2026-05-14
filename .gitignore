@@ -7,3 +7,6 @@ _site/
 .jekyll-metadata
 /vendor/
 /.bundle/
+
+# Local-only symlink for tooling that expects CLAUDE.md (points to AGENTS.md)
+/CLAUDE.md
