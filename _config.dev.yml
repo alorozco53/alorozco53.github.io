@@ -1,0 +1,7 @@
+# Development-specific configuration overrides
+# This file is used when running Jekyll locally for development
+
+# Override URL for local development
+url: "http://localhost:4000"
+baseurl: ""
+
