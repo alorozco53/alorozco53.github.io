@@ -1,0 +1,954 @@
+---
+layout: reveal
+title: "Knowledge Fusion of Large Language Models Via Modular SkillPacks"
+subtitle: "GraftLLM: Modular SkillPack Fusion (ICLR 2026)"
+presenter: "AlOrozco53"
+reveal:
+  theme: night
+  transition: slide
+  backgroundTransition: fade
+  controls: true
+  progress: true
+  history: true
+  center: false
+  menu: true
+  menu_config:
+    side: left
+    transitions: true
+    openButton: true
+  chalkboard: true
+  chalkboard_config:
+    theme: chalkboard
+    toggleChalkboardButton: true
+    toggleNotesButton: true
+  math: true
+  math_config:
+    mathjax: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js"
+    config: "TeX-AMS_HTML-full"
+  markdown: true
+  highlight: true
+  zoom: true
+  notes: true
+  home_link: true
+  home_url: "/"
+  home_label: "Back to Home"
+  links:
+    - label: "arXiv v3"
+      url: "https://arxiv.org/abs/2505.18502v3"
+    - label: "PDF v3"
+      url: "https://arxiv.org/pdf/2505.18502"
+    - label: "Official Code"
+      url: "https://github.com/duguodong7/GraftLLM"
+  extend:
+    width: 1366
+    height: 768
+    margin: 0.05
+    minScale: 0.2
+    maxScale: 1.35
+---
+
+<section>
+  <section class="column-title centered" data-background-color="#220707" data-transition="fade">
+    <h1>GraftLLM 🦙</h1>
+    <h2>Knowledge Fusion of Large Language Models Via Modular SkillPacks</h2>
+    <p class="subtitle">ICLR 2026, arXiv:2505.18502v3</p>
+  </section>
+
+  <section data-background-color="#2e0b0b">
+    <h2>Talk Map</h2>
+    <ol>
+      <li class="fragment">Motivation and problem framing</li>
+      <li class="fragment">Method and architecture</li>
+      <li class="fragment">Experimental evidence</li>
+      <li class="fragment">Takeaways and appendix</li>
+    </ol>
+  </section>
+</section>
+
+<section>
+  <section class="column-title centered" data-background-color="#103124" data-transition="fade">
+    <h1>Intro &amp; Motivation</h1>
+    <h2>Why not just distill, finetune, or merge?</h2>
+  </section>
+
+  <section data-background-color="#123628">
+    <h2>Why Cross-Capability Transfer Matters</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Current pressure</h3>
+        <ul>
+          <li>Teams already own multiple specialist LLMs.</li>
+          <li>Full retraining is expensive and slow.</li>
+          <li>Naive multitask fusion creates interference.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Desired outcome</h3>
+        <ul>
+          <li>Modular transfer across heterogeneous backbones.</li>
+          <li>High task fidelity under parameter budgets.</li>
+          <li>Continual updates without catastrophic forgetting.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-slide" data-background-color="#0e1726">
+    <img class="figure-full" src="/img/presentations/graftllm/graftllm_heterog-bneck.png" alt="Heterogeneous transfer bottleneck comparison figure">
+  </section>
+
+  <section class="image-slide" data-background-color="#ffffff">
+    <img class="figure-large" src="/img/presentations/graftllm/graftllm_grafting.png" alt="Knowledge grafting intuition illustration">
+  </section>
+
+  <section class="image-slide" data-background-color="#ffffff" data-transition="convex">
+    <img class="figure-large figure-fig3" src="/img/presentations/graftllm/graftllm_fig3.png" alt="Figure 3 comparison of distillation and grafting scenarios">
+  </section>
+</section>
+
+<section>
+  <section class="column-title centered" data-background-color="#14274a" data-transition="fade">
+    <h1>Method</h1>
+    <h2>GraftLLM pipeline and mechanisms</h2>
+  </section>
+
+  <section class="image-slide" data-background-color="#ffffff" data-transition="convex">
+    <img class="figure-method" src="/img/presentations/graftllm/graftllm_fig4.png" alt="Figure 4 overview of GraftLLM with specific knowledge, fusion, and forget-free learning">
+  </section>
+
+  <section class="image-slide" data-background-color="#000000" data-transition="fade">
+    <img class="figure-pipeline" src="/img/presentations/graftllm/graftllm_pipeline.png" alt="Cross-capability transfer pipeline with module-aware compression and routing">
+  </section>
+
+  <section class="highlight-slide" data-background-color="#ffffff" data-transition="zoom">
+    <h2>Problem Formulation</h2>
+    <p>Transfer source capability to target, then isolate specialized adaptation:</p>
+    <p class="equation">$$\Delta\theta = \theta^*_{\mathrm{tgt}} - \theta_{\mathrm{tgt}}$$</p>
+    <img class="figure-taskv" src="/img/presentations/graftllm/graftllm_taskv.png" alt="Task vector extraction from source and target models">
+    <p>Goal: compose transferable skill deltas without corrupting base-model generality.</p>
+  </section>
+
+  <section class="method-blue" data-background-color="#1e3b70">
+    <h2>Module-specific Adaptive Strategy</h2>
+    <p>After cross-capability transfer, each module delta is compressed with an operator chosen by module role and sensitivity.</p>
+    <p class="equation">$$\hat{\Delta\theta}=\{C_m(\Delta\theta_m)\}_{m\in\mathcal{M}}$$</p>
+    <ul>
+      <li>\(C_m(\cdot)\) can be pruning, low-rank decomposition, or quantization.</li>
+      <li>The compressed set forms the transferable SkillPack used in fusion and continual updates.</li>
+    </ul>
+  </section>
+
+  <section class="image-slide" data-background-color="#000000" data-transition="convex">
+    <h2 class="image-caption-light">SkillPack: module-aware adaptive compression strategy</h2>
+    <img class="figure-maacs" src="/img/presentations/graftllm/graftllm_maacs.png" alt="Module-aware adaptive compression strategy for SkillPack construction">
+  </section>
+
+  <section class="method-blue" data-background-color="#24467e">
+    <h2>SkillPack Compression Math I</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Embedding and output head: pruning</h3>
+        <p class="equation">$$\Delta\theta^{\mathrm{embed}}=\operatorname{Prune}_{\alpha}\!\left(\Delta\theta^{\mathrm{embed}}\right)$$</p>
+        <h3>Attention modules: low-rank SVD</h3>
+        <p class="equation">$$\Delta\theta^{\mathrm{attn}}\approx U_r\Sigma_rV_r^\top,\ \operatorname{rank}(\Sigma_r)=r$$</p>
+      </div>
+      <div class="card">
+        <h3>MLP modules: conservative rank selection</h3>
+        <p class="equation">$$\sum_{i=1}^{k}\sigma_i^2=\beta\sum_{i=1}^{\min(d_{\mathrm{out}},d_{\mathrm{in}})}\sigma_i^2$$</p>
+        <p>Keep the smallest rank \(k\) that satisfies the explained-variance threshold \(\beta\).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="method-blue" data-background-color="#2a4f90">
+    <h2>SkillPack Compression Math II: Quantization</h2>
+    <p class="equation">$$\hat{\theta}=\operatorname{Quant}_k(\theta,\mathbf{x})=\arg\min_{\hat{\theta}}\|\theta\mathbf{x}-\hat{\theta}\mathbf{x}\|^2$$</p>
+    <p class="equation">$$\hat{V}_{[r]}^\top=\operatorname{Quant}_k\!\left(V_{[r]}^\top,\mathbf{x}\right),\ \hat{U}_{[r]}=\operatorname{Quant}_k\!\left(U_{[r]},\Sigma_{[r]}\hat{V}_{[r]}^\top\mathbf{x}\right)$$</p>
+    <ul>
+      <li>Apply mixed precision (\(k>1\)) based on singular-value importance.</li>
+      <li>Group-wise GPTQ quantization reduces storage while preserving critical module behavior.</li>
+    </ul>
+  </section>
+
+  <section class="method-blue" data-background-color="#274a8a">
+    <h2>SkillPack Composition and Reconstruction</h2>
+    <p>Each SkillPack is decoded through dequantization and reconstructed via truncated SVD before fusion.</p>
+    <p class="equation">$$\Delta\theta^{(dq)}\approx U\Sigma V^\top=\Delta\theta$$</p>
+    <p class="equation">$$\theta_{\mathrm{fused}}=\theta_{\mathrm{tgt}}+\Delta\theta$$</p>
+    <ul>
+      <li>\(U,\Sigma,V\) are obtained from the truncated decomposition of compressed modules.</li>
+      <li>The reconstructed task delta is added back to base parameters for model fusion.</li>
+    </ul>
+  </section>
+
+  <section class="method-blue" data-background-color="#31589a">
+    <h2>Router Mechanism for Selective Integration</h2>
+    <p>For \(n\) SkillPacks \(\{\hat{\Delta\theta}_i\}_{i=1}^n\), a router \(\mathcal{R}\) selects which updates to activate:</p>
+    <p class="equation">$$\theta_{\mathrm{fused}}=\theta_{\mathrm{tgt}}+\sum_{i=1}^{n}\mathcal{R}\!\left(\hat{\Delta\theta}_i\right)$$</p>
+    <ul>
+      <li>Classifier-based router: lightweight FFN predicts the most suitable SkillPack.</li>
+      <li>Manual task-type assignment: deterministic mapping from task type to SkillPack.</li>
+      <li>Inference commonly uses top-1 routing to keep overhead low.</li>
+    </ul>
+  </section>
+
+  <section class="image-slide" data-background-color="#000000" data-transition="fade">
+    <h2 class="image-caption-light">Routing Overview</h2>
+    <img class="figure-routing" src="/img/presentations/graftllm/graftllm_routing.png" alt="Router selects the most relevant SkillPack for user query and activates one path">
+  </section>
+</section>
+
+<section>
+  <section class="column-title centered evidence-title" data-background-color="#f0c847" data-transition="fade">
+    <h1>Evidence</h1>
+    <h2>Experiments and results</h2>
+  </section>
+
+  <section class="evidence-yellow" data-background-color="#f6d86d">
+    <h2>Baseline Methods</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Pairwise LLM grafting</h3>
+        <ul>
+          <li>PEFT baselines: LoRA with varied ranks in both SFT and DPO stages.</li>
+          <li>Task vector compression: full-parameter tuning then pruning, SVD, or quantization at varied compression ratios.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Heterogeneous fusion + forget-free learning</h3>
+        <ul>
+          <li>Fusion baselines: multi-teacher distillation, parameter merging, routing-based, and mask-based methods.</li>
+          <li>Forget-free baselines: LoRA, Model Grafting, and Model Tailor.</li>
+        </ul>
+      </div>
+    </div>
+    <p>Representative baselines include FuseLLM, Task Arithmetic/TIES/SCE/PCB/DARE/InfiFusion, Routed LoRA/Twin-Merging, and TALL Mask/EMR-Merging.</p>
+  </section>
+
+  <section class="evidence-yellow" data-background-color="#fae59f">
+    <h2>Datasets and Architectures</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Coverage</h3>
+        <ul>
+          <li>10 established benchmarks across instruction following, QA, reasoning, math, and coding.</li>
+          <li>Benchmarks are grouped into four categories with domain-specific response sampling.</li>
+          <li>Full benchmark listing is provided in App. E.3.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Pairwise setup</h3>
+        <ul>
+          <li>Target model: Llama-3.1-8B-Instruct.</li>
+          <li>Primary source model: Qwen-2.5-72B-Instruct.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="evidence-yellow" data-background-color="#f9df81">
+    <h2>Fusion and Continual-Learning Setups</h2>
+    <ul>
+      <li>Explicit fusion (FuseChat 2.0 protocol): OpenChat-3.5-7B as pivot plus six chat-model sources.</li>
+      <li>Implicit fusion (FuseChat 3.0 protocol): targets Llama-3.1-8B-Instruct and Qwen-2.5-7B-Instruct with four stronger source LLMs.</li>
+      <li>Forget-free learning: sequential acquisition of math then coding capabilities using both SFT and DPO datasets.</li>
+      <li>Architecture details are in App. E; implementation details (training, hyperparameters, compute/runtime) are in App. F.</li>
+    </ul>
+  </section>
+
+  <section class="highlight-slide image-slide" data-background-color="#ffffff" data-transition="convex">
+    <h2>Pairwise GraftLLM (Sec. 5.1)</h2>
+    <img class="figure-pairwise" src="/img/presentations/graftllm/graftllm_pairwise.png" alt="Pairwise GraftLLM results corresponding to Figures 7 and 8">
+  </section>
+
+  <section class="highlight-slide image-side-caption" data-background-color="#ffffff" data-transition="convex">
+    <h2>Knowledge Fusion: Explicit (Sec. 5.2)</h2>
+    <div class="side-caption-layout">
+      <img class="figure-expkf" src="/img/presentations/graftllm/graftllm_expkf.png" alt="Explicit knowledge fusion results">
+      <div class="side-caption-panel">
+        <p><strong>Takeaway</strong></p>
+        <p>GraftLLM improves explicit fusion quality over strong merging baselines while keeping parameter growth relatively low.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="highlight-slide image-side-caption" data-background-color="#ffffff" data-transition="convex">
+    <h2>Knowledge Fusion: Implicit (Sec. 5.2)</h2>
+    <div class="side-caption-layout">
+      <img class="figure-impkf" src="/img/presentations/graftllm/graftllm_impkf.png" alt="Implicit knowledge fusion results">
+      <div class="side-caption-panel">
+        <p><strong>Takeaway</strong></p>
+        <p>Implicit fusion shows stronger average transfer across benchmark tasks than representative distillation and merging alternatives.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="highlight-slide image-slide" data-background-color="#ffffff" data-transition="convex">
+    <h2>Forget-free Learning (Sec. 5.3)</h2>
+    <div class="side-caption-layout">
+        <img class="figure-forgetfree" src="/img/presentations/graftllm/graftllm_forgetfree.png" alt="Forget-free learning comparison results">
+        <div class="side-caption-panel">
+        <p><strong>Takeaway</strong></p>
+        <p>GraftLLM retains prior capabilities while adding new math and coding skills, outperforming representative continual-learning baselines under fixed budget.</p>
+      </div>
+    </div>
+  
+  </section>
+
+  <section class="evidence-yellow" data-background-color="#f0cf62" data-transition="slide">
+    <h2>Highly Distinct Fusion Domains (Sec. 5.4)</h2>
+    <div class="two-col">
+      <div class="card">
+        <p>This setting tests fusion when source capabilities come from highly distinct domains, stressing cross-domain compatibility and conflict handling.</p>
+        <p>Result trend: routed SkillPack composition remains robust, showing better balance than direct parameter blending in disparate-task mixtures.</p>
+      </div>
+      <div>
+        <img class="figure-distinctdomains" src="/img/presentations/graftllm/graftllm_distinctdomains.png" alt="Results table for highly distinct fusion domains">
+      </div>
+    </div>
+  </section>
+
+  <section class="highlight-slide" data-background-color="#ffffff" data-transition="concave">
+    <h2>Core Results (Key Slide)</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Transfer + explicit fusion</h3>
+        <ul>
+          <li>Near full-finetune transfer quality under compression.</li>
+          <li>Routed GraftLLM (9.2B) MT-Bench avg: <strong>7.70</strong>.</li>
+          <li>AlpacaEval 2.0 LC gain: <strong>+8.07</strong> vs best parameter-fusion baseline.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Implicit fusion + continual learning</h3>
+        <ul>
+          <li>Average gain: +0.8 (Llama target), +1.2 (Qwen target).</li>
+          <li>Continual setting (10% budget): <strong>64.3</strong> average score.</li>
+          <li>Beats Model Tailor (62.2) and Model Grafting (61.3).</li>
+        </ul>
+      </div>
+    </div>
+    <p class="manual-slot"><strong>Manual asset slot:</strong> add Figure 5/6 plots and Table 1 crop if you want paper-native result visuals.</p>
+  </section>
+</section>
+
+<section>
+  <section class="column-title centered ablation-title" data-background-color="#4e2f82" data-transition="fade">
+    <h1>Ablations</h1>
+    <h2>Section 6: Component and Routing Analysis</h2>
+  </section>
+
+  <section class="ablation-purple image-side-caption" data-background-color="#5a3695" data-transition="slide">
+    <h2>6.1 Ablation Study of Each Component</h2>
+    <div class="side-caption-layout">
+      <img class="figure-tab5" src="/img/presentations/graftllm/graftllm_tab5.png" alt="Table 5 ablation study of GraftLLM components">
+      <div class="side-caption-panel">
+        <p><strong>Takeaway</strong></p>
+        <p>Each component contributes measurably; removing module-aware compression or routing causes noticeable quality drops.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ablation-purple image-side-caption" data-background-color="#6742a4" data-transition="slide">
+    <h2>6.2 Effect of Task Difficulty and Data Settings</h2>
+    <div class="side-caption-layout">
+      <img class="figure-fig9" src="/img/presentations/graftllm/graftllm_fig9.png" alt="Figure 9 effect of task difficulty and data settings">
+      <div class="side-caption-panel">
+        <p><strong>Takeaway</strong></p>
+        <p>Performance gaps widen on harder settings, where SkillPack compression plus routing better preserves transferred capability.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ablation-purple image-side-caption" data-background-color="#734eb0" data-transition="slide">
+    <h2>6.3 Router Behavior and SkillPack Usage</h2>
+    <div class="side-caption-layout">
+      <img class="figure-tab6" src="/img/presentations/graftllm/graftllm_tab6.png" alt="Table 6 router behavior and SkillPack analysis">
+      <div class="side-caption-panel">
+        <p><strong>Takeaway</strong></p>
+        <p>Router selection aligns with task type and activates specialized SkillPacks, reducing interference across capabilities.</p>
+      </div>
+    </div>
+  </section>
+</section>
+
+<section>
+  <section class="column-title centered closing-title" data-background-color="#7b2c62" data-transition="fade">
+    <h1>Conclusions</h1>
+    <h2>Limitations and Future Work</h2>
+  </section>
+
+  <section class="closing-pink" data-background-color="#9a3e7f" data-transition="slide">
+    <h2>Conclusions</h2>
+    <div class="two-col">
+      <div class="card">
+        <h3>Main result</h3>
+        <p>GraftLLM enables modular capability transfer across heterogeneous LLMs through compressed SkillPacks.</p>
+      </div>
+      <div class="card">
+        <h3>Practical impact</h3>
+        <p>It reaches strong transfer/fusion quality while keeping parameter overhead and continual-learning interference low.</p>
+      </div>
+    </div>
+    <p>Overall, the method provides a composable interface for transfer, fusion, and incremental updates.</p>
+  </section>
+
+  <section class="closing-pink" data-background-color="#aa4f8f" data-transition="slide">
+    <h2>Limitations</h2>
+    <ul>
+      <li>Router and reconstruction can add inference overhead versus lightweight adapter-only paths.</li>
+      <li>Performance depends on the quality of SFT/DPO data and source-model distillation.</li>
+      <li>Compression choices (rank, bit allocation, pruning ratio) remain largely empirically tuned.</li>
+      <li>Cross-domain behavior may still degrade when tasks are highly mismatched.</li>
+    </ul>
+  </section>
+
+  <section class="closing-pink" data-background-color="#b95ea0" data-transition="slide">
+    <h2>Future Work</h2>
+    <ul>
+      <li>Learned/automatic schedules for rank and mixed-precision assignment.</li>
+      <li>Lower-latency routing and activation strategies for deployment.</li>
+      <li>Robustness extensions to broader architectures and stronger domain shifts.</li>
+      <li>More standardized evaluation for safety, privacy, and long-horizon continual updates.</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <section class="column-title centered" data-background-color="#1a4834" data-transition="fade">
+    <h1>Appendix</h1>
+    <h2>Backup material</h2>
+  </section>
+
+  <section data-background-color="#205540">
+    <h2>Appendix A: Benchmark Highlights</h2>
+    <table class="results-table compact">
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Metric</th>
+          <th>Reported value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Explicit fusion</td>
+          <td>MT-Bench avg</td>
+          <td>7.70</td>
+        </tr>
+        <tr>
+          <td>Explicit fusion</td>
+          <td>AlpacaEval 2.0 LC gain</td>
+          <td>+8.07 vs best parameter-fusion baseline</td>
+        </tr>
+        <tr>
+          <td>Implicit fusion</td>
+          <td>Average gain</td>
+          <td>+0.8 (Llama target), +1.2 (Qwen target)</td>
+        </tr>
+        <tr>
+          <td>Continual learning</td>
+          <td>Average score</td>
+          <td>64.3 at 10% budget</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="manual-slot"><strong>Manual asset slot:</strong> optional full benchmark table image from the PDF appendix.</p>
+  </section>
+
+  <section data-background-color="#266148">
+    <h2>Appendix B: Compression Sensitivity</h2>
+    <ul>
+      <li>Higher SVD rank usually improves retention, with storage tradeoff.</li>
+      <li>Mixed precision outperforms naive uniform low-bit assignments.</li>
+      <li>DPO-oriented tasks degrade faster under aggressive compression than easier SFT settings.</li>
+      <li>MLP handling drives much of final quality variation.</li>
+    </ul>
+  </section>
+
+  <section class="highlight-slide" data-background-color="#f7fbff" data-transition="slide">
+    <h2>Appendix C: SFT + DPO Objective Details (Backup)</h2>
+    <p class="equation">$$\mathcal{L}_{\mathrm{SFT}}(\theta)=-\mathbb{E}_{(x,y)\sim\mathcal{D}_{\mathrm{SFT}}}[\log p_\theta(y\mid x)]$$</p>
+    <p class="equation">$$\mathcal{L}_{\mathrm{DPO}}(\pi_\theta;\pi_{\mathrm{ref}})=-\mathbb{E}_{(x,y_w,y_l)}\left[\log\sigma\left(\beta\log\frac{\pi_\theta(y_w\mid x)}{\pi_{\mathrm{ref}}(y_w\mid x)}-\beta\log\frac{\pi_\theta(y_l\mid x)}{\pi_{\mathrm{ref}}(y_l\mid x)}\right)\right]$$</p>
+    <ul>
+      <li>Preference pairs are sourced consistently to reduce reward bias.</li>
+      <li>Rule-based checks are used for math and coding tasks.</li>
+    </ul>
+  </section>
+
+  <section data-background-color="#2c6e52">
+    <h2>Appendix D: Future Work and Sources</h2>
+    <ul>
+      <li>Reduce inference overhead in reconstructed deployment path.</li>
+      <li>Automate rank and bit scheduling.</li>
+      <li>Extend routing-friendly compression to broader MoE settings.</li>
+    </ul>
+    <hr>
+    <p><small>Du et al., 2026 (ICLR). <a href="https://arxiv.org/abs/2505.18502v3" target="_blank" rel="noopener">arXiv:2505.18502v3</a></small></p>
+    <p><small><a href="https://arxiv.org/pdf/2505.18502" target="_blank" rel="noopener">PDF</a> | <a href="https://github.com/duguodong7/GraftLLM" target="_blank" rel="noopener">Code</a></small></p>
+  </section>
+</section>
+
+<style>
+  .reveal .slides section {
+    text-align: left;
+    padding: 0.4rem 1.05rem;
+  }
+
+  .reveal .slides section.centered {
+    text-align: center;
+  }
+
+  .reveal h1 {
+    font-size: 2.55em;
+    line-height: 1.08;
+    margin-bottom: 0.32em;
+  }
+
+  .reveal h2 {
+    font-size: 1.72em;
+    line-height: 1.15;
+    margin-bottom: 0.4em;
+  }
+
+  .reveal h3 {
+    font-size: 1.16em;
+    line-height: 1.22;
+    margin-bottom: 0.25em;
+  }
+
+  .reveal p,
+  .reveal li,
+  .reveal td,
+  .reveal th {
+    font-size: 0.9em;
+    line-height: 1.34;
+  }
+
+  .column-title h1,
+  .column-title h2 {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 980px;
+  }
+
+  .title-card {
+    padding: 1.55rem 1.7rem;
+    border-radius: 14px;
+    background: rgba(52, 12, 12, 0.72);
+    border: 1px solid rgba(255, 152, 152, 0.34);
+    max-width: 1100px;
+    margin: 1.2rem auto 0;
+  }
+
+  .subtitle {
+    color: #ffbcbc;
+    margin-top: 0.5rem;
+  }
+
+  .muted {
+    color: #b7e2c8;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.95rem;
+  }
+
+  .card {
+    border-radius: 10px;
+    border: 1px solid rgba(140, 225, 182, 0.35);
+    background: rgba(10, 48, 33, 0.6);
+    padding: 0.68rem 0.78rem;
+  }
+
+  .pipeline-svg {
+    width: 100%;
+    height: auto;
+    max-width: 1000px;
+    display: block;
+    margin: 0.2rem auto 0.4rem;
+  }
+
+  .image-slide {
+    text-align: center !important;
+  }
+
+  .figure-large {
+    width: auto;
+    max-width: 96%;
+    max-height: 76vh;
+    object-fit: contain;
+    display: block;
+    margin: 0.4rem auto;
+  }
+
+  .figure-full {
+    width: auto;
+    max-width: 99%;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+    margin: 0.1rem auto;
+  }
+
+  .figure-method {
+    width: auto;
+    display: block;
+    object-fit: contain;
+    margin: 0.1rem auto;
+    max-height: 85vh !important;
+    max-width: 74% !important;
+    text-align: center !important;
+  }
+
+  .figure-fig3 {
+    max-height: 60vh;
+    max-width: 88%;
+  }
+
+  .figure-pipeline {
+    width: auto;
+    max-width: 80% !important;
+    max-height: 85vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.15rem auto;
+  }
+
+  .figure-routing {
+    width: auto !important;
+    max-width: 92% !important;
+    max-height: 66vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.2rem auto 0.1rem;
+  }
+
+  .figure-pairwise {
+    width: auto !important;
+    max-width: 92% !important;
+    max-height: 58vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.15rem auto;
+  }
+
+  .figure-expkf {
+    width: auto !important;
+    max-width: 92% !important;
+    max-height: 58vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.15rem auto;
+  }
+
+  .figure-impkf {
+    width: auto !important;
+    max-width: 92% !important;
+    max-height: 58vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.15rem auto;
+  }
+
+  .figure-forgetfree {
+    width: auto !important;
+    max-width: 93% !important;
+    max-height: 60vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.15rem auto;
+  }
+
+  .figure-distinctdomains {
+    width: auto !important;
+    max-width: 100% !important;
+    max-height: 56vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.1rem auto;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .figure-tab5 {
+    width: auto !important;
+    max-width: 100% !important;
+    max-height: 58vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.1rem auto !important;
+  }
+
+  .figure-fig9 {
+    width: auto !important;
+    max-width: 100% !important;
+    max-height: 60vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.1rem auto !important;
+  }
+
+  .figure-tab6 {
+    width: auto !important;
+    max-width: 100% !important;
+    max-height: 58vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.1rem auto !important;
+  }
+
+  .image-side-caption {
+    text-align: left !important;
+  }
+
+  .side-caption-layout {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) !important;
+    gap: 0.9rem !important;
+    align-items: center !important;
+  }
+
+  .side-caption-panel {
+    border: 1px solid rgba(35, 88, 62, 0.25) !important;
+    border-radius: 10px !important;
+    background: rgba(248, 253, 250, 0.95) !important;
+    padding: 0.7rem 0.8rem !important;
+  }
+
+  .side-caption-panel p {
+    margin: 0.15rem 0 0.45rem !important;
+  }
+
+  .image-side-caption .figure-expkf,
+  .image-side-caption .figure-impkf {
+    width: auto !important;
+    max-width: 100% !important;
+    max-height: 62vh !important;
+    margin: 0.1rem auto !important;
+  }
+
+  .figure-taskv {
+    width: auto;
+    max-width: 86%;
+    max-height: 34vh;
+    object-fit: contain;
+    display: block;
+    margin: 0.5rem auto 0.25rem;
+  }
+
+  .figure-maacs {
+    width: auto;
+    max-width: 95% !important;
+    max-height: 55vh !important;
+    object-fit: contain;
+    display: block;
+    margin: 0.2rem auto;
+  }
+
+  .image-caption-dark {
+    color: #173153 !important;
+    text-align: left;
+    margin: 0.1rem 0 0.25rem;
+  }
+
+  .image-caption-light {
+    color: #ffffff !important;
+    text-align: left;
+    margin: 0.1rem 0 0.25rem;
+  }
+
+  .equation {
+    border-radius: 8px;
+    background: rgba(169, 255, 210, 0.12);
+    padding: 0.38rem 0.52rem;
+    margin: 0.42rem 0;
+    overflow-wrap: anywhere;
+  }
+
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.36rem;
+  }
+
+  .results-table th,
+  .results-table td {
+    border: 1px solid rgba(168, 235, 197, 0.35);
+    padding: 0.36rem 0.42rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .results-table th {
+    background: rgba(35, 95, 66, 0.55);
+  }
+
+  .results-table.compact th,
+  .results-table.compact td {
+    font-size: 0.96em;
+  }
+
+  .highlight-slide {
+    color: #16261d;
+  }
+
+  .highlight-slide h1,
+  .highlight-slide h2,
+  .highlight-slide h3,
+  .highlight-slide p,
+  .highlight-slide li,
+  .highlight-slide td,
+  .highlight-slide th {
+    color: #16261d;
+  }
+
+  .highlight-slide .card {
+    background: rgba(244, 250, 246, 0.96);
+    border: 1px solid rgba(27, 79, 56, 0.28);
+  }
+
+  .highlight-slide .equation {
+    background: rgba(221, 239, 229, 0.85);
+  }
+
+  .highlight-slide .results-table th {
+    background: rgba(221, 239, 229, 0.92);
+  }
+
+  .highlight-slide .results-table th,
+  .highlight-slide .results-table td {
+    border: 1px solid rgba(35, 88, 62, 0.32);
+  }
+
+  .manual-slot {
+    margin-top: 0.55rem;
+    padding: 0.34rem 0.48rem;
+    border-radius: 6px;
+    font-size: 0.74em;
+    background: rgba(214, 255, 230, 0.18);
+    border: 1px dashed rgba(168, 235, 197, 0.55);
+  }
+
+  .highlight-slide .manual-slot {
+    background: rgba(217, 235, 225, 0.9);
+    border: 1px dashed rgba(43, 88, 63, 0.45);
+  }
+
+  .evidence-title h1,
+  .evidence-title h2 {
+    color: #3f2d04 !important;
+  }
+
+  .evidence-yellow {
+    color: #261a02 !important;
+  }
+
+  .evidence-yellow h1,
+  .evidence-yellow h2,
+  .evidence-yellow h3,
+  .evidence-yellow p,
+  .evidence-yellow li,
+  .evidence-yellow td,
+  .evidence-yellow th {
+    color: #261a02 !important;
+  }
+
+  .evidence-yellow .card {
+    background: rgba(255, 248, 221, 0.9) !important;
+    border: 1px solid rgba(122, 90, 16, 0.35) !important;
+  }
+
+  .ablation-title h1,
+  .ablation-title h2 {
+    color: #f3e8ff !important;
+  }
+
+  .ablation-purple {
+    color: #f3e8ff !important;
+  }
+
+  .ablation-purple h1,
+  .ablation-purple h2,
+  .ablation-purple h3,
+  .ablation-purple p,
+  .ablation-purple li,
+  .ablation-purple td,
+  .ablation-purple th {
+    color: #f3e8ff !important;
+  }
+
+  .ablation-purple .side-caption-panel {
+    border: 1px solid rgba(205, 173, 247, 0.46) !important;
+    background: rgba(51, 27, 82, 0.6) !important;
+  }
+
+  .closing-title h1,
+  .closing-title h2 {
+    color: #ffe3f5 !important;
+  }
+
+  .closing-pink {
+    color: #ffeaf8 !important;
+  }
+
+  .closing-pink h1,
+  .closing-pink h2,
+  .closing-pink h3,
+  .closing-pink p,
+  .closing-pink li,
+  .closing-pink td,
+  .closing-pink th {
+    color: #ffeaf8 !important;
+  }
+
+  .closing-pink .card {
+    background: rgba(98, 24, 76, 0.45) !important;
+    border: 1px solid rgba(255, 203, 238, 0.45) !important;
+  }
+
+  .method-blue .card {
+    background: rgba(18, 36, 74, 0.68);
+    border: 1px solid rgba(157, 196, 255, 0.42);
+  }
+
+  .method-blue .equation {
+    background: rgba(196, 218, 255, 0.16);
+  }
+
+  .method-blue .results-table th,
+  .method-blue .results-table td {
+    border: 1px solid rgba(168, 201, 255, 0.4);
+  }
+
+  .method-blue .results-table th {
+    background: rgba(52, 88, 161, 0.58);
+  }
+
+  @media (max-width: 1000px) {
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .side-caption-layout {
+      grid-template-columns: 1fr !important;
+    }
+
+    .reveal h1 {
+      font-size: 2.08em;
+    }
+
+    .reveal h2 {
+      font-size: 1.42em;
+    }
+
+    .reveal p,
+    .reveal li,
+    .reveal td,
+    .reveal th {
+      font-size: 0.79em;
+    }
+  }
+</style>
