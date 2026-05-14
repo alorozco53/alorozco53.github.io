@@ -12,7 +12,7 @@
     <nav class="reveal-nav-links" aria-label="Presentation quick links">
       {% for item in page.reveal.links %}
         <a class="reveal-nav-link" href="{{ item.url | relative_url }}"
-           {% if item.newtab %}target="_blank" rel="noopener"{% endif %}>
+           {% if item.newtab != false %}target="_blank" rel="noopener noreferrer"{% endif %}>
           {{ item.label }}
         </a>
       {% endfor %}
