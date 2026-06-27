@@ -899,12 +899,18 @@ function parseFeedKickoff(g){
   return Number.isNaN(d.getTime()) ? null : raw;
 }
 function keyForGroups(groups){ return groups.slice().sort().join(''); }
-function isPlayed(m){ return m.status==='Complete' && Number.isFinite(+m.hg) && Number.isFinite(+m.ag); }
+function hasScore(m){ return Number.isFinite(+m.hg) && Number.isFinite(+m.ag); }
+function isPlayed(m){ return m.status==='Complete' && hasScore(m); }
+function isLiveScore(m){ return m.status==='Live' && hasScore(m); }
+function isCurrentTableResult(m){ return isPlayed(m) || isLiveScore(m); }
+function displayScore(m){ return hasScore(m) ? `${m.hg}-${m.ag}` : 'vs'; }
+function statusPillClass(m){ return isPlayed(m) ? 'good' : (m.status==='Live' ? 'warn' : ''); }
 function blankStats(team){ return {team, P:0,W:0,D:0,L:0,GF:0,GA:0,GD:0,Pts:0}; }
 function computeTables(ms){
   const tables={}; GROUPS.forEach(g=>{tables[g]=TEAMS.filter(t=>t.group===g).map(t=>blankStats(t));});
   const byTeam={}; Object.values(tables).flat().forEach(s=>byTeam[s.team.code]=s);
-  ms.filter(isPlayed).forEach(m=>{
+  // Live numeric scores count for the current "if matches ended now" table.
+  ms.filter(isCurrentTableResult).forEach(m=>{
     const h=byTeam[m.home], a=byTeam[m.away], hg=+m.hg, ag=+m.ag;
     h.P++; a.P++; h.GF+=hg; h.GA+=ag; a.GF+=ag; a.GA+=hg;
     if(hg>ag){h.W++;a.L++;h.Pts+=3}else if(hg<ag){a.W++;h.L++;a.Pts+=3}else{h.D++;a.D++;h.Pts++;a.Pts++}
@@ -916,7 +922,7 @@ function computeTables(ms){
 function subTableStats(statsList, ms){
   const codes=new Set(statsList.map(s=>s.team.code));
   const map=Object.fromEntries(statsList.map(s=>[s.team.code,{team:s.team,Pts:0,GD:0,GF:0}]));
-  ms.filter(m=>isPlayed(m)&&codes.has(m.home)&&codes.has(m.away)).forEach(m=>{
+  ms.filter(m=>isCurrentTableResult(m)&&codes.has(m.home)&&codes.has(m.away)).forEach(m=>{
     const h=map[m.home], a=map[m.away], hg=+m.hg, ag=+m.ag;
     h.GF+=hg; a.GF+=ag; h.GD+=hg-ag; a.GD+=ag-hg;
     if(hg>ag) h.Pts+=3; else if(hg<ag) a.Pts+=3; else {h.Pts++;a.Pts++;}
@@ -1000,7 +1006,7 @@ function knockoutWinner(a,b,rng=Math.random){
   return rng()<p ? a : b;
 }
 function simulatedMatches(rng=Math.random){
-  return matches.map(m=>{ const c={...m}; if(!isPlayed(c)){ const [hg,ag]=simResult(c,rng); c.hg=hg; c.ag=ag; c.status='Complete'; } return c; });
+  return matches.map(m=>{ const c={...m}; if(!isCurrentTableResult(c)){ const [hg,ag]=simResult(c,rng); c.hg=hg; c.ag=ag; c.status='Complete'; } return c; });
 }
 function blankRoundCounts(){ return Object.fromEntries(TEAMS.map(t=>[t.code,0])); }
 function allKnockoutMatchIds(){ return [...R32.map(([id])=>id), ...LATER_ROUNDS.flatMap(([,games])=>games.map(([id])=>id))]; }
@@ -1419,10 +1425,12 @@ function scenarioExample(assignments,path){
 }
 function analyzeTeamScenarios(code,maxGoals=scenarioGoalCap()){
   const team=teamByCode[code];
-  const remaining=matches.filter(m=>m.group===team.group && !isPlayed(m));
+  const remaining=matches.filter(m=>m.group===team.group && !isCurrentTableResult(m));
   const totalCombos=scenarioCount(remaining,maxGoals);
   const limit=100000;
-  const result={group:team.group, maxGoals, remaining, totalCombos, limit, total:0, direct:0, third:0, out:0, positions:{1:0,2:0,3:0,4:0}, buckets:{}, examples:{}};
+  const liveFixed=matches.filter(m=>m.group===team.group && isLiveScore(m)).length;
+  const unfinished=matches.filter(m=>m.group===team.group && !isPlayed(m)).length;
+  const result={group:team.group, maxGoals, remaining, liveFixed, unfinished, totalCombos, limit, total:0, direct:0, third:0, out:0, positions:{1:0,2:0,3:0,4:0}, buckets:{}, examples:{}};
   if(totalCombos>limit) return {...result, tooMany:true};
   const assignments=[];
   function ensureBucket(key){
@@ -1470,8 +1478,10 @@ function renderTeamScenarioLab(code){
   const qual=a.direct+a.third;
   if(!a.remaining.length){
     const route=a.direct ? 'direct qualifier' : (a.third ? 'third-place qualifier' : 'outside the Round of 32');
+    const title=a.unfinished ? 'If games ended now' : `Group ${a.group} complete`;
+    const liveNote=a.liveFixed ? ` ${a.liveFixed} live score${a.liveFixed===1?' is':'s are'} treated as if final.` : '';
     return `<h3>What does ${code} need?</h3><div class="summary-grid">
-      <div class="summary-card"><strong>Group ${a.group} complete</strong><div class="big">${qual ? 'In' : 'Out'}</div><div class="small">${code} is currently a ${route}.</div></div>
+      <div class="summary-card"><strong>${title}</strong><div class="big">${qual ? 'In' : 'Out'}</div><div class="small">${code} is currently a ${route}.${liveNote}</div></div>
       <div class="summary-card"><strong>Route split</strong><div class="big">${pct(qual,a.total)}</div><div class="small">Direct ${pct(a.direct,a.total)} · third-place ${pct(a.third,a.total)} · out ${pct(a.out,a.total)}</div></div>
     </div>`;
   }
@@ -1511,9 +1521,8 @@ function renderTeamFocus(tables,r){
   </div>
   <h3>${teamCodeLabel(team.code)} matches</h3>
   <div class="schedule-grid">${teamMatches.map(m=>{
-    const played=isPlayed(m);
-    const score=played ? `${m.hg}-${m.ag}` : 'vs';
-    const statusClass=played?'good':(m.status==='Live'?'warn':'');
+    const score=displayScore(m);
+    const statusClass=statusPillClass(m);
     return `<div class="match-card"><div class="team">${teamNameLabel(m.home)}</div><div class="score">${score}</div><div class="team away">${teamNameLabel(m.away)}</div><div class="small" style="grid-column:1/-1"><span class="pill ${statusClass}">${m.status}</span> Group ${m.group} · ${formatKickoff(m.kickoff)}</div></div>`;
   }).join('')}</div>
   ${renderTeamScenarioLab(team.code)}`;
@@ -1558,9 +1567,8 @@ function renderSchedule(){
   const groups=new Map();
   sorted.forEach(m=>{ const key=dateBand(m.kickoff); if(!groups.has(key)) groups.set(key,[]); groups.get(key).push(m); });
   root.innerHTML=Array.from(groups.entries()).map(([day,dayMatches])=>`<div class="date-band">${day}</div><div class="schedule-grid">${dayMatches.map(m=>{
-    const played=isPlayed(m);
-    const score=played ? `${m.hg}-${m.ag}` : 'vs';
-    const statusClass=played?'good':(m.status==='Live'?'warn':'');
+    const score=displayScore(m);
+    const statusClass=statusPillClass(m);
     return `<div class="match-card"><div class="team">${teamNameLabel(m.home)}</div><div class="score">${score}</div><div class="team away">${teamNameLabel(m.away)}</div><div class="small" style="grid-column:1/-1"><span class="pill ${statusClass}">${m.status}</span> Group ${m.group} · ${formatKickoff(m.kickoff)}</div></div>`;
   }).join('')}</div>`).join('');
 }
@@ -1595,10 +1603,11 @@ function renderR32(r){
   root.innerHTML=`<div class="bracket">${round32.join('')}${later.join('')}</div>`;
 }
 function renderSummary(tables,r){
-  const played=matches.filter(isPlayed).length, total=matches.length;
+  const played=matches.filter(isPlayed).length, total=matches.length, live=matches.filter(isLiveScore).length;
   const root=document.getElementById('summaryPills');
   const thirdKey=r.thirdRes.key || '—';
-  root.innerHTML=`<span class="pill good">${played}/${total} group matches complete</span><span class="pill ${r.thirdRes.exact?'good':'warn'}">Third-group key: ${thirdKey} (${r.thirdRes.exact?'Annex C exact':'fallback'})</span><span class="pill">Advancing thirds: ${r.thirds.slice(0,8).map(s=>s.slot+':'+teamCodeLabel(s.team.code)).join(', ')}</span>`;
+  const livePill=live ? `<span class="pill warn">R32 snapshot includes ${live} live score${live===1?'':'s'} if ended now</span>` : '';
+  root.innerHTML=`<span class="pill good">${played}/${total} group matches complete</span>${livePill}<span class="pill ${r.thirdRes.exact?'good':'warn'}">Third-group key: ${thirdKey} (${r.thirdRes.exact?'Annex C exact':'fallback'})</span><span class="pill">Advancing thirds: ${r.thirds.slice(0,8).map(s=>s.slot+':'+teamCodeLabel(s.team.code)).join(', ')}</span>`;
 }
 function renderProbs(sim){
   if(!sim){document.getElementById('matchupProbs').innerHTML='<p class="small">Run a simulation to populate this.</p>';document.getElementById('teamProbs').innerHTML='';document.getElementById('titleProbs').innerHTML='';return;}
