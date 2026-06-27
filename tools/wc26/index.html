@@ -107,6 +107,15 @@
   .drawer-note{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
   .drawer-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .drawer-tools{display:grid;grid-template-columns:1fr;gap:10px}
+  button:disabled{opacity:.68;cursor:wait}
+  .progress-wrap{display:none;margin-top:10px}
+  .progress-wrap.active{display:block}
+  .progress-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;color:var(--muted);font-size:12px}
+  .progress-spinner{width:14px;height:14px;border:2px solid var(--control-border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;flex:0 0 auto}
+  .progress-track{height:8px;background:var(--bar-bg);border-radius:999px;overflow:hidden}
+  .progress-track>i{display:block;height:100%;width:0%;background:var(--bar-fill);transition:width .12s linear}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.progress-spinner{animation:none}.progress-track>i{transition:none}}
   @media(max-width:640px){
     header{position:static;padding:16px}
     .header-row{width:100%}
@@ -171,6 +180,10 @@
         <input id="runs" type="number" min="100" max="200000" step="100" value="20000" style="width:100%">
         <div class="control-status">
           <div id="status" class="small">Ready.</div>
+          <div id="simulationProgress" class="progress-wrap" aria-live="polite" aria-hidden="true">
+            <div class="progress-meta"><span class="progress-spinner" aria-hidden="true"></span><span id="simulationProgressText">Preparing simulation...</span></div>
+            <div class="progress-track"><i id="simulationProgressBar"></i></div>
+          </div>
         </div>
 
         <details class="drawer">
@@ -185,7 +198,7 @@
           </div>
         </details>
 
-        <details class="drawer">
+        <details class="drawer" open>
           <summary>Live/API import<span class="drawer-note">Load public JSON, poll, or paste match data.</span></summary>
           <label>Optional live / JSON API URL</label>
           <input id="apiUrl" value="https://worldcup26.ir/get/games" style="width:100%" />
@@ -196,7 +209,7 @@
           <div class="drawer-grid">
             <div><label>Refresh seconds</label><input id="refreshSecs" type="number" min="10" max="3600" value="60" style="width:100%"></div>
           </div>
-          <label class="checkline"><input id="autoLoadLive" type="checkbox"> Auto-load feed when the page opens</label>
+          <label class="checkline"><input id="autoLoadLive" type="checkbox" checked> Auto-load feed when the page opens</label>
           <div id="feedHealth" class="small" style="margin-top:6px">No live feed loaded in this session.</div>
           <div class="notice"><b>Live-feed reality check:</b> the app is feed-agnostic. If the public endpoint is blocked by CORS or stale, paste JSON below or connect a licensed feed with the adapter hook.</div>
           <label>Paste result JSON or simple CSV: <span class="mono">Group,Home,Away,HG,AG,Status</span></label>
@@ -1129,23 +1142,54 @@ function simulateKnockout(r32Matches,rng){
   }
   return {rounds, matchCounts};
 }
+function blankSimulationResult(n,seed){
+  return {
+    n, seed,
+    matchupCounts:{},
+    qualCounts:Object.fromEntries(TEAMS.map(t=>[t.code,0])),
+    thirdQualCounts:Object.fromEntries(TEAMS.map(t=>[t.code,0])),
+    roundCounts:{R16:blankRoundCounts(), QF:blankRoundCounts(), SF:blankRoundCounts(), Final:blankRoundCounts(), Champion:blankRoundCounts()},
+    matchCounts:blankMatchCounts(),
+    opponentWatch:blankOpponentWatch(),
+    mexicoWatch:null
+  };
+}
+function recordSimulationRun(sim,rng){
+  const t=computeTables(simulatedMatches(rng)); const r=buildR32(t);
+  GROUPS.forEach(g=>{sim.qualCounts[t[g][0].team.code]++; sim.qualCounts[t[g][1].team.code]++;});
+  r.thirds.slice(0,8).forEach(s=>{sim.qualCounts[s.team.code]++; sim.thirdQualCounts[s.team.code]++;});
+  recordOpponentWatch(sim.opponentWatch,r,t);
+  r.matches.forEach(mm=>{ const key=mm.id+'|'+[mm.a,mm.b].sort().join(' v '); sim.matchupCounts[key]=(sim.matchupCounts[key]||0)+1; });
+  const ko=simulateKnockout(r.matches,rng);
+  Object.keys(sim.roundCounts).forEach(round=>TEAMS.forEach(team=>{ sim.roundCounts[round][team.code]+=ko.rounds[round][team.code]; }));
+  mergeMatchCounts(sim.matchCounts,ko.matchCounts);
+}
+function finalizeSimulation(sim){
+  sim.mexicoWatch=sim.opponentWatch;
+  return sim;
+}
 function runSimulation(n, seed=''){
   const rng=seed ? makeRng(seed) : Math.random;
-  const matchupCounts={}, qualCounts=Object.fromEntries(TEAMS.map(t=>[t.code,0])), thirdQualCounts=Object.fromEntries(TEAMS.map(t=>[t.code,0]));
-  const roundCounts={R16:blankRoundCounts(), QF:blankRoundCounts(), SF:blankRoundCounts(), Final:blankRoundCounts(), Champion:blankRoundCounts()};
-  const matchCounts=blankMatchCounts();
-  const opponentWatch=blankOpponentWatch();
-  for(let i=0;i<n;i++){
-    const t=computeTables(simulatedMatches(rng)); const r=buildR32(t);
-    GROUPS.forEach(g=>{qualCounts[t[g][0].team.code]++; qualCounts[t[g][1].team.code]++;});
-    r.thirds.slice(0,8).forEach(s=>{qualCounts[s.team.code]++; thirdQualCounts[s.team.code]++;});
-    recordOpponentWatch(opponentWatch,r,t);
-    r.matches.forEach(mm=>{ const key=mm.id+'|'+[mm.a,mm.b].sort().join(' v '); matchupCounts[key]=(matchupCounts[key]||0)+1; });
-    const ko=simulateKnockout(r.matches,rng);
-    Object.keys(roundCounts).forEach(round=>TEAMS.forEach(team=>{ roundCounts[round][team.code]+=ko.rounds[round][team.code]; }));
-    mergeMatchCounts(matchCounts,ko.matchCounts);
-  }
-  return {n, seed, matchupCounts, qualCounts, thirdQualCounts, roundCounts, matchCounts, opponentWatch, mexicoWatch:opponentWatch};
+  const sim=blankSimulationResult(n,seed);
+  for(let i=0;i<n;i++) recordSimulationRun(sim,rng);
+  return finalizeSimulation(sim);
+}
+function runSimulationAsync(n,seed='',onProgress=()=>{}){
+  const rng=seed ? makeRng(seed) : Math.random;
+  const sim=blankSimulationResult(n,seed);
+  const chunkSize=Math.max(50,Math.min(1000,Math.ceil(n/50)));
+  let done=0;
+  onProgress(done,n);
+  return new Promise(resolve=>{
+    function step(){
+      const stop=Math.min(n,done+chunkSize);
+      for(;done<stop;done++) recordSimulationRun(sim,rng);
+      onProgress(done,n);
+      if(done<n) setTimeout(step,0);
+      else resolve(finalizeSimulation(sim));
+    }
+    setTimeout(step,0);
+  });
 }
 function renderTabs(){
   const el=document.getElementById('groupTabs'); el.innerHTML=''; GROUPS.forEach(g=>{const b=document.createElement('button'); b.className='tab'+(g===activeGroup?' active':''); b.textContent='Group '+g; b.onclick=()=>{activeGroup=g;renderTabs();renderEditor();}; el.appendChild(b);});
@@ -1567,7 +1611,55 @@ function renderProbs(sim){
 }
 let latestSim=null;
 let lastFeedStats=null;
+let simulationJobId=0;
 function recompute(){ const tables=computeTables(matches); const r=buildR32(tables); renderSummary(tables,r); renderQualified(tables,r); renderOpponentWatch(tables,r,latestSim); renderTeamFocus(tables,r); renderSchedule(); renderThirdRace(r.thirds); renderTables(tables); renderR32(r); renderProbs(latestSim); renderFeedHealth(); }
+function setSimulationProgress(done,total,label=''){
+  const wrap=document.getElementById('simulationProgress'), bar=document.getElementById('simulationProgressBar'), text=document.getElementById('simulationProgressText');
+  if(!wrap || !bar || !text) return;
+  const pctValue=total ? Math.min(100,Math.max(0,100*done/total)) : 0;
+  wrap.classList.add('active');
+  wrap.setAttribute('aria-hidden','false');
+  bar.style.width=pctValue.toFixed(1)+'%';
+  text.textContent=label || `${done.toLocaleString()} / ${total.toLocaleString()} simulation runs`;
+}
+function clearSimulationProgress(){
+  const wrap=document.getElementById('simulationProgress'), bar=document.getElementById('simulationProgressBar');
+  if(!wrap || !bar) return;
+  wrap.classList.remove('active');
+  wrap.setAttribute('aria-hidden','true');
+  bar.style.width='0%';
+}
+async function runSimulationFromControls(){
+  const n=+document.getElementById('runs').value||10000;
+  const seed=document.getElementById('simSeed').value.trim();
+  const job=++simulationJobId;
+  const btn=document.getElementById('simulateBtn');
+  btn.disabled=true;
+  btn.textContent='Running...';
+  setStatus(`Running ${n.toLocaleString()} simulations${seed?` with seed "${seed}"`:''}...`);
+  setSimulationProgress(0,n,'Preparing simulation...');
+  try{
+    const sim=await runSimulationAsync(n,seed,(done,total)=>{
+      if(job!==simulationJobId) return;
+      setSimulationProgress(done,total,`Simulating ${done.toLocaleString()} / ${total.toLocaleString()} runs`);
+    });
+    if(job!==simulationJobId) return;
+    latestSim=sim;
+    recompute();
+    setStatus(`Simulation complete: ${n.toLocaleString()} runs${seed?` with seed "${seed}"`:''}.`);
+    setSimulationProgress(n,n,'Simulation complete.');
+    setTimeout(()=>{ if(job===simulationJobId) clearSimulationProgress(); },900);
+  }catch(e){
+    if(job!==simulationJobId) return;
+    setStatus('Simulation failed: '+e.message);
+    clearSimulationProgress();
+  }finally{
+    if(job===simulationJobId){
+      btn.disabled=false;
+      btn.textContent='Run simulation';
+    }
+  }
+}
 function renderFeedHealth(){
   const el=document.getElementById('feedHealth');
   if(!el) return;
@@ -1652,7 +1744,7 @@ function scenarioPayload(){
 }
 function copyScenarioLink(){
   const encoded=encodeURIComponent(btoa(JSON.stringify(scenarioPayload())));
-  const query=document.getElementById('autoLoadLive').checked ? '?live=1' : '';
+  const query=document.getElementById('autoLoadLive').checked ? '?live=1' : '?live=0';
   const url=`${location.origin}${location.pathname}${query}#state=${encoded}`;
   if(navigator.clipboard?.writeText){
     navigator.clipboard.writeText(url).then(()=>setStatus('Scenario link copied.')).catch(()=>setStatus(url));
@@ -1681,7 +1773,8 @@ function loadScenarioFromHash(){
 }
 function setupHostedLiveMode(){
   const params=new URLSearchParams(location.search);
-  const autoLive=/^(1|true|yes)$/i.test(params.get('live') || params.get('autoload') || '');
+  const liveParam=params.has('live') ? params.get('live') : (params.has('autoload') ? params.get('autoload') : null);
+  const autoLive=liveParam===null ? true : /^(1|true|yes)$/i.test(liveParam);
   const checkbox=document.getElementById('autoLoadLive');
   checkbox.checked=autoLive;
   checkbox.onchange=()=>{ if(checkbox.checked) loadLive(); };
@@ -1709,7 +1802,7 @@ function setupThemeToggle(){
 }
 setupThemeToggle();
 document.getElementById('recomputeBtn').onclick=()=>{latestSim=null;recompute();};
-document.getElementById('simulateBtn').onclick=()=>{const n=+document.getElementById('runs').value||10000; const seed=document.getElementById('simSeed').value.trim(); setStatus(`Running ${n.toLocaleString()} simulations${seed?` with seed "${seed}"`:''}...`); setTimeout(()=>{latestSim=runSimulation(n,seed); recompute(); setStatus(`Simulation complete: ${n.toLocaleString()} runs${seed?` with seed "${seed}"`:''}.`);},20);};
+document.getElementById('simulateBtn').onclick=runSimulationFromControls;
 document.getElementById('copyLinkBtn').onclick=copyScenarioLink;
 document.getElementById('resetBtn').onclick=()=>{matches=structuredClone(SEED_MATCHES); latestSim=null; lastFeedStats=null; renderEditor(); recompute(); setStatus('Reset to seed snapshot.');};
 document.getElementById('scenarioMaxGoals').onchange=()=>recompute();
