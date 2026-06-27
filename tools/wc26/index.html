@@ -96,6 +96,17 @@
   .notice.bad{border-left-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
   details.drawer{border:1px solid var(--line);border-radius:8px;background:var(--panel2);padding:10px;margin-top:12px}
   details.drawer summary{cursor:pointer;font-weight:750;color:var(--heading)}
+  details.drawer summary::marker{color:var(--muted)}
+  details.drawer[open] summary{margin-bottom:10px}
+  section.collapsible-section{padding:0}
+  section.collapsible-section>details.drawer{margin:0;border:0;background:transparent;padding:16px}
+  section.collapsible-section>details.drawer>summary{font-size:20px}
+  .control-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+  .control-actions button{width:100%}
+  .control-status{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+  .drawer-note{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+  .drawer-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .drawer-tools{display:grid;grid-template-columns:1fr;gap:10px}
   @media(max-width:640px){
     header{position:static;padding:16px}
     .header-row{width:100%}
@@ -106,6 +117,7 @@
     input,select,textarea,button{max-width:100%}
     .row{gap:6px}
     .row button{flex:1 1 100%}
+    .control-actions,.drawer-grid{grid-template-columns:1fr}
     .theme-toggle{width:auto}
     .tabs{gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.tab{padding:7px 9px;font-size:13px;flex:0 0 auto}
     .summary-grid,.schedule-grid{grid-template-columns:1fr}
@@ -149,48 +161,62 @@
     <aside>
       <section>
         <h2>Controls</h2>
-        <div class="row">
-          <button id="recomputeBtn">Recompute</button>
-          <button id="simulateBtn">Run simulation</button>
-          <button id="copyLinkBtn" class="secondary">Copy scenario link</button>
-          <button id="resetBtn" class="secondary">Reset seed</button>
-        </div>
-        <div class="control-grid">
-          <div><label>Monte Carlo runs</label><input id="runs" type="number" min="100" max="200000" step="100" value="20000" style="width:100%"></div>
-          <div><label>Simulation seed</label><input id="simSeed" placeholder="optional" style="width:100%"></div>
-          <div><label>Refresh seconds</label><input id="refreshSecs" type="number" min="10" max="3600" value="60" style="width:100%"></div>
-        </div>
         <label>Team focus</label>
         <select id="teamFocusSelect" style="width:100%"></select>
-        <label>Scenario max goals per team</label>
-        <input id="scenarioMaxGoals" type="number" min="1" max="8" value="4" style="width:100%" />
-        <label>Optional live / JSON API URL</label>
-        <input id="apiUrl" value="https://worldcup26.ir/get/games" style="width:100%" />
-        <div class="row" style="margin-top:8px">
-          <button id="loadLiveBtn" class="secondary">Load API once</button>
-          <button id="pollBtn" class="secondary">Start polling</button>
+        <div class="control-actions">
+          <button id="simulateBtn">Run simulation</button>
+          <button id="recomputeBtn" class="secondary">Recompute</button>
         </div>
-        <label class="checkline"><input id="autoLoadLive" type="checkbox"> Auto-load feed when the page opens</label>
-        <div id="status" class="small" style="margin-top:10px">Ready.</div>
-        <div id="feedHealth" class="small" style="margin-top:6px">No live feed loaded in this session.</div>
-        <div class="notice"><b>Live-feed reality check:</b> the app is feed-agnostic. If the public endpoint is blocked by CORS or stale, paste JSON below or connect a licensed feed with the adapter hook.</div>
-        <label>Paste result JSON or simple CSV: <span class="mono">Group,Home,Away,HG,AG,Status</span></label>
-        <textarea id="pasteBox" placeholder='Example CSV:&#10;F,TUN,NED,0,2,Complete&#10;F,JPN,SWE,1,1,Complete'></textarea>
-        <div class="row"><button id="applyPasteBtn" class="secondary">Apply pasted data</button></div>
-      </section>
+        <label>Monte Carlo runs</label>
+        <input id="runs" type="number" min="100" max="200000" step="100" value="20000" style="width:100%">
+        <div class="control-status">
+          <div id="status" class="small">Ready.</div>
+        </div>
 
-      <section>
-        <h2>Annex C mapping</h2>
-        <p class="small">The full 495-row FIFA Annex C table is bundled and loaded by default. Paste rows here only to inspect or override mappings. If the full table is removed or incomplete, the app labels fallback assignments as debug-only.</p>
-        <label>CSV rows: <span class="mono">groups,1A,1B,1D,1E,1G,1I,1K,1L</span></label>
-        <textarea id="annexBox" placeholder="EFGHIJKL,3E,3J,3I,3F,3H,3G,3L,3K"></textarea>
-        <div class="row"><button id="applyAnnexBtn" class="secondary">Load Annex C rows</button><span id="annexCount" class="pill good">495 official rows loaded</span></div>
-      </section>
+        <details class="drawer">
+          <summary>Advanced simulation<span class="drawer-note">Seed, scenario grid, reset, and share link.</span></summary>
+          <div class="drawer-grid">
+            <div><label>Simulation seed</label><input id="simSeed" placeholder="optional" style="width:100%"></div>
+            <div><label>Scenario max goals per team</label><input id="scenarioMaxGoals" type="number" min="1" max="8" value="4" style="width:100%" /></div>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button id="copyLinkBtn" class="secondary">Copy scenario link</button>
+            <button id="resetBtn" class="secondary">Reset seed</button>
+          </div>
+        </details>
 
-      <section>
-        <h2>Match editor</h2>
-        <div class="tabs" id="groupTabs"></div>
-        <div id="matchEditor"></div>
+        <details class="drawer">
+          <summary>Live/API import<span class="drawer-note">Load public JSON, poll, or paste match data.</span></summary>
+          <label>Optional live / JSON API URL</label>
+          <input id="apiUrl" value="https://worldcup26.ir/get/games" style="width:100%" />
+          <div class="row" style="margin-top:8px">
+            <button id="loadLiveBtn" class="secondary">Load API once</button>
+            <button id="pollBtn" class="secondary">Start polling</button>
+          </div>
+          <div class="drawer-grid">
+            <div><label>Refresh seconds</label><input id="refreshSecs" type="number" min="10" max="3600" value="60" style="width:100%"></div>
+          </div>
+          <label class="checkline"><input id="autoLoadLive" type="checkbox"> Auto-load feed when the page opens</label>
+          <div id="feedHealth" class="small" style="margin-top:6px">No live feed loaded in this session.</div>
+          <div class="notice"><b>Live-feed reality check:</b> the app is feed-agnostic. If the public endpoint is blocked by CORS or stale, paste JSON below or connect a licensed feed with the adapter hook.</div>
+          <label>Paste result JSON or simple CSV: <span class="mono">Group,Home,Away,HG,AG,Status</span></label>
+          <textarea id="pasteBox" placeholder='Example CSV:&#10;F,TUN,NED,0,2,Complete&#10;F,JPN,SWE,1,1,Complete'></textarea>
+          <div class="row"><button id="applyPasteBtn" class="secondary">Apply pasted data</button></div>
+        </details>
+
+        <details class="drawer">
+          <summary>Annex C mapping<span class="drawer-note">Official rows are bundled; paste only to inspect or override.</span></summary>
+          <p class="small">The full 495-row FIFA Annex C table is bundled and loaded by default. If the full table is removed or incomplete, the app labels fallback assignments as debug-only.</p>
+          <label>CSV rows: <span class="mono">groups,1A,1B,1D,1E,1G,1I,1K,1L</span></label>
+          <textarea id="annexBox" placeholder="EFGHIJKL,3E,3J,3I,3F,3H,3G,3L,3K"></textarea>
+          <div class="row"><button id="applyAnnexBtn" class="secondary">Load Annex C rows</button><span id="annexCount" class="pill good">495 official rows loaded</span></div>
+        </details>
+
+        <details class="drawer">
+          <summary>Manual match editor<span class="drawer-note">Edit scorelines and status by group.</span></summary>
+          <div class="tabs" id="groupTabs"></div>
+          <div id="matchEditor"></div>
+        </details>
       </section>
     </aside>
 
@@ -211,33 +237,43 @@
         <h2>Team focus</h2>
         <div id="teamFocus"></div>
       </section>
-      <section>
-        <h2>Match schedule</h2>
-        <div class="filterbar">
-          <div><label>Schedule view</label><select id="scheduleFilter" style="width:100%"><option value="all">All matches</option><option value="today">Today</option><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="complete">Complete</option></select></div>
-          <div><label>Schedule group</label><select id="scheduleGroup" style="width:100%"></select></div>
-        </div>
-        <div id="schedule"></div>
+      <section class="collapsible-section">
+        <details class="drawer">
+          <summary>Match schedule<span class="drawer-note">Fixture list with date, group, and status filters.</span></summary>
+          <div class="filterbar">
+            <div><label>Schedule view</label><select id="scheduleFilter" style="width:100%"><option value="all">All matches</option><option value="today">Today</option><option value="upcoming">Upcoming</option><option value="live">Live</option><option value="complete">Complete</option></select></div>
+            <div><label>Schedule group</label><select id="scheduleGroup" style="width:100%"></select></div>
+          </div>
+          <div id="schedule"></div>
+        </details>
       </section>
-      <section>
-        <h2>Best third-place race</h2>
-        <div id="thirdRace"></div>
+      <section class="collapsible-section">
+        <details class="drawer">
+          <summary>Best third-place race<span class="drawer-note">Current ranking of all third-place teams.</span></summary>
+          <div id="thirdRace"></div>
+        </details>
       </section>
-      <section>
-        <h2>Group standings</h2>
-        <div id="tables"></div>
+      <section class="collapsible-section">
+        <details class="drawer">
+          <summary>Group standings<span class="drawer-note">Full tables for Groups A-L.</span></summary>
+          <div id="tables"></div>
+        </details>
       </section>
-      <section>
-        <h2>Knockout bracket path</h2>
-        <div id="r32" class="bracket-scroll"></div>
+      <section class="collapsible-section">
+        <details class="drawer">
+          <summary>Knockout bracket path<span class="drawer-note">Round-of-32 slots and simulated later-round paths.</span></summary>
+          <div id="r32" class="bracket-scroll"></div>
+        </details>
       </section>
-      <section>
-        <h2>Probabilities</h2>
-        <div class="two">
-          <div><h3>Most likely R32 matchups</h3><div id="matchupProbs"></div></div>
-          <div><h3>Team qualification probabilities</h3><div id="teamProbs"></div></div>
-          <div><h3>Title path probabilities</h3><div id="titleProbs"></div></div>
-        </div>
+      <section class="collapsible-section">
+        <details class="drawer">
+          <summary>Probabilities<span class="drawer-note">Monte Carlo matchups, qualification, and title paths.</span></summary>
+          <div class="two">
+            <div><h3>Most likely R32 matchups</h3><div id="matchupProbs"></div></div>
+            <div><h3>Team qualification probabilities</h3><div id="teamProbs"></div></div>
+            <div><h3>Title path probabilities</h3><div id="titleProbs"></div></div>
+          </div>
+        </details>
       </section>
     </main>
   </div>
