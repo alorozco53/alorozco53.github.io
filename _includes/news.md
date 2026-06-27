@@ -1,5 +1,13 @@
 # News
 
+## 2026
+
+### May
+
+- `[20th]` I successfully presented my Phd's _thesis proposal_.  From now on, I am officially a PhD Candidate!
+
+------------------------
+
 ## 2024
 
 ### December
@@ -7,7 +15,7 @@
 - `[10th]` I will be the Volunteer Chair for the [**Latinx in AI Workshop**](https://www.latinxinai.org/events/lxai-workshop-at-neurips-2024) at [NeurIPS 2024](https://nips.cc/Conferences/2024), in Vancouver, BC, Canada 🇨🇦.
 
 ### November
-- `[27th]` I completed my PhD program's _comprehensive exam_. From now on, I am officially a PhD Candidate!
+- `[27th]` I completed my PhD program's _comprehensive exam_.
 
 ### September
 - `[2nd]` I started TAing again for the _INF8245AE: Machine Learning_ course at the Université de Montréal, under the supervision of Prof [Sarath Chandar](https://sarathchandar.in/).
