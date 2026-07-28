@@ -2,6 +2,9 @@
 
 ## 2026
 
+### July
+- `[10th]` Our paper entitled _"Meta-Merging by Checkpoint Nowcasting"_ was accepted to [ICML](https://icml.cc)'s [**Weight-Space Symmetries Workshop**](https://www.weightsymmetry.com/), which took place in Seoul, South Korea 🇰🇷.
+
 ### May
 
 - `[20th]` I successfully presented my Phd's _thesis proposal_.  From now on, I am officially a PhD Candidate!
@@ -11,8 +14,8 @@
 ## 2024
 
 ### December
-- `[15th]` Our paper on _"Non-Uniform Parameter-Wise Model Merging"_ will be presented at the _9th MLBD_ Special Session, within the [**IEEE Big Data 2024 conference**](https://www3.cs.stonybrook.edu/~ieeebigdata2024/index.html), in Washington, D.C., USA 🇺🇸.
-- `[10th]` I will be the Volunteer Chair for the [**Latinx in AI Workshop**](https://www.latinxinai.org/events/lxai-workshop-at-neurips-2024) at [NeurIPS 2024](https://nips.cc/Conferences/2024), in Vancouver, BC, Canada 🇨🇦.
+- `[15th]` Our paper on _"Non-Uniform Parameter-Wise Model Merging"_ was presented at the _9th MLBD_ Special Session, within the [**IEEE Big Data 2024 conference**](https://www3.cs.stonybrook.edu/~ieeebigdata2024/index.html), in Washington, D.C., USA 🇺🇸.
+- `[10th]` I was the Volunteer Chair for the [**Latinx in AI Workshop**](https://www.latinxinai.org/events/lxai-workshop-at-neurips-2024) at [NeurIPS 2024](https://nips.cc/Conferences/2024), in Vancouver, BC, Canada 🇨🇦.
 
 ### November
 - `[27th]` I completed my PhD program's _comprehensive exam_.
